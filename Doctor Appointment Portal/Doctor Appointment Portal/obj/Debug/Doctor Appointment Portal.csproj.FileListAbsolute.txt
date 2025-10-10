@@ -1,0 +1,52 @@
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\csc.exe
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\System.Collections.Immutable.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\System.Reflection.Metadata.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\vbc.exe
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\VBCSCompiler.exe
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\VBCSCompiler.exe.config
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Doctor Appointment Portal.dll.config
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Doctor Appointment Portal.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Doctor Appointment Portal.pdb
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Antlr3.Runtime.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\DoctorAppointmentPortalClassLibrary.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.EnterpriseLibrary.Data.SqlCe.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.ObjectBuilder2.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Web.Infrastructure.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Newtonsoft.Json.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Net.Http.Formatting.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Helpers.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Http.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Http.WebHost.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Mvc.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Optimization.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Razor.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Deployment.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Razor.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\WebGrease.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\DoctorAppointmentPortalClassLibrary.pdb
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Newtonsoft.Json.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Net.Http.Formatting.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Helpers.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Http.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Http.WebHost.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Mvc.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Optimization.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Razor.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Deployment.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Razor.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Antlr3.Runtime.pdb
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.csprojResolveAssemblyReference.cache
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.pdb
