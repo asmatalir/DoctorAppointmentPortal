@@ -174,7 +174,7 @@ CREATE TABLE Addresses (
 CREATE TABLE DoctorAvailability (
     DoctorAvailabilityId INT IDENTITY(1,1) PRIMARY KEY,
     DoctorId INT NOT NULL FOREIGN KEY REFERENCES DoctorProfiles(DoctorId),
-    DayOfWeek INT NOT NULL UNIQUE,                 
+    DayOfWeek INT NOT NULL,                 
     StartTime TIME NOT NULL,
     EndTime TIME NOT NULL,
     SlotDuration INT NOT NULL,                 

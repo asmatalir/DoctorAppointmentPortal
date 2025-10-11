@@ -14,6 +14,7 @@ export class DoctorsList implements OnInit {
   doctorDetail: DoctorsModel | null = null;
   specializationsList : SpecializationsModel[] = [];
   loading: boolean = false;
+  filters : DoctorsModel = new DoctorsModel();
 
   constructor(private doctorsService: DoctorsService) { }
 
@@ -23,7 +24,7 @@ export class DoctorsList implements OnInit {
 
   loadDoctors() {
     this.loading = true;
-    this.doctorsService.DoctorsGetList().subscribe({
+    this.doctorsService.DoctorsGetList(this.filters).subscribe({
       next: (data: any) => {
         // Extract the actual doctors array from the response
         this.doctorsList = data.DoctorsList || [];

@@ -27,7 +27,7 @@
             </div>
             <div class="col-lg-4 col-sm-6">
               <i class="ri-map-pin-2-line align-bottom mx-1"></i> 
-              <span>Address: {{ doc.FullAddress }}</span>
+              <span>Address: {{ doc.Address }}</span>
             </div>
             <div class="col-lg-4 col-sm-6">
               <i class="ri-money-dollar-box-line align-bottom mx-1"></i> 
@@ -57,7 +57,7 @@
           <div class="mt-3">
             <h5 class="view-title">{{ doctorDetail.FirstName }} {{ doctorDetail.LastName }}</h5>
             <p class="text-muted">{{ doctorDetail.HospitalName }}</p>
-            <p class="text-muted">Address: {{ doctorDetail.FullAddress }}</p>
+            <p class="text-muted">Address: {{ doctorDetail.Address }}</p>
             <p class="text-muted">Experience: {{ doctorDetail.ExperienceYears }} Years</p>
             <p class="text-muted">Consultation Fees: {{ doctorDetail.ConsultationFees | currency }}</p>
             <p class="text-muted">Rating: {{ doctorDetail.Rating }}</p>

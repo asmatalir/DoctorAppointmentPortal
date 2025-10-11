@@ -10,8 +10,8 @@ import { environment } from '../../../environments/environment';
 export class DoctorsService {
   constructor(private http: HttpClient) { }
 
-  DoctorsGetList(): Observable<DoctorsModel[]> {
-    return this.http.get<DoctorsModel[]>(environment.apiBaseUrl + 'Doctors/GetLists');
+  DoctorsGetList(model: DoctorsModel): Observable<DoctorsModel[]> {
+    return this.http.post<DoctorsModel[]>(environment.apiBaseUrl + 'Doctors/GetLists',model);
   }
   
 }

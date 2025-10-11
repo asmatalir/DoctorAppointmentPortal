@@ -1,0 +1,223 @@
+<div class="container p-4 mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">{{ doctor?.DoctorId ? 'Edit Doctor' : 'Add Doctor' }}</h5>
+    </div>
+    <div class="card-body">
+
+      <form #doctorForm="ngForm" (ngSubmit)="onSubmit(doctorForm)">
+
+        <!-- Section 1: Personal Information -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Personal Information</h6>
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="First Name"
+                     name="FirstName" [(ngModel)]="doctor.FirstName" required>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="Last Name"
+                     name="LastName" [(ngModel)]="doctor.LastName" required>
+            </div>
+            <div class="col-lg-6">
+              <select class="form-control" name="Gender" [(ngModel)]="doctor.Gender" required>
+                <option value="">Select Gender</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+            <div class="col-lg-6">
+              <input type="date" class="form-control" name="DateOfBirth" [(ngModel)]="doctor.DateOfBirth" required>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="Contact Number"
+                     name="ContactNumber" [(ngModel)]="doctor.ContactNumber" required>
+            </div>
+            <div class="col-lg-6">
+              <input type="email" class="form-control" placeholder="Email"
+                     name="Email" [(ngModel)]="doctor.Email" required>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="User Name"
+                     name="UserName" [(ngModel)]="doctor.UserName" required>
+            </div>
+            <div class="col-lg-6">
+              <input type="password" class="form-control" placeholder="Password"
+                     name="Password" [(ngModel)]="doctor.Password" required>
+            </div>
+          </div>
+        </div>
+
+
+  
+        <!-- Section 2: Professional Information -->
+<div class="p-3 mb-4 border rounded bg-light">
+    <h6 class="mb-3 text-dark fw-bold">Professional Information</h6>
+    <div class="row g-4">
+  
+      <!-- Experience -->
+      <div class="col-lg-4">
+        <input type="number" class="form-control" placeholder="Experience (Years)"
+               name="ExperienceYears" [(ngModel)]="doctor.ExperienceYears" required>
+      </div>
+  
+      <!-- Consultation Fees -->
+      <div class="col-lg-4">
+        <input type="number" class="form-control" placeholder="Consultation Fees"
+               name="ConsultationFees" [(ngModel)]="doctor.ConsultationFees" required>
+      </div>
+  
+      <!-- Hospital Name -->
+      <div class="col-lg-4">
+        <input type="text" class="form-control" placeholder="Hospital Name"
+               name="HospitalName" [(ngModel)]="doctor.HospitalName" required>
+      </div>
+  
+      <!-- Specializations (Multi-select) -->
+      <!-- <div class="col-lg-6">
+        <label class="form-label">Specializations</label>
+        <select class="form-control" name="Specializations" [(ngModel)]="doctor.Specializations" multiple>
+          <option *ngFor="let spec of specializationsList" [value]="spec.SpecializationId">
+            {{ spec.SpecializationName }}
+          </option>
+        </select>
+      </div>
+  
+       Qualifications (Multi-select) 
+      <div class="col-lg-6">
+        <label class="form-label">Qualifications</label>
+        <select class="form-control" name="Qualifications" [(ngModel)]="doctor.Qualifications" multiple>
+          <option *ngFor="let qual of qualificationsList" [value]="qual.QualificationId">
+            {{ qual.QualificationName }}
+          </option>
+        </select>
+      </div> -->
+  
+      <!-- Specializations (Multi-select) -->
+<!-- Specializations Multi-select -->
+<div class="col-lg-6">
+    <label class="form-label">Specializations</label>
+    <ng-select 
+    [items]="specializationsList"   
+    [(ngModel)]="doctor.Specializations"
+    bindLabel="SpecializationName"
+    bindValue="SpecializationId"
+    [multiple]="true"
+    placeholder="Select Specializations"
+    class="form-control">
+</ng-select>
+
+  </div>
+  
+  <!-- Qualifications Multi-select -->
+  <div class="col-lg-6">
+    <label class="form-label">Qualifications</label>
+    <ng-select
+      [items]="qualificationsList"
+      bindLabel="QualificationName"
+      bindValue="QualificationId"
+      placeholder="Select Qualifications"
+      [(ngModel)]="doctor.Qualifications"
+      [multiple]="true"
+      [closeOnSelect]="false"       
+      [hideSelected]="true"        
+      [clearable]="true" 
+      class="form-control custom-ng-select">
+    </ng-select>
+  </div>
+  
+  
+      <!-- Rating -->
+      <div class="col-lg-6">
+        <input type="number" class="form-control" placeholder="Rating"
+               name="Rating" [(ngModel)]="doctor.Rating" min="0" max="5" step="0.1">
+      </div>
+  
+      <!-- Description -->
+      <div class="col-lg-12">
+        <textarea class="form-control" placeholder="Description (Optional)"
+                  name="Description" [(ngModel)]="doctor.Description"></textarea>
+      </div>
+  
+    </div>
+  </div>
+  
+
+         <!-- Section 4: Availability & Slots -->
+<div class="p-3 mb-4 border rounded bg-light">
+    <h6 class="mb-3 text-dark">Availability & Slots</h6>
+  
+    <div class="row g-4" *ngFor="let slot of doctor.DoctorAvailabilityList; let i = index">
+      <div class="col-lg-3">
+        <select class="form-control" [(ngModel)]="slot.DayOfWeek" name="DayOfWeek{{i}}" required>
+          <option value="">Select Day</option>
+          <option *ngFor="let day of daysOfWeek" [value]="day.value">{{day.name}}</option>
+        </select>
+      </div>
+  
+      <div class="col-lg-3">
+        <input type="time" class="form-control" [(ngModel)]="slot.StartTime" name="StartTime{{i}}" required>
+      </div>
+  
+      <div class="col-lg-3">
+        <input type="time" class="form-control" [(ngModel)]="slot.EndTime" name="EndTime{{i}}" required>
+      </div>
+  
+      <div class="col-lg-2">
+        <input type="number" class="form-control" [(ngModel)]="slot.SlotDuration" name="SlotDuration{{i}}" placeholder="Slot Min" required>
+      </div>
+  
+      <div class="col-lg-1 text-center">
+        <button type="button" class="btn btn-danger" >X</button>
+      </div>
+    </div>
+  
+    <div class="mt-2">
+      <button type="button" class="btn btn-secondary" >Add Day</button>
+    </div>
+  </div>
+  
+        <!-- Section 3: Address Information -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Address Information</h6>
+          <div class="row g-4">
+            <div class="col-lg-3">
+              <select class="form-control" name="StateId" [(ngModel)]="doctor.StateId">
+                <option value="">Select State</option>
+              </select>
+            </div>
+            <div class="col-lg-3">
+              <select class="form-control" name="DistrictId" [(ngModel)]="doctor.DistrictId">
+                <option value="">Select District</option>
+              </select>
+            </div>
+            <div class="col-lg-3">
+              <select class="form-control" name="TalukaId" [(ngModel)]="doctor.TalukaId">
+                <option value="">Select Taluka</option>
+              </select>
+            </div>
+            <div class="col-lg-3">
+              <select class="form-control" name="CityId" [(ngModel)]="doctor.CityId">
+                <option value="">Select City</option>
+              </select>
+            </div>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Address Line"
+                     name="AddressLine" [(ngModel)]="doctor.AddressLine">
+            </div>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" placeholder="Pincode"
+                     name="Pincode" [(ngModel)]="doctor.Pincode">
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 text-end">
+          <button type="submit" class="btn btn-primary">Save Doctor</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
