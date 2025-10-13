@@ -25,6 +25,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int TotalRecords { get; set; }
 
         public string Address { get; set; }
+        public int AddressId { get; set; }
         public int StateId { get; set; }
         public int DistrictId { get; set; }
         public int TalukaId { get; set; }
@@ -39,6 +40,8 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int PageSize { get; set; }
 
         public string QualificationIds { get; set; }
+        public string QualificationNames { get; set; }
+        public string SpecializationNames { get; set; }
         public string SpecializationIds { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
@@ -53,6 +56,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public List<DistrictsModel> DistrictsList { get; set; }
         public List<TalukasModel> TalukasList { get; set; }
         public List<CitiesModel> CitiesList { get; set; }
+        public List<DoctorAvailabilitiesModel> DoctorAvailabilityList { get; set; }
 
 
     }

@@ -1,0 +1,68 @@
+<div class="container p-4 mt-4">
+    <div class="p-3 mb-4 border rounded bg-light">
+      <h6 class="mb-3 text-dark fw-bold">Doctor Information</h6>
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+          <label class="form-label">Doctor Name</label>
+          <input type="text" class="form-control" [value]="doctor.FirstName + ' ' + doctor.LastName" readonly>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Specializations</label>
+          <input type="text" class="form-control" [value]="doctor.Specializations" readonly>
+        </div>
+      </div>
+  
+      <div class="row g-3 mt-2">
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input type="text" class="form-control" [value]="doctor.Email" readonly>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Contact</label>
+          <input type="text" class="form-control" [value]="doctor.ContactNumber" readonly>
+        </div>
+      </div>
+    </div>
+    <div class="p-3 mb-4 border rounded bg-light">
+        <h6 class="mb-3 text-dark fw-bold">Availability & Slots</h6>
+      
+        <!-- Loop through existing availabilities -->
+        <div class="row mb-2" *ngFor="let availability of doctor.DoctorAvailabilityList; let i = index">
+            <div class="col-md-3">
+              <select class="form-control" [(ngModel)]="availability.DayOfWeek" name="DayOfWeek{{i}}"  required>
+                <option value="">Select Day</option>
+                <option *ngFor="let day of daysOfWeek" [value]="day.value">{{ day.name }}</option>
+              </select>
+            </div>
+          
+            <div class="col-md-3">
+                <input type="time" class="form-control" [(ngModel)]="availability.StartTime" name="StartTime{{i}}" required>
+            </div>
+          
+            <div class="col-md-3">
+                <input type="time" class="form-control" [(ngModel)]="availability.EndTime" name="EndTime{{i}}" required>
+            </div>
+          
+            <div class="col-md-2">
+              <input type="number" class="form-control" [(ngModel)]="availability.Duration" name="Duration{{i}}" placeholder="Slot (min)" required>
+            </div>
+          
+            <div class="col-md-1 text-center">
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeAvailability(i)">X</button>
+            </div>
+          </div>
+          
+      
+        <!-- BUTTON TO ADD NEW AVAILABILITY -->
+        <div class="mt-3">
+          <button type="button" class="btn btn-primary" (click)="addAvailability()">
+            + Add Availability
+          </button>
+        </div>
+      </div>
+      <div class="mt-4 text-end">
+        <button type="submit" class="btn btn-primary" (click)="SaveDoctorAvailabilities()">Save</button>
+      </div>
+
+       
+</div>

@@ -11,7 +11,6 @@ import { SpecializationsModel } from '../../core/models/SpecializationsModel';
 })
 export class DoctorsList implements OnInit {
   doctorsList: DoctorsModel[] = [];
-  doctorDetail: DoctorsModel | null = null;
   specializationsList : SpecializationsModel[] = [];
   loading: boolean = false;
   filters : DoctorsModel = new DoctorsModel();
@@ -20,17 +19,35 @@ export class DoctorsList implements OnInit {
 
   ngOnInit(): void {
     this.loadDoctors();
+
+    
   }
 
   loadDoctors() {
     this.loading = true;
     this.doctorsService.DoctorsGetList(this.filters).subscribe({
       next: (data: any) => {
+        debugger;
         // Extract the actual doctors array from the response
         this.doctorsList = data.DoctorsList || [];
-        this.specializationsList = data.specializationsList || [];
-        // Set first doctor as default detail
-        this.doctorDetail = this.doctorsList.length > 0 ? this.doctorsList[0] : null;
+        this.specializationsList = data.SpecializationsList || [];
+
+        this.doctorsList.forEach(doc => {
+          console.log('Doctor:', doc.FirstName + ' ' + doc.LastName);
+          console.log('SpecializationNames:', doc.SpecializationNames);
+        });
+
+
+        this.doctorsList = this.doctorsList.map(doc => {
+          return {
+            ...doc,
+            Specializations: doc.SpecializationNames
+              ? doc.SpecializationNames.split(',').map(s => s.trim()).filter(s => s)
+              : []  // empty array if no specializations
+          };
+        });
+                
+
         this.loading = false;
       },
       error: (err) => {
@@ -41,7 +58,5 @@ export class DoctorsList implements OnInit {
   }
   
 
-  viewMore(index: number) {
-    this.doctorDetail = this.doctorsList[index];
-  }
+
 }

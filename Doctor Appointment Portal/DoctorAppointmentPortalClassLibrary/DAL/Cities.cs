@@ -35,8 +35,6 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                             CityId = Convert.ToInt32(row["CityId"]),
                             CityName = Convert.ToString(row["CityName"]),
                             TalukaId = Convert.ToInt32(row["TalukaId"]),
-                            DistrictId = Convert.ToInt32(row["DistrictId"]),
-                            StateId = Convert.ToInt32(row["StateId"]),
                             IsActive = Convert.ToBoolean(row["IsActive"])
                         };
 

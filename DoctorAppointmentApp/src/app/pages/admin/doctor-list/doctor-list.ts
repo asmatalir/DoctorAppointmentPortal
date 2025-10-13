@@ -18,8 +18,6 @@ export class DoctorList {
   loading = false;
   searchTerm: string = '';
   TotalRecords : number=0;
-  PageNo : number=1;
-  PageSize : number=5;
   selectedSpecialization : string;
   filters : DoctorsModel = new DoctorsModel();
 

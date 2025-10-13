@@ -132,7 +132,7 @@ BEGIN
     DROP TABLE #FilteredDoctors;
 END
 
-
+GO
 --Final Version
 CREATE OR ALTER PROCEDURE DoctorsGetList  
     @DoctorName NVARCHAR(100) = NULL,
@@ -223,7 +223,7 @@ BEGIN
 
     DROP TABLE #FilteredDoctors;
 END;
-
+GO
 
 
 GO
@@ -480,6 +480,147 @@ BEGIN
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH
+END
+GO
+
+GO
+CREATE OR ALTER PROCEDURE GetDoctorDetailsById
+    @DoctorId INT
+AS
+BEGIN
+
+    SELECT
+        -- Doctor basic info
+        ISNULL(D.DoctorId, 0) AS DoctorId,
+        ISNULL(U.FirstName, '') AS FirstName,
+        ISNULL(U.LastName, '') AS LastName,
+        ISNULL(U.Email, '') AS Email,
+        ISNULL(U.ContactNumber, '') AS ContactNumber,
+        ISNULL(U.Gender, '') AS Gender,
+        ISNULL(D.ExperienceYears, 0) AS ExperienceYears,
+        ISNULL(D.ConsultationFees, 0) AS ConsultationFees,
+        ISNULL(D.HospitalName, '') AS HospitalName,
+        ISNULL(D.Description, '') AS Description,
+        ISNULL(D.Rating, 0) AS Rating,
+
+        -- Address info
+        ISNULL(A.AddressId, 0) AS AddressId,
+        ISNULL(A.StateId, 0) AS StateId,
+        ISNULL(A.DistrictId, 0) AS DistrictId,
+        ISNULL(A.TalukaId, 0) AS TalukaId,
+        ISNULL(A.CityId, 0) AS CityId,
+
+        -- Specialization IDs & Names
+        ISNULL(
+            (
+                SELECT STRING_AGG(CAST(DS.SpecializationId AS NVARCHAR), ',')
+                FROM DoctorSpecializations DS
+                WHERE DS.DoctorId = D.DoctorId AND DS.IsActive = 1
+            ), ''
+        ) AS SpecializationIds,
+
+        ISNULL(
+            (
+                SELECT STRING_AGG(SP.SpecializationName, ',')
+                FROM DoctorSpecializations DS
+                INNER JOIN Specializations SP ON DS.SpecializationId = SP.SpecializationId
+                WHERE DS.DoctorId = D.DoctorId AND DS.IsActive = 1
+            ), ''
+        ) AS SpecializationNames,
+
+        -- Qualification IDs & Names
+        ISNULL(
+            (
+                SELECT STRING_AGG(CAST(DQ.QualificationId AS NVARCHAR), ',')
+                FROM DoctorQualifications DQ
+                WHERE DQ.DoctorId = D.DoctorId AND DQ.IsActive = 1
+            ), ''
+        ) AS QualificationIds,
+
+        ISNULL(
+            (
+                SELECT STRING_AGG(Q.QualificationName, ',')
+                FROM DoctorQualifications DQ
+                INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
+                WHERE DQ.DoctorId = D.DoctorId AND DQ.IsActive = 1
+            ), ''
+        ) AS QualificationNames
+
+    FROM DoctorProfiles D
+    INNER JOIN UserProfiles U ON D.UserId = U.UserId
+    LEFT JOIN Addresses A ON D.AddressId = A.AddressId
+    WHERE D.DoctorId = @DoctorId;
+END;
+GO
+
+GO
+CREATE PROCEDURE InsertOrUpdateDoctorAvailability
+    @DoctorId INT,
+    @CreatedBy INT,
+    @AvailabilitiesXml XML,
+    @ResultCode INT OUTPUT
+AS
+BEGIN
+
+    BEGIN TRY
+        -- Begin a transaction
+        BEGIN TRANSACTION;
+
+        -- If DoctorId is not null or 0, optionally delete existing availabilities to replace with new ones
+        IF @DoctorId IS NOT NULL
+        BEGIN
+            DELETE FROM DoctorAvailability
+            WHERE DoctorId = @DoctorId;
+        END
+
+        -- Insert from XML
+        IF @AvailabilitiesXml IS NOT NULL
+        BEGIN
+            INSERT INTO DoctorAvailability
+            (
+                DoctorId,
+                DayOfWeek,
+                StartTime,
+                EndTime,
+                SlotDuration,
+                IsActive,
+                CreatedBy,
+                CreatedOn
+            )
+            SELECT
+                @DoctorId AS DoctorId,
+                T.c.value('(DayOfWeek)[1]', 'INT') AS DayOfWeek,
+                T.c.value('(StartTime)[1]', 'TIME') AS StartTime,
+                T.c.value('(EndTime)[1]', 'TIME') AS EndTime,
+                T.c.value('(SlotDuration)[1]', 'INT') AS SlotDuration,
+                1 AS IsActive,
+                @CreatedBy AS CreatedBy,
+                GETDATE() AS CreatedOn
+            FROM @AvailabilitiesXml.nodes('/Availabilities/Availability') AS T(c);
+        END
+
+        -- Set result code to success
+        SET @ResultCode = 1;
+
+        COMMIT TRANSACTION;
+    END TRY
+    --BEGIN CATCH
+    --    -- Rollback on error
+    --    IF @@TRANCOUNT > 0
+    --        ROLLBACK TRANSACTION;
+
+    --    -- Set result code to -1 for error
+    --    SET @ResultCode = -1;
+    --END CATCH
+
+	BEGIN CATCH
+    DECLARE @ErrMsg NVARCHAR(4000), @ErrSeverity INT;
+    SELECT @ErrMsg = ERROR_MESSAGE(), @ErrSeverity = ERROR_SEVERITY();
+    IF @@TRANCOUNT > 0
+        ROLLBACK TRANSACTION;
+    RAISERROR('Error in InsertOrUpdateDoctorAvailability: %s', @ErrSeverity, 1, @ErrMsg);
+    SET @ResultCode = -1;
+END CATCH
 END
 GO
 

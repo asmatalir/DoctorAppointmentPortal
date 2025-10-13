@@ -75,7 +75,8 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                             HospitalName = Convert.ToString(row["HospitalName"]),
                             Address = Convert.ToString(row["Address"]),
                             Rating = Convert.ToDecimal(row["Rating"]),
-                            IsActive = Convert.ToBoolean(row["IsActive"])
+                            IsActive = Convert.ToBoolean(row["IsActive"]),
+                            SpecializationNames = row.Table.Columns.Contains("SpecializationNames")? Convert.ToString(row["SpecializationNames"]): string.Empty
                         };
                         DoctorsList.Add(doctors);
                     }
@@ -89,6 +90,56 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             return DoctorsList;
         }
+
+        public DoctorsModel LoadDoctorDetails(int doctorId)
+        {
+            DoctorsModel model = new DoctorsModel();
+
+            try
+            {
+                if (doctorId != 0)
+                {
+                    DbCommand com = this.db.GetStoredProcCommand("GetDoctorDetailsById");
+                    db.AddInParameter(com, "DoctorId", DbType.Int32, doctorId);
+
+                    DataSet ds = this.db.ExecuteDataSet(com);
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataTable dt = ds.Tables[0];
+                        model.DoctorId = Convert.ToInt32(dt.Rows[0]["DoctorId"]);
+                        model.FirstName = Convert.ToString(dt.Rows[0]["FirstName"]);
+                        model.LastName = Convert.ToString(dt.Rows[0]["LastName"]);
+                        model.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        model.ContactNumber = Convert.ToString(dt.Rows[0]["ContactNumber"]);
+                        model.Gender = Convert.ToString(dt.Rows[0]["Gender"]);
+                        model.ExperienceYears = Convert.ToInt32(dt.Rows[0]["ExperienceYears"]);
+                        model.ConsultationFees = Convert.ToDecimal(dt.Rows[0]["ConsultationFees"]);
+                        model.HospitalName = Convert.ToString(dt.Rows[0]["HospitalName"]);
+                        model.Description = Convert.ToString(dt.Rows[0]["Description"]);
+                        model.Rating = Convert.ToDecimal(dt.Rows[0]["Rating"]);
+
+                        model.AddressId = Convert.ToInt32(dt.Rows[0]["AddressId"]);
+                        model.StateId = Convert.ToInt32(dt.Rows[0]["StateId"]);
+                        model.DistrictId = Convert.ToInt32(dt.Rows[0]["DistrictId"]);
+                        model.TalukaId = Convert.ToInt32(dt.Rows[0]["TalukaId"]);
+                        model.CityId = Convert.ToInt32(dt.Rows[0]["CityId"]);
+
+                        model.SpecializationIds = Convert.ToString(dt.Rows[0]["SpecializationIds"]);
+                        model.SpecializationNames = Convert.ToString(dt.Rows[0]["SpecializationNames"]);
+                        model.QualificationIds = Convert.ToString(dt.Rows[0]["QualificationIds"]);
+                        model.QualificationNames = Convert.ToString(dt.Rows[0]["QualificationNames"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in LoadDoctorDetails: {ex.Message}");
+                // Handle Exception
+            }
+
+            return model;
+        }
+
 
         public int SaveDoctorDetails(DoctorsModel doctor)
         {
@@ -229,6 +280,71 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 return -1;
             }
         }
+
+        public int SaveDoctorAvailability(DoctorsModel doctor)
+        {
+            int resultCode = 1;
+            try
+            {
+
+                DbCommand cmd = db.GetStoredProcCommand("InsertOrUpdateDoctorAvailability");
+                if(doctor.DoctorId > 0)
+                     db.AddInParameter(cmd, "@DoctorId", DbType.Int32, doctor.DoctorId);
+                else
+                    db.AddInParameter(cmd, "@DoctorId", DbType.Int32, DBNull.Value);
+
+
+                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, 6);
+
+                // Convert availability list to XML
+                string availabilitiesXml = ConvertAvailabilitiesToXml(doctor.DoctorAvailabilityList);
+                if (!String.IsNullOrEmpty(availabilitiesXml))
+                {
+                    db.AddInParameter(cmd, "@AvailabilitiesXml", DbType.Xml, availabilitiesXml);
+                }
+                else
+                {
+                    db.AddInParameter(cmd, "@AvailabilitiesXml", DbType.Xml, DBNull.Value);
+                }
+
+                db.AddOutParameter(cmd, "@ResultCode", DbType.Int32, 4);
+
+                // Execute
+                db.ExecuteNonQuery(cmd);
+
+                resultCode = Convert.ToInt32(db.GetParameterValue(cmd, "@ResultCode"));
+                return resultCode;
+            }
+            catch (Exception ex)
+            {
+
+                //errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace, doctor.CreatedBy);
+                return -1;
+            }
+        }
+
+
+
+        private string ConvertAvailabilitiesToXml(List<DoctorAvailabilitiesModel> availabilities)
+        {
+            if (availabilities == null || availabilities.Count == 0)
+                return "<Availabilities></Availabilities>";
+
+            var sb = new StringBuilder();
+            sb.Append("<Availabilities>");
+            foreach (var slot in availabilities)
+            {
+                sb.Append("<Availability>");
+                sb.AppendFormat("<DayOfWeek>{0}</DayOfWeek>", slot.DayOfWeek);
+                sb.AppendFormat("<StartTime>{0}</StartTime>", slot.StartTime);
+                sb.AppendFormat("<EndTime>{0}</EndTime>", slot.EndTime);
+                sb.AppendFormat("<SlotDuration>{0}</SlotDuration>", slot.Duration);
+                sb.Append("</Availability>");
+            }
+            sb.Append("</Availabilities>");
+            return sb.ToString();
+        }
+
 
 
     }

@@ -1,7 +1,7 @@
 <div class="container p-4 mt-4">
   <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0">{{ doctor?.DoctorId ? 'Edit Doctor' : 'Add Doctor' }}</h5>
+    <div class="card-header text-dark">
+      <h5 class="mb-0">{{ doctor.DoctorId ? 'Edit Doctor' : 'Add Doctor' }}</h5>
     </div>
     <div class="card-body">
 
@@ -43,7 +43,7 @@
             </div>
             <div class="col-lg-6">
               <input type="password" class="form-control" placeholder="Password"
-                     name="Password" [(ngModel)]="doctor.Password" required>
+                     name="Password" [(ngModel)]="doctor.HashedPassword" required>
             </div>
           </div>
         </div>
@@ -99,11 +99,11 @@
     <label class="form-label">Specializations</label>
     <ng-select 
     [items]="specializationsList"   
-    [(ngModel)]="doctor.Specializations"
+    [(ngModel)]="SpecializationIds"
     bindLabel="SpecializationName"
     bindValue="SpecializationId"
     [multiple]="true"
-    placeholder="Select Specializations"
+    name="Specializations" 
     class="form-control">
 </ng-select>
 
@@ -116,12 +116,12 @@
       [items]="qualificationsList"
       bindLabel="QualificationName"
       bindValue="QualificationId"
-      placeholder="Select Qualifications"
-      [(ngModel)]="doctor.Qualifications"
+      [(ngModel)]="QualificationIds"
       [multiple]="true"
       [closeOnSelect]="false"       
       [hideSelected]="true"        
       [clearable]="true" 
+      name="Qualifications" 
       class="form-control custom-ng-select">
     </ng-select>
   </div>
@@ -151,23 +151,39 @@
             <div class="col-lg-3">
               <select class="form-control" name="StateId" [(ngModel)]="doctor.StateId">
                 <option value="">Select State</option>
+                <option *ngFor="let state of statesList" [value]="state.StateId">
+                  {{ state.StateName }}
+                </option>
               </select>
+              
             </div>
             <div class="col-lg-3">
               <select class="form-control" name="DistrictId" [(ngModel)]="doctor.DistrictId">
                 <option value="">Select District</option>
+                <option *ngFor="let district of districtsList" [value]="district.DistrictId">
+                  {{ district.DistrictName }}
+                </option>
               </select>
             </div>
+            
             <div class="col-lg-3">
               <select class="form-control" name="TalukaId" [(ngModel)]="doctor.TalukaId">
                 <option value="">Select Taluka</option>
+                <option *ngFor="let taluka of talukasList" [value]="taluka.TalukaId">
+                  {{ taluka.TalukaName }}
+                </option>
               </select>
             </div>
+            
             <div class="col-lg-3">
               <select class="form-control" name="CityId" [(ngModel)]="doctor.CityId">
                 <option value="">Select City</option>
+                <option *ngFor="let city of citiesList" [value]="city.CityId">
+                  {{ city.CityName }}
+                </option>
               </select>
             </div>
+            
             <div class="col-lg-8">
               <input type="text" class="form-control" placeholder="Address Line"
                      name="AddressLine" [(ngModel)]="doctor.AddressLine">

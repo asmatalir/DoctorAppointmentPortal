@@ -47,21 +47,21 @@ namespace Doctor_Appointment_Portal.Controllers
 
 
         [HttpGet]
-        public IHttpActionResult AddEdit(int id)
+        public IHttpActionResult GetDoctorDetails(int id)
         {
             DoctorsModel model = new DoctorsModel();
             try
             {
-                //if (id != 0)
-                //{
-                //    // Load existing doctor details
-                //    //model = doctorsDAL.LoadDoctor(id);
-                //}
-                //else
-                //{
-                //    // Initialize new doctor model
-                //    model = new DoctorsModel();
-                //}
+                if (id != 0)
+                {
+                    
+                    model = doctorsDAL.LoadDoctorDetails(id);
+                }
+                else
+                {
+                    // Initialize new doctor model
+                    model = new DoctorsModel();
+                }
 
                 // Load dropdown lists
                 model.SpecializationsList = specializationsDAL.GetList();
@@ -78,6 +78,8 @@ namespace Doctor_Appointment_Portal.Controllers
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor details." });
             }
         }
+
+       
 
 
 
@@ -107,6 +109,39 @@ namespace Doctor_Appointment_Portal.Controllers
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while saving doctor details." });
             }
         }
+
+        [HttpPost]
+        public IHttpActionResult SaveDoctorAvailability(DoctorsModel model)
+        {
+            try
+            {
+                if (model == null || model.DoctorId == 0)
+                {
+                    return BadRequest("DoctorId is missing or invalid.");
+                }
+
+                int result = doctorsDAL.SaveDoctorAvailability(model);
+
+                if (result>0)
+                {
+                    return Ok(new{success = true, message = "Doctor availability saved successfully.", doctorId = model.DoctorId });
+                }
+                else
+                {
+                    return Content(HttpStatusCode.InternalServerError, new { success = false, message = "Failed to save doctor availability."  });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, new
+                {
+                    success = false,
+                    message = "Server error while saving doctor availability.",
+                    details = ex.Message
+                });
+            }
+        }
+
 
     }
 }

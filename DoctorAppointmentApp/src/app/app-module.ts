@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { DoctorList } from './pages/admin/doctor-list/doctor-list';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorAddedit } from './pages/admin/doctor-addedit/doctor-addedit';
+import { DoctorAvailability } from './pages/admin/doctor-availability/doctor-availability';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DoctorAddedit } from './pages/admin/doctor-addedit/doctor-addedit';
     DoctorsList,
     Navbar,
     DoctorList,
-    DoctorAddedit
+    DoctorAddedit,
+    DoctorAvailability
   ],
   imports: [
     BrowserModule,

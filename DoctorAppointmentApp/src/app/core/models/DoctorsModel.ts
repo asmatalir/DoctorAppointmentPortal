@@ -1,3 +1,11 @@
+import { CitiesModel } from "./CitiesModel";
+import { DistrictsModel } from "./DistrictsModel";
+import { DoctorAvailabilitiesModel } from "./DoctorAvailabilitiesModel";
+import { QualificationsModel } from "./QualificationsModel";
+import { SpecializationsModel } from "./SpecializationsModel";
+import { StatesModel } from "./StatesModel";
+import { TalukasModel } from "./TalukasModel";
+
 export class DoctorsModel {
     // Search & filtering
     DoctorNameSearch?: string = '';
@@ -21,15 +29,15 @@ export class DoctorsModel {
     ContactNumber?: string = '';          
     Email?: string = '';                  
     UserName?: string = '';               
-    Password?: string = '';  
+    HashedPassword?: string = '';  
     Specializations: any[] = [];          
     Qualifications: any[] = [];  
     Description?: string = '';
     HospitalName?: string = '';
     Specialization : string = '';
     SelectedSpecializationId : number;
-    SpecializationIds?: string = '';  
-    QualificationIds?: string = ''; 
+    SpecializationIds: string = '';  
+    QualificationIds: string = ''; 
     Rating : number;
 
      // Address Information
@@ -44,4 +52,15 @@ export class DoctorsModel {
      CreatedBy: number | null = null;
      AddressId: number | null = null;
      Address?: string = '';
+
+     SpecializationsList : SpecializationsModel[];
+     SpecializationNames : string ;
+     QualificationNames : string ;
+     QualificationsList : QualificationsModel[];
+     StatesList : StatesModel[];
+     DistrictsList : DistrictsModel[];
+     TalukasList : TalukasModel[];
+     CitiesList : CitiesModel[];
+     DoctorAvailabilityList : DoctorAvailabilitiesModel[] = [];
+
 }

@@ -69,7 +69,7 @@
     <div class="d-flex justify-content-end mt-3">
         <ngb-pagination *ngIf="!loading && TotalRecords > 0"
           class="d-flex justify-content-center shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords"
-          [(page)]="PageNo" [pageSize]="PageSize" [maxSize]="3" [boundaryLinks]="true"
+          [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3" [boundaryLinks]="true"
           (pageChange)="loadDoctors()">
         </ngb-pagination>
       </div>

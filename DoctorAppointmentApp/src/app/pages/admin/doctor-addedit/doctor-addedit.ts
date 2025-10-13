@@ -1,43 +1,9 @@
 import { Component } from '@angular/core';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-
-interface DoctorSession {
-  StartTime: string;
-  EndTime: string;
-  Duration: number | null;
-}
-
-interface DoctorAvailability {
-  DayOfWeek: string;
-  Sessions: DoctorSession[];
-}
-
-interface Doctor {
-  DoctorId?: number;
-  FirstName?: string;
-  LastName?: string;
-  Gender?: string;
-  DateOfBirth?: string;
-  ContactNumber?: string;
-  Email?: string;
-  UserName?: string;
-  Password?: string;
-  ExperienceYears?: number;
-  ConsultationFees?: number;
-  HospitalName?: string;
-  Specializations?: number[];
-  Qualifications?: number[];
-  Rating?: number;
-  Description?: string;
-  StateId?: number;
-  DistrictId?: number;
-  TalukaId?: number;
-  CityId?: number;
-  AddressLine?: string;
-  Pincode?: string;
-  DoctorAvailabilityList: DoctorAvailability[];
-}
+import { DoctorsModel } from '../../../core/models/DoctorsModel';
+import { Router,ActivatedRoute } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
@@ -48,68 +14,28 @@ interface Doctor {
 })
 export class DoctorAddedit {
   
-specializationsList = [
-  { SpecializationId: 1, SpecializationName: 'Cardiology' },
-  { SpecializationId: 2, SpecializationName: 'Dermatology' },
-  { SpecializationId: 3, SpecializationName: 'Neurology' },
-  // Add more
-];
-
-qualificationsList = [
-  { QualificationId: 1, QualificationName: 'MBBS' },
-  { QualificationId: 2, QualificationName: 'MD' },
-  { QualificationId: 3, QualificationName: 'DO' },
-  // Add more
-];
- doctor: Doctor = {
-    DoctorAvailabilityList: []
-  };
-
-  // Example dropdown data
-  daysOfWeek = [
-    { name: 'Monday', value: 'Monday' },
-    { name: 'Tuesday', value: 'Tuesday' },
-    { name: 'Wednesday', value: 'Wednesday' },
-    { name: 'Thursday', value: 'Thursday' },
-    { name: 'Friday', value: 'Friday' },
-    { name: 'Saturday', value: 'Saturday' },
-    { name: 'Sunday', value: 'Sunday' }
-  ];
-
-  ngOnInit(): void { }
-
-  // -------------------------
-  // Availability & Session logic
-  // -------------------------
-
-  addAvailability() {
-    this.doctor.DoctorAvailabilityList.push({
-      DayOfWeek: '',
-      Sessions: [
-        { StartTime: '', EndTime: '', Duration: null }
-      ]
-    });
-  }
-
-  removeAvailability(index: number) {
-    this.doctor.DoctorAvailabilityList.splice(index, 1);
-  }
-
-  addSession(dayIndex: number) {
-    this.doctor.DoctorAvailabilityList[dayIndex].Sessions.push({
-      StartTime: '',
-      EndTime: '',
-      Duration: null
-    });
-  }
-
-  removeSession(dayIndex: number, sessionIndex: number) {
-    this.doctor.DoctorAvailabilityList[dayIndex].Sessions.splice(sessionIndex, 1);
-  }
+doctor : DoctorsModel = new DoctorsModel();
+SpecializationIds : number[]=[];
+QualificationIds : number[] = []; 
+specializationsList: any[] = [];
+qualificationsList: any[] = [];
+statesList: any[] = [];
+districtsList: any[] = [];
+talukasList: any[] = [];
+citiesList: any[] = [];
 
 
+constructor(
+  private doctorService: DoctorsService,
+  private route: ActivatedRoute,
+  private router: Router,
+) {}
 
-  constructor(private doctorService: DoctorsService) {}
+ngOnInit(): void {
+  const doctorId = this.route.snapshot.paramMap.get('id');
+  this.loadDoctorDetails(doctorId ? +doctorId : 0);
+}
+
   dropdownSettings: IDropdownSettings = {
     singleSelection: false,
     idField: 'PublisherId',
@@ -119,12 +45,61 @@ qualificationsList = [
     itemsShowLimit: 2,
     allowSearchFilter: true
   };
-  onSubmit(form: any) {
-    if (form.valid) {
-      console.log('Form Data:', this.doctor);
-      // Call backend API to save doctor
-    } else {
-      console.log('Form is invalid');
-    }
+
+  loadDoctorDetails(id: number = 0) {
+    this.doctorService.GetDoctorDetails(id).subscribe({
+      next: (response: DoctorsModel) => {
+        if (id > 0) {
+          // Edit mode
+          this.doctor = response;
+        } else {
+          // Add mode - initialize new model
+          this.doctor = new DoctorsModel();
+        }
+
+        // Populate dropdown lists
+        this.specializationsList = response.SpecializationsList || [];
+        this.qualificationsList = response.QualificationsList || [];
+        this.statesList = response.StatesList || [];
+        this.districtsList = response.DistrictsList || [];
+        this.talukasList = response.TalukasList || [];
+        this.citiesList = response.CitiesList || [];
+
+      },
+      error: (err) => {
+        console.error('Error loading doctor details:', err);
+      }
+    });
   }
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      // this.toast.warning('Please fill all required fields!');
+      console.error('Please fill all required fields!');
+
+      return;
+    }
+    this.doctor.SpecializationIds = this.SpecializationIds.join(',');
+    this.doctor.QualificationIds = this.QualificationIds.join(',');
+
+    this.doctorService.SaveDoctorDetails(this.doctor).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          debugger;
+          // this.toast.success('Doctor details saved successfully!');
+          console.error('Doctor details saved successfully!');
+
+          this.router.navigate(['/doctors']);  // navigate to doctor list page
+          form.form.markAsPristine();
+        } else {
+          // this.toast.error('Error saving doctor details!');
+        }
+      },
+      error: (err) => {
+        debugger;
+        console.error('Error saving doctor details', err);
+        // this.toast.error('Error saving doctor details!');
+      }
+    });
+  }
+  
 }
