@@ -143,39 +143,6 @@
   </div>
   
 
-         <!-- Section 4: Availability & Slots -->
-<div class="p-3 mb-4 border rounded bg-light">
-    <h6 class="mb-3 text-dark">Availability & Slots</h6>
-  
-    <div class="row g-4" *ngFor="let slot of doctor.DoctorAvailabilityList; let i = index">
-      <div class="col-lg-3">
-        <select class="form-control" [(ngModel)]="slot.DayOfWeek" name="DayOfWeek{{i}}" required>
-          <option value="">Select Day</option>
-          <option *ngFor="let day of daysOfWeek" [value]="day.value">{{day.name}}</option>
-        </select>
-      </div>
-  
-      <div class="col-lg-3">
-        <input type="time" class="form-control" [(ngModel)]="slot.StartTime" name="StartTime{{i}}" required>
-      </div>
-  
-      <div class="col-lg-3">
-        <input type="time" class="form-control" [(ngModel)]="slot.EndTime" name="EndTime{{i}}" required>
-      </div>
-  
-      <div class="col-lg-2">
-        <input type="number" class="form-control" [(ngModel)]="slot.SlotDuration" name="SlotDuration{{i}}" placeholder="Slot Min" required>
-      </div>
-  
-      <div class="col-lg-1 text-center">
-        <button type="button" class="btn btn-danger" >X</button>
-      </div>
-    </div>
-  
-    <div class="mt-2">
-      <button type="button" class="btn btn-secondary" >Add Day</button>
-    </div>
-  </div>
   
         <!-- Section 3: Address Information -->
         <div class="p-3 mb-4 border rounded bg-light">

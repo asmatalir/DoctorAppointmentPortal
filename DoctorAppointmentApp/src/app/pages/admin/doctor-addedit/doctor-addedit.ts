@@ -2,6 +2,43 @@ import { Component } from '@angular/core';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 
+interface DoctorSession {
+  StartTime: string;
+  EndTime: string;
+  Duration: number | null;
+}
+
+interface DoctorAvailability {
+  DayOfWeek: string;
+  Sessions: DoctorSession[];
+}
+
+interface Doctor {
+  DoctorId?: number;
+  FirstName?: string;
+  LastName?: string;
+  Gender?: string;
+  DateOfBirth?: string;
+  ContactNumber?: string;
+  Email?: string;
+  UserName?: string;
+  Password?: string;
+  ExperienceYears?: number;
+  ConsultationFees?: number;
+  HospitalName?: string;
+  Specializations?: number[];
+  Qualifications?: number[];
+  Rating?: number;
+  Description?: string;
+  StateId?: number;
+  DistrictId?: number;
+  TalukaId?: number;
+  CityId?: number;
+  AddressLine?: string;
+  Pincode?: string;
+  DoctorAvailabilityList: DoctorAvailability[];
+}
+
 
 @Component({
   selector: 'app-doctor-addedit',
@@ -10,7 +47,6 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
   styleUrl: './doctor-addedit.scss'
 })
 export class DoctorAddedit {
-  doctor: any = {}; // Object bound to form
   
 specializationsList = [
   { SpecializationId: 1, SpecializationName: 'Cardiology' },
@@ -25,16 +61,52 @@ qualificationsList = [
   { QualificationId: 3, QualificationName: 'DO' },
   // Add more
 ];
-// In your component.ts
-daysOfWeek = [
-  { name: 'Sunday', value: 0 },
-  { name: 'Monday', value: 1 },
-  { name: 'Tuesday', value: 2 },
-  { name: 'Wednesday', value: 3 },
-  { name: 'Thursday', value: 4 },
-  { name: 'Friday', value: 5 },
-  { name: 'Saturday', value: 6 }
-];
+ doctor: Doctor = {
+    DoctorAvailabilityList: []
+  };
+
+  // Example dropdown data
+  daysOfWeek = [
+    { name: 'Monday', value: 'Monday' },
+    { name: 'Tuesday', value: 'Tuesday' },
+    { name: 'Wednesday', value: 'Wednesday' },
+    { name: 'Thursday', value: 'Thursday' },
+    { name: 'Friday', value: 'Friday' },
+    { name: 'Saturday', value: 'Saturday' },
+    { name: 'Sunday', value: 'Sunday' }
+  ];
+
+  ngOnInit(): void { }
+
+  // -------------------------
+  // Availability & Session logic
+  // -------------------------
+
+  addAvailability() {
+    this.doctor.DoctorAvailabilityList.push({
+      DayOfWeek: '',
+      Sessions: [
+        { StartTime: '', EndTime: '', Duration: null }
+      ]
+    });
+  }
+
+  removeAvailability(index: number) {
+    this.doctor.DoctorAvailabilityList.splice(index, 1);
+  }
+
+  addSession(dayIndex: number) {
+    this.doctor.DoctorAvailabilityList[dayIndex].Sessions.push({
+      StartTime: '',
+      EndTime: '',
+      Duration: null
+    });
+  }
+
+  removeSession(dayIndex: number, sessionIndex: number) {
+    this.doctor.DoctorAvailabilityList[dayIndex].Sessions.splice(sessionIndex, 1);
+  }
+
 
 
   constructor(private doctorService: DoctorsService) {}
