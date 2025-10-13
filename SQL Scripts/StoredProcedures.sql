@@ -554,7 +554,7 @@ END;
 GO
 
 GO
-CREATE PROCEDURE InsertOrUpdateDoctorAvailability
+CREATE OR ALTER PROCEDURE InsertOrUpdateDoctorAvailability
     @DoctorId INT,
     @CreatedBy INT,
     @AvailabilitiesXml XML,
