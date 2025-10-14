@@ -60,6 +60,74 @@
           </button>
         </div>
       </div>
+
+  <!-- Section: Doctor Unavailability -->
+<div class="p-3 mb-4 border rounded bg-light">
+  <h6 class="mb-3 text-dark fw-bold">Doctor Unavailability (Exceptions)</h6>
+
+  <!-- Loop through DoctorUnAvailabilityList -->
+  <div class="row mb-3" *ngFor="let exception of doctor.DoctorAvailabilityExceptionsList; let i = index">
+    <div class="col-md-2">
+      <label class="form-label">Date</label>
+      <input type="date"
+             class="form-control"
+             [(ngModel)]="exception.ExceptionDate"
+             name="ExceptionDate{{i}}"
+             required>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Start Time</label>
+      <input type="time"
+             class="form-control"
+             [(ngModel)]="exception.StartTime"
+             name="StartTime{{i}}">
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">End Time</label>
+      <input type="time"
+             class="form-control"
+             [(ngModel)]="exception.EndTime"
+             name="EndTime{{i}}">
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Reason</label>
+      <input type="text"
+             class="form-control"
+             [(ngModel)]="exception.Reason"
+             name="Reason{{i}}"
+             placeholder="Reason (optional)">
+    </div>
+
+    <div class="col-md-2 d-flex align-items-center">
+      <input type="checkbox"
+             [(ngModel)]="exception.IsAvailable"
+             name="IsAvailable{{i}}"
+             class="form-check-input me-2">
+      <label class="form-label mb-0">Available?</label>
+    </div>
+    
+
+    <div class="col-md-1 d-flex align-items-end justify-content-center">
+      <button type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="removeUnavailability(i)">
+        X
+      </button>
+    </div>
+  </div>
+
+  <!-- Add new unavailability -->
+  <div class="mt-3">
+    <button type="button" class="btn btn-primary" (click)="addUnavailability()">
+      + Add Unavailability
+    </button>
+  </div>
+</div>
+
+
       <div class="mt-4 text-end">
         <button type="submit" class="btn btn-primary" (click)="SaveDoctorAvailabilities()">Save</button>
       </div>

@@ -18,6 +18,8 @@ namespace Doctor_Appointment_Portal.Controllers
         Districts districtsDAL = new Districts();
         Talukas talukasDAL = new Talukas();
         Cities citiesDAL = new Cities();
+        DoctorAvailabilities doctorAvailabilitiesDAL = new DoctorAvailabilities();
+        DoctorAvailabilityExceptions doctorAvailabilityExceptionsDAL = new DoctorAvailabilityExceptions();
 
         [HttpPost]
         public IHttpActionResult GetLists(DoctorsModel model)
@@ -70,6 +72,9 @@ namespace Doctor_Appointment_Portal.Controllers
                 model.DistrictsList = districtsDAL.GetList();
                 model.TalukasList = talukasDAL.GetList();
                 model.CitiesList = citiesDAL.GetList();
+                model.DoctorAvailabilityList = doctorAvailabilitiesDAL.GetDetails(id);
+                model.DoctorAvailabilityExceptionsList = doctorAvailabilityExceptionsDAL.GetDetails(id);
+
 
                 return Ok(model);
             }
@@ -79,7 +84,25 @@ namespace Doctor_Appointment_Portal.Controllers
             }
         }
 
-       
+        [HttpGet]
+        public IHttpActionResult GetDoctorAvailabilityDetails(int id)
+        {
+            DoctorsModel model = new DoctorsModel();
+            try
+            {
+
+                model = doctorsDAL.LoadDoctorDetails(id);
+                model.DoctorAvailabilityList = doctorAvailabilitiesDAL.GetDetails(id);
+                model.DoctorAvailabilityExceptionsList = doctorAvailabilityExceptionsDAL.GetDetails(id);
+
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor availability details." });
+            }
+        }
 
 
 
@@ -90,18 +113,10 @@ namespace Doctor_Appointment_Portal.Controllers
             {
                 int doctorId = -1;
 
-                if (model.DoctorId != 0)
-                {
-                    // Update existing doctor
-                    //doctorId = doctorsDAL.UpdateDoctorDetails(model); // Make sure you have an Update method in DAL
-                    return Ok(new { success = true, message = "Doctor updated successfully.", doctorId });
-                }
-                else
-                {
                     // Insert new doctor
                     doctorId = doctorsDAL.SaveDoctorDetails(model); 
                     return Ok(new { success = true, message = "Doctor created successfully.", doctorId });
-                }
+                
             }
             catch (Exception ex)
             {

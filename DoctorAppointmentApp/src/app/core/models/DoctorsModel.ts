@@ -1,6 +1,7 @@
 import { CitiesModel } from "./CitiesModel";
 import { DistrictsModel } from "./DistrictsModel";
 import { DoctorAvailabilitiesModel } from "./DoctorAvailabilitiesModel";
+import { DoctorUnavailabilityModel } from "./DoctorUnavailablityModel";
 import { QualificationsModel } from "./QualificationsModel";
 import { SpecializationsModel } from "./SpecializationsModel";
 import { StatesModel } from "./StatesModel";
@@ -62,5 +63,6 @@ export class DoctorsModel {
      TalukasList : TalukasModel[];
      CitiesList : CitiesModel[];
      DoctorAvailabilityList : DoctorAvailabilitiesModel[] = [];
+     DoctorAvailabilityExceptionsList : DoctorUnavailabilityModel[] = [];
 
 }

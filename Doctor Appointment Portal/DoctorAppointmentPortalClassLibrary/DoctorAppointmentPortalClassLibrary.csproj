@@ -81,16 +81,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="DAL\AppointmentRequests.cs" />
     <Compile Include="DAL\Cities.cs" />
     <Compile Include="DAL\Districts.cs" />
+    <Compile Include="DAL\DoctorAvailabilities.cs" />
+    <Compile Include="DAL\DoctorAvailabilityExceptions.cs" />
     <Compile Include="DAL\Doctors.cs" />
     <Compile Include="DAL\Qualifications.cs" />
     <Compile Include="DAL\Specializations.cs" />
     <Compile Include="DAL\States.cs" />
     <Compile Include="DAL\Talukas.cs" />
+    <Compile Include="Models\AppointmentRequestsModel.cs" />
     <Compile Include="Models\CitiesModel.cs" />
     <Compile Include="Models\DistrictsModel.cs" />
     <Compile Include="Models\DoctorAvailabilitiesModel.cs" />
+    <Compile Include="Models\DoctorAvailabilityExceptionsModel.cs" />
     <Compile Include="Models\DoctorsModel.cs" />
     <Compile Include="Models\QualificationsModel.cs" />
     <Compile Include="Models\SpecializationsModel.cs" />

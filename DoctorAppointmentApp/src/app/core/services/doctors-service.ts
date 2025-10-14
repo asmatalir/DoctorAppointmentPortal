@@ -19,6 +19,11 @@ export class DoctorsService {
     );
   }
   
+  GetDoctorAvailabilityDetails(id: number): Observable<any> {
+    return this.http.get<any>(environment.apiBaseUrl + 'Doctors/GetDoctorAvailabilityDetails', { params: { id: id.toString() } }
+    );
+  }
+
   SaveDoctorDetails(doctor: DoctorsModel): Observable<any> {
     return this.http.post<any>(environment.apiBaseUrl + 'Doctors/SaveAddEditDoctor', doctor);
   }

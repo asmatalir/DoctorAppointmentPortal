@@ -1,0 +1,137 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4>Appointment Requests</h4>
+    </div>
+
+    <!-- Search & Filters -->
+    <!-- <div class="row mb-3 g-2 align-items-center">
+        <div class="col-md-4">
+          <input type="text" class="form-control" placeholder="Search by doctor name..." [(ngModel)]="filters.SearchedPatientName" (ngModelChange)="onFilterChange()">
+        </div>
+
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" href="javascript:void(0);"
+            (click)="openEnd(filterOffcanvas)"><i class="ri-filter-3-line align-bottom me-1"></i> Fliters</button>
+        </div>
+    </div> -->
+
+
+    <div class="row mb-3 g-2 align-items-center">
+        <!-- Search Text -->
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by doctor name..." [(ngModel)]="filters.SearchedPatientName" (ngModelChange)="onFilterChange()">
+        </div>
+    
+          
+        <!-- Optional: Clear Button -->
+        <div class="col-md d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" href="javascript:void(0);"
+            (click)="openEnd(filterOffcanvas)"><i class="ri-filter-3-line align-bottom me-1"></i> Fliters</button>
+        </div>
+      </div>
+
+    <table class="table table-striped table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Patient</th>
+          <th>Doctor</th>
+          <th>Specialization</th>
+          <th>Medical Concern</th>
+          <th>Preferred Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Final Date</th>
+          <th>Final Start</th>
+          <th>Final End</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let req of AppointmentRequestList">
+            <td>{{ req.PatientName }}</td>
+            <td>{{ req.DoctorName }}</td>
+            <td>{{ req.SpecializationName }}</td>
+            <td>{{ req.MedicalConcern }}</td>
+            <td>{{ req.PreferredDate | date:'yyyy-MM-dd' }}</td>
+            <td>{{ req.StartTime }}</td>
+            <td>{{ req.EndTime }}</td>
+            <td>{{ req.FinalDate | date:'yyyy-MM-dd' }}</td>
+            <td>{{ req.FinalStartTime }}</td>
+            <td>{{ req.FinalEndTime }}</td>
+            <td>{{ req.StatusName }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- <--Pagination --> 
+     <div class="d-flex justify-content-end mt-3">
+        <ngb-pagination *ngIf="!loading && TotalRecords > 0"
+          class="d-flex justify-content-center shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords"
+          [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3" [boundaryLinks]="true"
+          (pageChange)="loadAppointmentRequests()">
+        </ngb-pagination>
+    </div>
+</div>
+<ng-template #filterOffcanvas let-offcanvas>
+    <!-- Offcanvas Header -->
+    <div class="offcanvas-header bg-light">
+      <h5 class="offcanvas-title">Appointment Filters</h5>
+      <button type="button" class="btn-close text-reset" (click)="offcanvas.dismiss()"></button>
+    </div>
+  
+    <form (ngSubmit)="applyFilters(offcanvas)" class="d-flex flex-column h-100">
+      <div class="offcanvas-body">
+  
+        <!-- Patient Name -->
+        <div class="mb-3">
+          <label class="form-label">Patient Name</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="filters.SearchedPatientName"
+                 name="PatientName"
+                 placeholder="Enter patient name">
+        </div>
+  
+        <!-- Doctor Name -->
+        <div class="mb-3">
+          <label class="form-label">Doctor Name</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="filters.SearchedDoctorName"
+                 name="DoctorName"
+                 placeholder="Enter doctor name">
+        </div>
+  
+        <!-- Specialization Dropdown -->
+        <div class="mb-3">
+          <label class="form-label">Specialization</label>
+          <select class="form-select" [(ngModel)]="filters.SpecializationId" name="SpecializationId">
+            <option [ngValue]="null">All Specializations</option>
+            <option *ngFor="let spec of specializationsList" [ngValue]="spec.SpecializationId">
+              {{ spec.SpecializationName }}
+            </option>
+          </select>
+        </div>
+  
+        <!-- Date Range -->
+        <div class="mb-3">
+          <label class="form-label">From Date</label>
+          <input type="date" class="form-control"
+                 [(ngModel)]="filters.FromDate"
+                 name="FromDate">
+        </div>
+  
+        <div class="mb-3">
+          <label class="form-label">To Date</label>
+          <input type="date" class="form-control"
+                 [(ngModel)]="filters.ToDate"
+                 name="ToDate">
+        </div>
+  
+      </div>
+  
+      <!-- Offcanvas Footer -->
+      <div class="offcanvas-footer border-top p-3 hstack gap-2">
+        <button type="button" class="btn btn-light w-100" (click)="clearFilters(offcanvas)">Clear</button>
+        <button type="submit" class="btn btn-success w-100">Search</button>
+      </div>
+    </form>
+  </ng-template>

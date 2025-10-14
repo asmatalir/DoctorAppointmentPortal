@@ -32,11 +32,6 @@ export class DoctorsList implements OnInit {
         this.doctorsList = data.DoctorsList || [];
         this.specializationsList = data.SpecializationsList || [];
 
-        this.doctorsList.forEach(doc => {
-          console.log('Doctor:', doc.FirstName + ' ' + doc.LastName);
-          console.log('SpecializationNames:', doc.SpecializationNames);
-        });
-
 
         this.doctorsList = this.doctorsList.map(doc => {
           return {

@@ -214,12 +214,14 @@ CREATE TABLE AppointmentRequests (
     AppointmentRequestId INT IDENTITY(1,1) PRIMARY KEY,
     PatientId INT NOT NULL FOREIGN KEY REFERENCES PatientProfiles(PatientId),
     DoctorId INT NULL FOREIGN KEY REFERENCES DoctorProfiles(DoctorId),
-    SpecializationId INT NULL FOREIGN KEY REFERENCES Specializations(SpecializationId),
+    SpecializationId INT NOT NULL FOREIGN KEY REFERENCES Specializations(SpecializationId),
     MedicalConcern NVARCHAR(300) NOT NULL,
     PreferredDate DATE NOT NULL,
+	StartTime TIME,
+	EndTime TIME,
+	FinalStartTime TIME,
+	FinalEndTime TIME,
 	FinalDate DATE,
-    SlotId INT NULL FOREIGN KEY REFERENCES DoctorSlots(SlotId),
-    FinalSlotId INT NULL FOREIGN KEY REFERENCES DoctorSlots(SlotId),
     StatusId INT NULL FOREIGN KEY REFERENCES Statuses(StatusId),
 	CreatedOn DATETIME NOT NULL,
 	LastModifiedBy INT FOREIGN KEY REFERENCES UserProfiles(UserId),
@@ -242,6 +244,20 @@ CREATE TABLE PatientDocuments(
 
 
 
+CREATE TABLE DoctorAvailabilityExceptions (
+    ExceptionId INT IDENTITY(1,1) PRIMARY KEY,
+    DoctorId INT NOT NULL FOREIGN KEY REFERENCES DoctorProfiles(DoctorId),
+    ExceptionDate DATE NOT NULL,    
+	StartTime TIME,
+	EndTime TIME,
+    IsAvailable BIT NOT NULL DEFAULT 0,      
+    Reason NVARCHAR(255) NULL,                
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedBy INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(UserId),
+    CreatedOn DATETIME NOT NULL,
+    LastModifiedBy INT FOREIGN KEY REFERENCES UserProfiles(UserId),
+    LastModifiedOn DATETIME       
+);
 
 
 

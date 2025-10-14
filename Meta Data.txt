@@ -1,0 +1,13 @@
+States of a Slot:
+
+AVAILABLE: Open for booking by any patient.
+
+BLOCKED: Temporarily made unavailable by the admin or doctor (e.g., for a lunch break).
+
+BOOKED: A patient has scheduled an appointment. This is a firm commitment.
+
+RESERVED / PENDING: A patient is in the process of booking (e.g., they have 5-10 minutes to complete the booking before it's released). This prevents double-booking.
+
+CANCELLED: The appointment was canceled. The slot may or may not return to AVAILABLE based on business rules (e.g., cancellation policy).
+
+COMPLETED: The appointment has been fulfilled.

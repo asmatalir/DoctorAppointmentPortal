@@ -8,6 +8,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
 {
     public class DoctorAvailabilitiesModel
     {
+        public int DoctorAvailabilityId { get; set; }
         public int DayOfWeek { get; set; }          
         public TimeSpan StartTime { get; set; }     
         public TimeSpan EndTime { get; set; }

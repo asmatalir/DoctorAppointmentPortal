@@ -1,3 +1,4 @@
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.csprojResolveAssemblyReference.cache
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\csc.exe
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
@@ -15,14 +16,31 @@ D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Doctor Appointment Portal.pdb
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Antlr3.Runtime.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\DoctorAppointmentPortalClassLibrary.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Bcl.TimeProvider.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.Abstractions.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.Logging.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.Tokens.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.EnterpriseLibrary.Data.SqlCe.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Practices.ObjectBuilder2.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Web.Infrastructure.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Newtonsoft.Json.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Buffers.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Memory.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Net.Http.Formatting.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Numerics.Vectors.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Text.Encodings.Web.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Text.Json.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Threading.Tasks.Extensions.dll
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.ValueTuple.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Helpers.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Http.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Http.WebHost.dll
@@ -34,7 +52,24 @@ D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Razor.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\WebGrease.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\DoctorAppointmentPortalClassLibrary.pdb
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Bcl.TimeProvider.xml
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.Abstractions.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.Logging.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Microsoft.IdentityModel.Tokens.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Buffers.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Diagnostics.DiagnosticSource.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Memory.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Numerics.Vectors.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Text.Encodings.Web.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Text.Json.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Threading.Tasks.Extensions.xml
+D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.ValueTuple.xml
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Newtonsoft.Json.xml
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Net.Http.Formatting.xml
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.Helpers.xml
@@ -47,6 +82,5 @@ D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Deployment.xml
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\System.Web.WebPages.Razor.xml
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\bin\Antlr3.Runtime.pdb
-D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.csprojResolveAssemblyReference.cache
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.dll
 D:\Doctor Appointment Portal\Doctor Appointment Portal\Doctor Appointment Portal\obj\Debug\Doctor Appointment Portal.pdb

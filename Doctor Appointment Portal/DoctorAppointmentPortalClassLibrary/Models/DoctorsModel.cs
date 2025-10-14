@@ -21,7 +21,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public decimal ConsultationFees { get; set; }
         public string Description { get; set; }
         public string HospitalName { get; set; }
-        public decimal Rating { get; set; }
+        public decimal? Rating { get; set; }
         public int TotalRecords { get; set; }
 
         public string Address { get; set; }
@@ -29,7 +29,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int StateId { get; set; }
         public int DistrictId { get; set; }
         public int TalukaId { get; set; }
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
         public string Pincode { get; set; }
         public string AddressLine { get; set; }
 
@@ -57,6 +57,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public List<TalukasModel> TalukasList { get; set; }
         public List<CitiesModel> CitiesList { get; set; }
         public List<DoctorAvailabilitiesModel> DoctorAvailabilityList { get; set; }
+        public List<DoctorAvailabilityExceptionsModel> DoctorAvailabilityExceptionsList { get; set; }
 
 
     }

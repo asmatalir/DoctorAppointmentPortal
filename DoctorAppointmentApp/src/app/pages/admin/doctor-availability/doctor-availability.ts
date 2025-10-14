@@ -4,6 +4,7 @@ import { DoctorSessionsModel } from '../../../core/models/DoctorSessionsModel';
 import { DoctorsModel } from '../../../core/models/DoctorsModel';
 import { ActivatedRoute } from '@angular/router';
 import { DoctorsService } from '../../../core/services/doctors-service';
+import { DoctorUnavailabilityModel } from '../../../core/models/DoctorUnavailablityModel';
 
 @Component({
   selector: 'app-doctor-availability',
@@ -40,10 +41,10 @@ ngOnInit(): void {
 
 
   loadDoctorDetails(id: number) {
-    this.doctorService.GetDoctorDetails(id).subscribe({
+    this.doctorService.GetDoctorAvailabilityDetails(id).subscribe({
       next: (res: any) => {
         if (res) {
-          this.doctor = res; // directly assign the model if the structure matches
+          this.doctor = res;
           
           // convert comma-separated strings to arrays if needed
           this.doctor.Specializations = res.SpecializationNames?.split(',') || [];
@@ -51,6 +52,14 @@ ngOnInit(): void {
 
           // ensure DoctorAvailabilityList exists
           this.doctor.DoctorAvailabilityList = res.DoctorAvailabilityList || [];
+          this.doctor.DoctorAvailabilityExceptionsList = res.DoctorAvailabilityExceptionsList || [];
+          // Inside your component, after fetching data
+          this.doctor.DoctorAvailabilityExceptionsList.forEach(ex => {
+            if (ex.ExceptionDate) {
+                ex.ExceptionDate = new Date(ex.ExceptionDate).toISOString().split('T')[0];
+            }
+          });
+
         }
       },
       error: (err) => console.error('Error loading doctor details', err)
@@ -86,6 +95,28 @@ ngOnInit(): void {
     });
   }
   
+
+  addUnavailability() {
+    if (!this.doctor.DoctorAvailabilityExceptionsList) {
+      this.doctor.DoctorAvailabilityExceptionsList = [];
+    }
+  
+    this.doctor.DoctorAvailabilityExceptionsList.push({
+      UnavailabilityId: 0,
+      DoctorId: this.doctor.DoctorId,
+      ExceptionDate: '',
+      StartTime: '',
+      EndTime: '',
+      Reason: ''
+    } as DoctorUnavailabilityModel);
+  }
+  
+  
+  
+
+  removeUnavailability(index: number) {
+    this.doctor.DoctorAvailabilityExceptionsList.splice(index, 1);
+  }
 
 
 }

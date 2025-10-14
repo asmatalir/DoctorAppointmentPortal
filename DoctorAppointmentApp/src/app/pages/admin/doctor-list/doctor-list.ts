@@ -21,7 +21,7 @@ export class DoctorList {
   selectedSpecialization : string;
   filters : DoctorsModel = new DoctorsModel();
 
-  constructor(private doctorsService: DoctorsService,private router: Router,) { }
+  constructor(private doctorsService: DoctorsService,private router: Router) { }
 
   ngOnInit(): void {
     this.loadDoctors();

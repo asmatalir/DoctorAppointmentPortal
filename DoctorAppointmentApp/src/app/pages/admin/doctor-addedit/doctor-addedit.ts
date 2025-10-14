@@ -65,6 +65,17 @@ ngOnInit(): void {
         this.talukasList = response.TalukasList || [];
         this.citiesList = response.CitiesList || [];
 
+        if (this.doctor.DateOfBirth) {
+          const dob = new Date(this.doctor.DateOfBirth);
+          this.doctor.DateOfBirth = dob.toISOString().substring(0, 10); 
+        } else {
+          this.doctor.DateOfBirth = ''; // empty if null
+        }
+        this.SpecializationIds = this.doctor.SpecializationIds? this.doctor.SpecializationIds.split(',').map(id => +id.trim()) : [];
+      
+        this.QualificationIds = this.doctor.QualificationIds ? this.doctor.QualificationIds.split(',').map(id => +id.trim())  : [];
+      
+
       },
       error: (err) => {
         console.error('Error loading doctor details:', err);

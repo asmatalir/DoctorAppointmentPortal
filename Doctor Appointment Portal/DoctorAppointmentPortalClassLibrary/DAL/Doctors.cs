@@ -116,8 +116,12 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                         model.ConsultationFees = Convert.ToDecimal(dt.Rows[0]["ConsultationFees"]);
                         model.HospitalName = Convert.ToString(dt.Rows[0]["HospitalName"]);
                         model.Description = Convert.ToString(dt.Rows[0]["Description"]);
+                        model.UserName = Convert.ToString(dt.Rows[0]["UserName"]);
+                        model.DateOfBirth = Convert.ToDateTime(dt.Rows[0]["DateOfBirth"]);
                         model.Rating = Convert.ToDecimal(dt.Rows[0]["Rating"]);
 
+                        model.Address = Convert.ToString(dt.Rows[0]["Address"]);
+                        model.Pincode = Convert.ToString(dt.Rows[0]["Pincode"]);
                         model.AddressId = Convert.ToInt32(dt.Rows[0]["AddressId"]);
                         model.StateId = Convert.ToInt32(dt.Rows[0]["StateId"]);
                         model.DistrictId = Convert.ToInt32(dt.Rows[0]["DistrictId"]);
@@ -150,9 +154,13 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             {
 
 
-                DbCommand cmd = db.GetStoredProcCommand("InsertDoctorDetails");
+                DbCommand cmd = db.GetStoredProcCommand("InsertOrUpdateDoctorDetails");
 
                 // Personal Info
+                if (doctor.DoctorId > 0)
+                    db.AddInParameter(cmd, "@DoctorId", DbType.String, doctor.DoctorId);
+                else
+                    db.AddInParameter(cmd, "@FirstName", DbType.String, DBNull.Value);
                 if (!string.IsNullOrEmpty(doctor.FirstName))
                     db.AddInParameter(cmd, "@FirstName", DbType.String, doctor.FirstName);
                 else
@@ -193,7 +201,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 else
                     db.AddInParameter(cmd, "@DateOfBirth", DbType.Date, DBNull.Value);
 
-                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, 1);
+                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, 6);
 
                 // Professional Info
                 if (doctor.ExperienceYears > 0)
@@ -222,8 +230,8 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(cmd, "@Rating", DbType.Decimal, DBNull.Value);
 
                 // Address Info
-                if (!string.IsNullOrEmpty(doctor.AddressLine))
-                    db.AddInParameter(cmd, "@AddressLine", DbType.String, doctor.AddressLine);
+                if (!string.IsNullOrEmpty(doctor.Address))
+                    db.AddInParameter(cmd, "@AddressLine", DbType.String, doctor.Address);
                 else
                     db.AddInParameter(cmd, "@AddressLine", DbType.String, DBNull.Value);
 
@@ -306,6 +314,16 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 {
                     db.AddInParameter(cmd, "@AvailabilitiesXml", DbType.Xml, DBNull.Value);
                 }
+                string exceptionsXml = ConvertExceptionsToXml(doctor.DoctorAvailabilityExceptionsList);
+                if (!String.IsNullOrEmpty(exceptionsXml))
+                {
+                    db.AddInParameter(cmd, "@ExceptionsListXml", DbType.Xml, exceptionsXml);
+                }
+                else
+                {
+                    db.AddInParameter(cmd, "@ExceptionsListXml", DbType.Xml, DBNull.Value);
+                }
+
 
                 db.AddOutParameter(cmd, "@ResultCode", DbType.Int32, 4);
 
@@ -345,6 +363,27 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             return sb.ToString();
         }
 
+
+        private string ConvertExceptionsToXml(List<DoctorAvailabilityExceptionsModel> exceptions)
+        {
+            if (exceptions == null || exceptions.Count == 0) return null;
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Append("<Exceptions>");
+            foreach (var ex in exceptions)
+            {
+                sb.Append("<Exception>");
+                sb.AppendFormat("<ExceptionId>{0}</ExceptionId>", ex.ExceptionId);
+                sb.AppendFormat("<ExceptionDate>{0}</ExceptionDate>", ex.ExceptionDate);
+                sb.AppendFormat("<StartTime>{0}</StartTime>", ex.StartTime);
+                sb.AppendFormat("<EndTime>{0}</EndTime>", ex.EndTime);
+                sb.AppendFormat("<IsAvailable>{0}</IsAvailable>", ex.IsAvailable);
+                sb.AppendFormat("<Reason>{0}</Reason>", ex.Reason);
+                sb.Append("</Exception>");
+            }
+            sb.Append("</Exceptions>");
+            return sb.ToString();
+        }
 
 
     }

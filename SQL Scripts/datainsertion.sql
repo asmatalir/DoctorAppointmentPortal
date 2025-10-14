@@ -118,6 +118,63 @@ VALUES
 (4, 5, 1, 6, GETDATE()), 
 (5, 6, 1, 6, GETDATE());  
 
+INSERT INTO AppointmentRequests
+(
+    PatientId,
+    DoctorId,
+    SpecializationId,
+    MedicalConcern,
+    PreferredDate,
+    StartTime,
+    EndTime,
+    FinalStartTime,
+    FinalEndTime,
+    FinalDate,
+    StatusId,
+    CreatedOn
+)
+VALUES
+-- 1
+(1, 2, 3, N'Frequent headaches and dizziness', '2025-10-18', '09:00', '09:30', NULL, NULL, NULL, 1, GETDATE()),
+
+-- 2
+(2, 3, 2, N'Persistent cough and throat irritation', '2025-10-19', '10:00', '10:30', NULL, NULL, NULL, 2, GETDATE()),
+
+-- 3
+(3, 4, 5, N'Back pain and joint stiffness', '2025-10-20', '11:00', '11:30', NULL, NULL, NULL, 1, GETDATE()),
+
+-- 4
+(4, 6, 1, N'Skin rash with mild itching', '2025-10-21', '15:00', '15:30', NULL, NULL, NULL, 3, GETDATE()),
+
+-- 5
+(5, 2, 4, N'High blood pressure follow-up', '2025-10-22', '17:00', '17:30', NULL, NULL, NULL, 1, GETDATE());
+
+
+
+INSERT INTO PatientProfiles 
+(FirstName, LastName, Email, PhoneNumber, DateOfBirth, Gender, InsuranceInfo, MedicalHistory, AddressId, CreatedOn)
+VALUES
+(N'Riya', N'Shah', N'riya.shah@example.com', N'9876543210', '1998-05-15', 'F', N'FHPRD25486DF', N'Allergic to penicillin', 1, GETDATE()),
+
+(N'Amit', N'Patil', N'amit.patil@example.com', N'9123456789', '1995-03-22', 'M', N'GHPRD25486DF', N'Hypertension under control', 2, GETDATE()),
+
+(N'Sneha', N'Kulkarni', N'sneha.kulkarni@example.com', N'9988776655', '2000-08-09', 'F', N'DFGT55486DF', N'No major history', 3, GETDATE()),
+
+(N'Rahul', N'Jadhav', N'rahul.jadhav@example.com', N'9090909090', '1989-12-25', 'M', N'GRTY5486DF', N'Diabetic Type 2', 1, GETDATE()),
+
+(N'Aryan', N'Deshmukh', N'aryan.deshmukh@example.com', N'9765432109', '1992-07-11', 'M', N'GHPRD254856F', N'History of asthma', 2, GETDATE());
+
+INSERT INTO Statuses (StatusName, IsActive, CreatedBy, CreatedOn)
+VALUES
+(N'Pending', 1, 6, GETDATE()),
+(N'Approved', 1, 6, GETDATE()),
+(N'Rejected', 1, 6, GETDATE()),
+(N'Cancelled', 1, 6, GETDATE()),
+(N'Completed', 1, 6, GETDATE()),
+(N'Rescheduled', 1, 6, GETDATE()),
+(N'Booked', 1, 6, GETDATE()),
+(N'Available', 1, 6, GETDATE());
+
 
 
 
