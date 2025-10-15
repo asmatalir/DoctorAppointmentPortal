@@ -1,6 +1,8 @@
 export class AppointmentRequestsModel {
     AppointmentRequestId: number;
     PatientId: number;
+    PatientEmail : string;
+    DoctorEmail : string;
     DoctorId: number;
     StatusId: number;
     SpecializationId: number;
@@ -21,6 +23,7 @@ export class AppointmentRequestsModel {
     DoctorName: string;
     StatusName: string;
 
+    Action : string;
     SearchedPatientName : string;
     SearchedDoctorName : string;
     FromDate : string;

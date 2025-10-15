@@ -4,15 +4,18 @@ CREATE OR ALTER PROCEDURE GetUserPasswordByUsername
     @UserName NVARCHAR(100)
 AS
 BEGIN
-    SET NOCOUNT ON;
 
     SELECT 
-        HashedPassword,
-		Email
+        up.HashedPassword,
+        up.UserRoleId,
+        ur.RoleName
     FROM 
-        UserProfiles
+        UserProfiles up
+    INNER JOIN 
+        UserRoles ur
+        ON up.UserRoleId = ur.UserRoleId
     WHERE 
-        UserName = @UserName
-        AND IsActive = 1;
+        up.UserName = @UserName
+        AND up.IsActive = 1;
 END
 GO

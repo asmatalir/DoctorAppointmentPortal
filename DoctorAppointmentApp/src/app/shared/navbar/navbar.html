@@ -67,9 +67,41 @@
 
         <!-- Right side: Location + Login -->
         <form class="d-flex align-items-center">
-          <input class="location-search me-2" type="search" placeholder="Search doctors, clinics, hospitals..." aria-label="Search">
-          <button class="btn btn-login" type="button">Login / Signup</button>
-        </form>
+          <!-- <input class="location-search me-2" type="search" placeholder="Search doctors, clinics, hospitals..." aria-label="Search"> -->
+
+          <ng-container *ngIf="username; else loginBtn">
+            <div class="user-info dropdown">
+              <!-- Profile Image & Dropdown toggle -->
+              <img 
+                [src]="profileImage" 
+                alt="Profile" 
+                class="profile-img dropdown-toggle" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+              >
+          
+              <!-- Name & Role -->
+              <div class="user-details">
+                <div class="username">{{ username }}</div>
+                <div class="role">{{ role }}</div>
+              </div>
+          
+              <!-- Dropdown Menu -->
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/appointments">My Appointments</a></li>
+                <li><a class="dropdown-item" routerLink="/settings">Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" (click)="logout()">Logout</a></li>
+              </ul>
+            </div>
+          </ng-container>
+          
+          <ng-template #loginBtn>
+            <button class="btn btn-login" type="button">Login / Signup</button>
+          </ng-template>
+           
+             </form>
       </div>
     </div>
   </nav>

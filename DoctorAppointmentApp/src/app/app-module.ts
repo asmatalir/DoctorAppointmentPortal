@@ -1,6 +1,9 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+
+
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
@@ -10,10 +13,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { Navbar } from './shared/navbar/navbar';
 import { FormsModule } from '@angular/forms';
 import { DoctorList } from './pages/admin/doctor-list/doctor-list';
-import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorAddedit } from './pages/admin/doctor-addedit/doctor-addedit';
 import { DoctorAvailability } from './pages/admin/doctor-availability/doctor-availability';
 import { AppointmentRequests } from './pages/admin/appointment-requests/appointment-requests';
+import { DoctorAppointmentRequests } from './pages/doctor/doctor-appointment-requests/doctor-appointment-requests';
+import { LoaderInterceptor } from './core/helpers/loader-interceptor';
+import { Login } from './account/login/login';
+import { Loader } from './core/helpers/loader/loader';
+import { ToastContainer } from './core/helpers/toast-container/toast-container';
+import { AuthInterceptor } from './core/helpers/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -23,7 +33,11 @@ import { AppointmentRequests } from './pages/admin/appointment-requests/appointm
     DoctorList,
     DoctorAddedit,
     DoctorAvailability,
-    AppointmentRequests
+    AppointmentRequests,
+    DoctorAppointmentRequests,
+    Login,
+    Loader,
+    ToastContainer
   ],
   imports: [
     BrowserModule,
@@ -32,10 +46,13 @@ import { AppointmentRequests } from './pages/admin/appointment-requests/appointm
     FormsModule,
     NgbPaginationModule,
     NgMultiSelectDropDownModule.forRoot(),
-    NgSelectModule
+    NgSelectModule,
+    NgbDropdownModule,
+    NgbToastModule
   ],
   providers: [
-    provideBrowserGlobalErrorListeners()
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
   ],
   bootstrap: [App]
 })

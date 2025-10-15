@@ -90,7 +90,9 @@
     <Compile Include="DAL\Qualifications.cs" />
     <Compile Include="DAL\Specializations.cs" />
     <Compile Include="DAL\States.cs" />
+    <Compile Include="DAL\Statuses.cs" />
     <Compile Include="DAL\Talukas.cs" />
+    <Compile Include="DAL\Users.cs" />
     <Compile Include="Models\AppointmentRequestsModel.cs" />
     <Compile Include="Models\CitiesModel.cs" />
     <Compile Include="Models\DistrictsModel.cs" />
@@ -100,7 +102,9 @@
     <Compile Include="Models\QualificationsModel.cs" />
     <Compile Include="Models\SpecializationsModel.cs" />
     <Compile Include="Models\StatesModel.cs" />
+    <Compile Include="Models\StatusesModel.cs" />
     <Compile Include="Models\TalukasModel.cs" />
+    <Compile Include="Models\UserProfilesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

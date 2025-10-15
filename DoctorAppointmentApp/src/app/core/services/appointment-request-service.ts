@@ -11,6 +11,15 @@ export class AppointmentRequestService {
     constructor(private http: HttpClient) { }
   
     AppointmentRequestGetList(model: AppointmentRequestsModel): Observable<AppointmentRequestsModel[]> {
-      return this.http.post<AppointmentRequestsModel[]>(environment.apiBaseUrl + 'AppointmentRequests/GetLists',model);
+      return this.http.post<AppointmentRequestsModel[]>(environment.apiBaseUrl + 'AppointmentRequests/AppointmentRequestsGetLists',model);
     }
+
+    DoctorAppointmentRequestGetList(model: AppointmentRequestsModel): Observable<AppointmentRequestsModel[]> {
+      return this.http.post<AppointmentRequestsModel[]>(environment.apiBaseUrl + 'AppointmentRequests/DoctorApppointmentGetLists',model);
+    }
+
+    UpdateStatus(model : AppointmentRequestsModel): Observable<any> {
+      return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/DoctorAppointmentUpdateStatus',model);
+    }
+    
 }

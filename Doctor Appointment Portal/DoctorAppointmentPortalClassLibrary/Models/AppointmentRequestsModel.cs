@@ -13,6 +13,8 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
         public int StatusId { get; set; }
+        public string PatientEmail { get; set; }
+        public string DoctorEmail { get; set; }
         public int SpecializationId { get; set; }
         public string MedicalConcern { get; set; }
         public DateTime PreferredDate { get; set; }
@@ -31,6 +33,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public string DoctorName { get; set; }
         public string StatusName { get; set; }
 
+        public string Action { get; set; }
         public string SearchedPatientName { get; set; }
         public string SearchedDoctorName { get; set; }
         public DateTime? FromDate { get; set; }
@@ -41,5 +44,6 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         }
         public List<AppointmentRequestsModel> AppointmentRequestList { get; set; }
         public List<SpecializationsModel> SpecializationsList { get; set; }
+        public List<StatusesModel> StatusesList { get; set; }
     }
 }

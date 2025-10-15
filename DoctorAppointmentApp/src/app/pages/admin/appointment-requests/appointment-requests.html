@@ -37,12 +37,9 @@
           <th>Doctor</th>
           <th>Specialization</th>
           <th>Medical Concern</th>
-          <th>Preferred Date</th>
+          <th>Appointment Date</th>
           <th>Start Time</th>
           <th>End Time</th>
-          <th>Final Date</th>
-          <th>Final Start</th>
-          <th>Final End</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -52,9 +49,6 @@
             <td>{{ req.DoctorName }}</td>
             <td>{{ req.SpecializationName }}</td>
             <td>{{ req.MedicalConcern }}</td>
-            <td>{{ req.PreferredDate | date:'yyyy-MM-dd' }}</td>
-            <td>{{ req.StartTime }}</td>
-            <td>{{ req.EndTime }}</td>
             <td>{{ req.FinalDate | date:'yyyy-MM-dd' }}</td>
             <td>{{ req.FinalStartTime }}</td>
             <td>{{ req.FinalEndTime }}</td>

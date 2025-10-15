@@ -369,6 +369,25 @@ END
 GO
 
 GO
+CREATE OR ALTER PROCEDURE StatusesGetList
+AS
+BEGIN
+    SELECT
+        ISNULL(StatusId, '') AS StatusId,
+        ISNULL(StatusName, '') AS StatusName,
+        ISNULL(IsActive, '') AS IsActive,
+        ISNULL(CreatedBy, '') AS CreatedBy,
+        ISNULL(CreatedOn, '') AS CreatedOn,
+        ISNULL(LastModifiedBy, '') AS ModifiedBy,
+        ISNULL(LastModifiedOn, '') AS ModifiedOn
+    FROM
+        Statuses
+    WHERE IsActive = 1
+    ORDER BY StatusName
+END
+GO
+
+GO
 CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
 AS
 BEGIN
@@ -1147,7 +1166,7 @@ GO
 
 ---Final Version
 GO
-CREATE OR ALTER PROCEDURE AppointmentRequestsGetListFiltered
+CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
     @PatientName NVARCHAR(100) = NULL,
     @DoctorName NVARCHAR(100) = NULL,
     @SpecializationId INT = NULL,
@@ -1165,11 +1184,11 @@ BEGIN
     (
         AppointmentRequestId INT,
         PatientId INT,
-        PatientName NVARCHAR(200),
+        PatientName NVARCHAR(100),
         DoctorId INT,
-        DoctorName NVARCHAR(200),
+        DoctorName NVARCHAR(100),
         SpecializationId INT,
-        SpecializationName NVARCHAR(200),
+        SpecializationName NVARCHAR(150),
         MedicalConcern NVARCHAR(300),
         PreferredDate DATE,
         StartTime TIME,
@@ -1219,8 +1238,8 @@ BEGIN
         AND (@PatientName IS NULL OR PP.FirstName + ' ' + PP.LastName LIKE '%' + @PatientName + '%')
         AND (@DoctorName IS NULL OR U.FirstName + ' ' + U.LastName LIKE '%' + @DoctorName + '%')
         AND (@SpecializationId IS NULL OR AR.SpecializationId = @SpecializationId)
-        AND (@FromDate IS NULL OR AR.PreferredDate >= @FromDate)
-        AND (@ToDate IS NULL OR AR.PreferredDate <= @ToDate);
+		AND (@FromDate IS NULL OR  AR.PreferredDate >= @FromDate)
+        AND (@ToDate IS NULL OR  AR.PreferredDate < DATEADD(DAY, 1, @ToDate))
 
     -- Total count
     SELECT @TotalCount = COUNT(*) FROM #FilteredAppointments;
@@ -1238,6 +1257,132 @@ GO
 
 
 
+GO
+CREATE OR ALTER PROCEDURE DoctorAppointmentRequestsGetList
+    @DoctorId INT,                         
+    @PatientName NVARCHAR(100) = NULL,
+    @SpecializationId INT = NULL,
+	@StatusId INT = NULL,
+    @FromDate DATE = NULL,
+    @ToDate DATE = NULL,
+    @PageNumber INT = 1,
+    @PageSize INT = 10,
+    @TotalCount INT OUTPUT
+AS
+BEGIN
+
+    -- Temporary table to store filtered results
+    CREATE TABLE #FilteredAppointments
+    (
+        AppointmentRequestId INT,
+        PatientId INT,
+        PatientName NVARCHAR(100),
+        DoctorId INT,
+        DoctorName NVARCHAR(100),
+		PatientEmail NVARCHAR(150),
+        SpecializationId INT,
+        SpecializationName NVARCHAR(150),
+        MedicalConcern NVARCHAR(300),
+        FinalStartTime TIME,
+        FinalEndTime TIME,
+        FinalDate DATE,
+        StatusId INT,
+        StatusName NVARCHAR(50),
+        CreatedOn DATETIME,
+        LastModifiedBy INT,
+        ModifiedBy NVARCHAR(200),
+        LastModifiedOn DATETIME
+    );
+
+    -- Insert filtered data
+    INSERT INTO #FilteredAppointments
+    SELECT
+        AR.AppointmentRequestId,
+        AR.PatientId,
+        ISNULL(PP.FirstName,'') + ' ' + ISNULL(PP.LastName,'') AS PatientName,		
+        AR.DoctorId,
+        ISNULL(U.FirstName,'') + ' ' + ISNULL(U.LastName,'') AS DoctorName,
+		ISNULL(PP.Email,'') AS PatientEmail,
+        AR.SpecializationId,
+        ISNULL(SP.SpecializationName,'') AS SpecializationName,
+        AR.MedicalConcern,
+        AR.FinalStartTime,
+        AR.FinalEndTime,
+        AR.FinalDate,
+        AR.StatusId,
+        ISNULL(S.StatusName,'') AS StatusName,
+        AR.CreatedOn,
+        AR.LastModifiedBy,
+        ISNULL(UM.FirstName,'') + ' ' + ISNULL(UM.LastName,'') AS ModifiedBy,
+        AR.LastModifiedOn
+    FROM AppointmentRequests AR
+    LEFT JOIN PatientProfiles PP ON AR.PatientId = PP.PatientId
+    LEFT JOIN DoctorProfiles DP ON AR.DoctorId = DP.DoctorId
+    LEFT JOIN UserProfiles U ON DP.UserId = U.UserId
+    LEFT JOIN Specializations SP ON AR.SpecializationId = SP.SpecializationId
+    LEFT JOIN Statuses S ON AR.StatusId = S.StatusId
+    LEFT JOIN UserProfiles UM ON AR.LastModifiedBy = UM.UserId
+    WHERE AR.DoctorId = @DoctorId                       -- Filter for this doctor
+        AND (@PatientName IS NULL OR PP.FirstName + ' ' + PP.LastName LIKE '%' + @PatientName + '%')
+        AND (@SpecializationId IS NULL OR AR.SpecializationId = @SpecializationId)
+		AND (@StatusId IS NULL OR AR.StatusId = @StatusId)
+        AND (@FromDate IS NULL OR AR.PreferredDate >= @FromDate)
+        AND (@ToDate IS NULL OR AR.PreferredDate < DATEADD(DAY, 1, @ToDate))
+
+    -- Total count
+    SELECT @TotalCount = COUNT(*) FROM #FilteredAppointments;
+
+    -- Paginated results
+    SELECT *
+    FROM #FilteredAppointments
+    ORDER BY CreatedOn DESC
+    OFFSET (@PageNumber - 1) * @PageSize ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+
+    DROP TABLE #FilteredAppointments;
+END
+GO
+
+GO
+CREATE OR ALTER PROCEDURE UpdateAppointmentStatus
+    @AppointmentRequestId INT,
+    @StatusName NVARCHAR(50)
+AS
+BEGIN
+
+   
+    DECLARE @StatusId INT;
+    SELECT @StatusId = StatusId
+    FROM Statuses
+    WHERE StatusName = @StatusName;
+
+    UPDATE AppointmentRequests
+    SET StatusId = @StatusId,
+        LastModifiedOn = GETDATE()
+    WHERE AppointmentRequestId = @AppointmentRequestId;
+END
+GO
+
+GO
+CREATE OR ALTER PROCEDURE GetUserPasswordByUsername
+    @UserName NVARCHAR(100)
+AS
+BEGIN
+
+    SELECT 
+        up.HashedPassword,
+        up.UserRoleId,
+        ur.RoleName
+    FROM 
+        UserProfiles up
+    INNER JOIN 
+        UserRoles ur
+        ON up.UserRoleId = ur.UserRoleId
+    WHERE 
+        up.UserName = @UserName
+        AND up.IsActive = 1;
+END
+GO
 
 
 
