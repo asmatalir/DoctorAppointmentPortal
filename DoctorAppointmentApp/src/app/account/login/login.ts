@@ -17,6 +17,11 @@ export class Login {
 
 
   constructor(private loginService: LoginService, private router: Router,private toastService : ToastService) { }
+ 
+  ngOnInit(){
+    this.model.UserName="asmatali123";
+    this.model.EnteredPassword="Asmatali@123";
+  }
 
   onClick(form: NgForm): void {
 

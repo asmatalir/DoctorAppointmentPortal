@@ -177,4 +177,35 @@ VALUES
 
 
 
+-- DoctorId = 6, CreatedBy = 1
+
+-- ===== Day 1: 2025-10-16 =====
+INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+VALUES
+(6, '2025-10-16', '10:00', '11:00', 8,  6, GETDATE()),
+(6, '2025-10-16', '11:00', '12:00', 8,  6, GETDATE()),
+(6, '2025-10-16', '12:00', '13:00', 8, 6, GETDATE()),
+(6, '2025-10-16', '17:00', '18:00', 8, 6, GETDATE()),
+(6, '2025-10-16', '18:00', '19:00', 8,  6, GETDATE()),
+(6, '2025-10-16', '19:00', '20:00', 8,  6, GETDATE());
+
+-- ===== Day 2: 2025-10-17 =====
+INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+VALUES
+(6, '2025-10-17', '10:00', '11:00', 8, 6, GETDATE()),
+(6, '2025-10-17', '11:00', '12:00', 8,  6, GETDATE()),
+(6, '2025-10-17', '12:00', '13:00', 8,  6, GETDATE()),
+(6, '2025-10-17', '17:00', '18:00', 8, 6, GETDATE()),
+(6, '2025-10-17', '18:00', '19:00', 8,  6, GETDATE()),
+(6, '2025-10-17', '19:00', '20:00', 8,  6, GETDATE());
+
+-- ===== Day 3: 2025-10-18 =====
+INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+VALUES
+(6, '2025-10-18', '10:00', '11:00', 8,  6, GETDATE()),
+(6, '2025-10-18', '11:00', '12:00', 8,  6, GETDATE()),
+(6, '2025-10-18', '12:00', '13:00', 8,  6, GETDATE()),
+(6, '2025-10-18', '17:00', '18:00', 8,  6, GETDATE()),
+(6, '2025-10-18', '18:00', '19:00', 8,  6, GETDATE()),
+(6, '2025-10-18', '19:00', '20:00', 8,  6, GETDATE());
 

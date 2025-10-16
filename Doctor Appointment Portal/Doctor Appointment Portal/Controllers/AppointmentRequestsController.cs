@@ -15,6 +15,10 @@ namespace Doctor_Appointment_Portal.Controllers
         AppointmentRequests appointmentRequestsDAL = new AppointmentRequests();
         Specializations specializationDAL = new Specializations();
         Statuses statusesDAL = new Statuses();
+        States statesDAL = new States();
+        Districts districtsDAL = new Districts();
+        Talukas talukasDAL = new Talukas();
+        Cities citiesDAL = new Cities();
 
         [HttpPost]
         public IHttpActionResult AppointmentRequestsGetLists(AppointmentRequestsModel model)
@@ -100,6 +104,31 @@ namespace Doctor_Appointment_Portal.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetPatientDetails(string contactNumber)
+        {
+            PatientDetailsModel model = new PatientDetailsModel();
+            try
+            {
+
+                    model = appointmentRequestsDAL.LoadPatientDetails(contactNumber);
+
+                // Load dropdown lists
+
+                model.StatesList = statesDAL.GetList();
+                model.DistrictsList = districtsDAL.GetList();
+                model.TalukasList = talukasDAL.GetList();
+                model.CitiesList = citiesDAL.GetList();
+
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor details." });
             }
         }
 

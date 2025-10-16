@@ -32,9 +32,14 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 {
                     DataRow row = ds.Tables[0].Rows[0];
 
+                    model.UserId = Convert.ToInt32(row["UserId"]);
                     model.FetchedPassword = row["HashedPassword"].ToString();
                     model.UserRoleId = Convert.ToInt32(row["UserRoleId"]);
                     model.RoleName = row["RoleName"].ToString();
+                    model.Email = row["Email"].ToString();
+                    model.UserName = row["UserName"].ToString();
+
+
 
                     return true; 
                 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using DoctorAppointmentPortalClassLibrary.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,15 +13,17 @@ namespace Doctor_Appointment_Portal.Helper
 {
     public class JwtHelper
     {
-        public static string GenerateJwtToken(string Username, int UserId, string Role)
+        public static string GenerateJwtToken(UserProfilesModel model)
         {
             var key = Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["JwtSecret"]);
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, Username),
-                new Claim(ClaimTypes.NameIdentifier, UserId.ToString()),
-                new Claim(ClaimTypes.Role,Role)
+                new Claim(ClaimTypes.NameIdentifier, model.UserId.ToString()), 
+                new Claim(ClaimTypes.Name, model.UserName),                    
+                new Claim(ClaimTypes.Email, model.Email ?? string.Empty),       
+                new Claim(ClaimTypes.Role, model.RoleName ?? string.Empty),         
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

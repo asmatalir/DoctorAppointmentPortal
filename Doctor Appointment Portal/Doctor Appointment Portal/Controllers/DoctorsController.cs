@@ -20,7 +20,9 @@ namespace Doctor_Appointment_Portal.Controllers
         Cities citiesDAL = new Cities();
         DoctorAvailabilities doctorAvailabilitiesDAL = new DoctorAvailabilities();
         DoctorAvailabilityExceptions doctorAvailabilityExceptionsDAL = new DoctorAvailabilityExceptions();
+        DoctorAvailableSlots doctorSlotsDAL = new DoctorAvailableSlots();
 
+        [JwtAuthorize]
         [HttpPost]
         public IHttpActionResult GetLists(DoctorsModel model)
         {
@@ -29,13 +31,15 @@ namespace Doctor_Appointment_Portal.Controllers
                 // Call DAL to get list of doctors
                 var doctors = doctorsDAL.GetList(model);
                 var specializations = specializationsDAL.GetList();
-                
+                var qualifications = qualificationsDAL.GetList();
+
                 // Map to response model
                 var response = new DoctorsModel
                 {
                     TotalRecords = doctorsDAL.TotalRecords,
                     DoctorsList = doctors,
-                    SpecializationsList = specializations
+                    SpecializationsList = specializations,
+                    QualificationsList = qualifications
                 };
 
                 return Ok(response);
@@ -56,7 +60,7 @@ namespace Doctor_Appointment_Portal.Controllers
             {
                 if (id != 0)
                 {
-                    
+
                     model = doctorsDAL.LoadDoctorDetails(id);
                 }
                 else
@@ -113,10 +117,10 @@ namespace Doctor_Appointment_Portal.Controllers
             {
                 int doctorId = -1;
 
-                    // Insert new doctor
-                    doctorId = doctorsDAL.SaveDoctorDetails(model); 
-                    return Ok(new { success = true, message = "Doctor created successfully.", doctorId });
-                
+                // Insert new doctor
+                doctorId = doctorsDAL.SaveDoctorDetails(model);
+                return Ok(new { success = true, message = "Doctor created successfully.", doctorId });
+
             }
             catch (Exception ex)
             {
@@ -137,13 +141,13 @@ namespace Doctor_Appointment_Portal.Controllers
 
                 int result = doctorsDAL.SaveDoctorAvailability(model);
 
-                if (result>0)
+                if (result > 0)
                 {
-                    return Ok(new{success = true, message = "Doctor availability saved successfully.", doctorId = model.DoctorId });
+                    return Ok(new { success = true, message = "Doctor availability saved successfully.", doctorId = model.DoctorId });
                 }
                 else
                 {
-                    return Content(HttpStatusCode.InternalServerError, new { success = false, message = "Failed to save doctor availability."  });
+                    return Content(HttpStatusCode.InternalServerError, new { success = false, message = "Failed to save doctor availability." });
                 }
             }
             catch (Exception ex)
@@ -157,6 +161,25 @@ namespace Doctor_Appointment_Portal.Controllers
             }
         }
 
+        [HttpGet]
+        public IHttpActionResult GetDoctorSlots(int id)
+        {
+            try
+            {
+                List<DoctorAvailableSlotsModel> slots = doctorSlotsDAL.GetSlots(id);
 
+                return Ok(slots);
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, new
+                {
+                    message = "Server error while fetching doctor slots.",
+                    details = ex.Message
+                });
+            }
+
+
+        }
     }
 }

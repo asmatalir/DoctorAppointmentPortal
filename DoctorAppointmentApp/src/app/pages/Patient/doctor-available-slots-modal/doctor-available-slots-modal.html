@@ -1,0 +1,80 @@
+<div class="modal-content-modern">
+    <!-- 🌤 Header -->
+    <div class="modal-header-modern">
+      <h5 class="modal-title d-flex align-items-center">
+        <i class="bi bi-calendar2-check me-2"></i>
+        Book Appointment – <span class="ms-1 fw-semibold">{{ doctorName }}</span>
+      </h5>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        aria-label="Close"
+        (click)="activeModal.dismiss()"
+      ></button>
+    </div>
+  
+    <div class="modal-body-modern">
+      <!-- 🗓️ Date selection -->
+      <h6 class="fw-semibold mb-3 text-primary text-center">Select a Date</h6>
+  
+      <div class="date-slider">
+        <button
+          *ngFor="let day of next7Days"
+          class="date-chip"
+          [ngClass]="{ 'active': selectedDate === day.date }"
+          (click)="selectDate(day.date)"
+        >
+          <div class="fw-semibold">{{ day.label }}</div>
+        </button>
+      </div>
+  
+      <hr class="my-3" />
+  
+      <!-- 🕒 Slots Section -->
+      <div *ngIf="selectedDate" class="mt-3">
+        <h6 class="fw-semibold text-secondary mb-3 text-center">Available Slots</h6>
+  
+        <!-- Loading -->
+        <div *ngIf="isLoading" class="alert alert-soft-blue text-center">
+          <i class="bi bi-hourglass-split me-1"></i>
+          Fetching slots for
+          <span class="fw-semibold">{{ selectedDate | date: 'fullDate' }}</span>...
+        </div>
+  
+        <!-- Error -->
+        <div *ngIf="errorMsg" class="alert alert-danger small text-center">
+          {{ errorMsg }}
+        </div>
+  
+        <!-- Slot Buttons -->
+        <div
+          *ngIf="!isLoading && !errorMsg && filteredSlots.length > 0"
+          class="slot-grid mt-3"
+        >
+          <button
+            *ngFor="let slot of filteredSlots"
+            class="slot-btn"
+            [ngClass]="{ 'active': selectedSlotId === slot.SlotId }"
+            (click)="selectSlot(slot.SlotId)"
+          >
+            {{ formatTime(slot.StartTime) }} - {{ formatTime(slot.EndTime) }}
+          </button>
+        </div>
+  
+        <!-- No Slots -->
+        <div
+          *ngIf="!isLoading && !errorMsg && filteredSlots.length === 0"
+          class="text-muted small text-center mt-3"
+        >
+          <i class="bi bi-info-circle me-1"></i> No available slots on this day.
+        </div>
+      </div>
+    </div>
+  
+    <!-- 🌤 Footer -->
+    <div class="modal-footer-modern">
+      <button class="btn btn-outline-secondary px-4" (click)="activeModal.dismiss()">Cancel</button>
+      <button class="btn btn-modern-primary px-4" (click)="confirmAppointment()">Confirm</button>
+    </div>
+  </div>
+  

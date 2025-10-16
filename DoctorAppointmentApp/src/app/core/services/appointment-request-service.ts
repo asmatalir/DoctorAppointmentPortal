@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { AppointmentRequestsModel } from '../models/AppointmentRequestsModel';
+import { PatientDetailsModel } from '../models/PatientDetailsModel';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,11 @@ export class AppointmentRequestService {
     UpdateStatus(model : AppointmentRequestsModel): Observable<any> {
       return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/DoctorAppointmentUpdateStatus',model);
     }
+
+    GetPatientDetails(contactNumber: string): Observable<PatientDetailsModel> {
+      return this.http.get<PatientDetailsModel>(environment.apiBaseUrl + 'AppointmentRequests/GetPatientDetails' ,{params: { contactNumber: contactNumber }});
+    }
+    
+
     
 }

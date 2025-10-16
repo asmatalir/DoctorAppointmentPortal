@@ -76,7 +76,9 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                             Address = Convert.ToString(row["Address"]),
                             Rating = Convert.ToDecimal(row["Rating"]),
                             IsActive = Convert.ToBoolean(row["IsActive"]),
-                            SpecializationNames = row.Table.Columns.Contains("SpecializationNames")? Convert.ToString(row["SpecializationNames"]): string.Empty
+                            SpecializationNames = row.Table.Columns.Contains("SpecializationNames")? Convert.ToString(row["SpecializationNames"]): string.Empty,
+                            QualificationNames = row.Table.Columns.Contains("QualificationNames") ? Convert.ToString(row["QualificationNames"]) : string.Empty
+
                         };
                         DoctorsList.Add(doctors);
                     }

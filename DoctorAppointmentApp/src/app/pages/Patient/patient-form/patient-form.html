@@ -1,0 +1,170 @@
+<div class="container p-4 mt-4">
+
+    <!-- Appointment Summary -->
+    <div class="alert alert-info text-center fw-semibold mb-4">
+      Booking Appointment with 
+      <span class="text-primary">Dr .{{ doctorName }}</span> on 
+      <span class="text-success">{{ slotDate | date: 'fullDate' }}</span> at 
+      <span class="text-success">{{ startTime }} - {{ endTime }}</span>
+    </div>
+  
+    <div class="card shadow-sm">
+      <div class="card-header text-dark">
+        <h5 class="mb-0">Patient Details</h5>
+      </div>
+  
+      <div class="card-body">
+        <form #patientForm="ngForm" (ngSubmit)="onSubmit(patientForm)">
+  
+            <!-- Section 1: Contact Info -->
+            <div class="p-3 mb-4 border rounded bg-light">
+              <h6 class="mb-3 text-dark">Contact Information</h6>
+              <div class="row g-4">
+                <!-- Contact Number -->
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" placeholder="Contact Number"
+                         name="ContactNumber"
+                         [(ngModel)]="patient.ContactNumber"
+                         (blur)="loadPatientDetails()"
+                         required>
+                </div>
+                <!-- Email -->
+                <div class="col-lg-6">
+                  <input type="email" class="form-control" placeholder="Email"
+                         name="Email"
+                         [(ngModel)]="patient.Email">
+                </div>
+              </div>
+            </div>
+    
+            <!-- Section 2: Personal Information -->
+            <div class="p-3 mb-4 border rounded bg-light">
+              <h6 class="mb-3 text-dark">Personal Information</h6>
+              <div class="row g-4">
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" placeholder="First Name"
+                         name="FirstName" [(ngModel)]="patient.FirstName" required>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" placeholder="Last Name"
+                         name="LastName" [(ngModel)]="patient.LastName" required>
+                </div>
+                <div class="col-lg-6">
+                  <input type="date" class="form-control" name="DateOfBirth"
+                         [(ngModel)]="patient.DateOfBirth" required>
+                </div>
+                <div class="col-lg-6">
+                  <select class="form-control" name="Gender" [(ngModel)]="patient.Gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                  </select>
+                </div>
+                <div class="col-lg-6">
+                  <input type="text" class="form-control" placeholder="Insurance ID"
+                         name="InsuranceId" [(ngModel)]="patient.InsuranceId">
+                </div>
+              </div>
+            </div>
+    
+            <!-- Section 3: Medical Information -->
+            <div class="p-3 mb-4 border rounded bg-light">
+              <h6 class="mb-3 text-dark">Medical Information</h6>
+              <div class="row g-4">
+                <div class="col-lg-12">
+                  <textarea class="form-control" placeholder="Medical History"
+                            name="MedicalHistory" [(ngModel)]="patient.MedicalHistory"></textarea>
+                </div>
+                <div class="col-lg-12">
+                  <textarea class="form-control" placeholder="Medical Concern"
+                            name="MedicalConcern" [(ngModel)]="patient.MedicalConcern"></textarea>
+                </div>
+              </div>
+            </div>
+    
+            <!-- Section 4: Address Information -->
+            <div class="p-3 mb-4 border rounded bg-light">
+              <h6 class="mb-3 text-dark">Address Information</h6>
+              <div class="row g-4">
+                <div class="col-lg-3">
+                  <select class="form-control" name="StateId" [(ngModel)]="patient.StateId">
+                    <option value="">Select State</option>
+                    <option *ngFor="let state of statesList" [value]="state.StateId">{{ state.StateName }}</option>
+                  </select>
+                </div>
+                <div class="col-lg-3">
+                  <select class="form-control" name="DistrictId" [(ngModel)]="patient.DistrictId">
+                    <option value="">Select District</option>
+                    <option *ngFor="let district of districtsList" [value]="district.DistrictId">{{ district.DistrictName }}</option>
+                  </select>
+                </div>
+                <div class="col-lg-3">
+                  <select class="form-control" name="TalukaId" [(ngModel)]="patient.TalukaId">
+                    <option value="">Select Taluka</option>
+                    <option *ngFor="let taluka of talukasList" [value]="taluka.TalukaId">{{ taluka.TalukaName }}</option>
+                  </select>
+                </div>
+                <div class="col-lg-3">
+                  <select class="form-control" name="CityId" [(ngModel)]="patient.CityId">
+                    <option value="">Select City</option>
+                    <option *ngFor="let city of citiesList" [value]="city.CityId">{{ city.CityName }}</option>
+                  </select>
+                </div>
+                <div class="col-lg-8">
+                  <input type="text" class="form-control" placeholder="Address Line"
+                         name="Address" [(ngModel)]="patient.AddressLine">
+                </div>
+                <div class="col-lg-4">
+                  <input type="text" class="form-control" placeholder="Pincode"
+                         name="Pincode" [(ngModel)]="patient.Pincode">
+                </div>
+              </div>
+            </div>
+    
+            <div class="mt-4 text-end">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+    
+          </form>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="container p-4 mt-4">
+    <div class="card shadow-sm">
+      <div class="card-header text-dark">
+        <h5 class="mb-0">Patient Details</h5>
+      </div>
+      <div class="card-body">
+
+      </div>
+    </div>
+  </div> -->
+  

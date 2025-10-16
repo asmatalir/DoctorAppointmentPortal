@@ -1,4 +1,5 @@
 ﻿using Doctor_Appointment_Portal.Helper;
+using DoctorAppointmentPortal.Controllers;
 using DoctorAppointmentPortalClassLibrary.DAL;
 using DoctorAppointmentPortalClassLibrary.Models;
 using System;
@@ -10,7 +11,7 @@ using System.Web.Http;
 
 namespace Doctor_Appointment_Portal.Controllers
 {
-    public class AccountsController : ApiController
+    public class AccountsController : BaseApiController
     {
         Users usersDAL = new Users();
         [HttpPost]
@@ -18,7 +19,7 @@ namespace Doctor_Appointment_Portal.Controllers
         {
             try
             {
-                int userId = 1;
+                int userId = CurrentUserId;
 
                 if (!usersDAL.ValidateUser(model))
                 {
@@ -28,7 +29,7 @@ namespace Doctor_Appointment_Portal.Controllers
                 {
                     return Ok(new { success = false, message = "Password is incorrect" });
                 }
-                var token = JwtHelper.GenerateJwtToken(model.UserName, userId, model.RoleName);
+                var token = JwtHelper.GenerateJwtToken(model);
                 return Ok(new { success = true, token = token, username = model.UserName, userrole = model.RoleName });
             }
             catch (Exception ex)
@@ -46,6 +47,24 @@ namespace Doctor_Appointment_Portal.Controllers
             string hashedPassword = PasswordHasher.HashPassword(password);
 
             return Ok(new { HashedPassword = hashedPassword });
+        }
+
+        [JwtAuthorize]
+        [HttpGet]
+        public IHttpActionResult TestClaims()
+        {
+            var userId = CurrentUserId;
+            var username = CurrentUsername;
+            var email = CurrentEmail;
+            var role = CurrentRole;
+
+            return Ok(new
+            {
+                userId,
+                username,
+                email,
+                role
+            });
         }
     }
 }

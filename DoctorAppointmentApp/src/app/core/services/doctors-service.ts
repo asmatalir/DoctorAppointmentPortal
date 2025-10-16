@@ -32,5 +32,8 @@ export class DoctorsService {
     return this.http.post<any>(environment.apiBaseUrl + 'Doctors/SaveDoctorAvailability', doctor );
   }
   
+  GetDoctorAvailableSlots(id: number): Observable<any> {
+     return this.http.get<any>(environment.apiBaseUrl +'Doctors/GetDoctorSlots' , { params: { id: id.toString() } });
+  }
   
 }

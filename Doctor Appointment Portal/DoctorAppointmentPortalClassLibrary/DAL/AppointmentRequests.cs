@@ -266,6 +266,46 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             return isUpdated;
         }
 
+        public PatientDetailsModel LoadPatientDetails(string contactNumber)
+        {
+            PatientDetailsModel model = new PatientDetailsModel();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(contactNumber))
+                {
+                    DbCommand com = this.db.GetStoredProcCommand("GetPatientPersonalInfoByPhone");
+                    db.AddInParameter(com, "PhoneNumber", DbType.String, contactNumber);
+
+                    DataSet ds = this.db.ExecuteDataSet(com);
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    {
+                        DataTable dt = ds.Tables[0];
+                        model.FirstName = Convert.ToString(dt.Rows[0]["FirstName"]);
+                        model.LastName = Convert.ToString(dt.Rows[0]["LastName"]);
+                        model.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        model.ContactNumber = Convert.ToString(dt.Rows[0]["ContactNumber"]);
+                        model.DateOfBirth = Convert.ToDateTime(dt.Rows[0]["DateOfBirth"]);
+                        model.Gender = Convert.ToString(dt.Rows[0]["Gender"]);
+
+                        // Address
+                        model.AddressLine = Convert.ToString(dt.Rows[0]["AddressLine"]);
+                        model.StateId = Convert.ToInt32(dt.Rows[0]["StateId"]);
+                        model.DistrictId = Convert.ToInt32(dt.Rows[0]["DistrictId"]);
+                        model.TalukaId = Convert.ToInt32(dt.Rows[0]["TalukaId"]);
+                        model.CityId = Convert.ToInt32(dt.Rows[0]["CityId"]);
+                        model.Pincode = Convert.ToString(dt.Rows[0]["Pincode"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in LoadPatientDetails: {ex.Message}");
+                // Handle Exception
+            }
+
+            return model;
+        }
     }
 
 

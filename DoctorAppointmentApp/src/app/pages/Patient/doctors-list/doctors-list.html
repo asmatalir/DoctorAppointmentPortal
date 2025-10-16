@@ -1,0 +1,88 @@
+<div class="container mt-4">
+
+  <!-- Row with heading -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <h4 class="mb-0">Available Doctors</h4>
+    </div>
+  </div>
+
+  <!-- Row with doctor cards -->
+  <div class="row">
+    <div class="col-12">
+      <div *ngFor="let doc of doctorsList; let i = index" class="card doctor-card mb-3">
+        <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
+          
+          <!-- Left: Doctor Info -->
+          <div class="d-flex align-items-center flex-grow-1 mb-2 mb-md-0">
+            
+            <!-- Profile Picture -->
+            <div class="avatar-lg me-3">
+              <img src="images/defaultprofilepicmale.jpg" alt="Doctor Photo" class="avatar-img">
+            </div>
+      
+            <!-- Doctor Details -->
+            <div>
+              <h5 class="doctor-name mb-1">{{ doc.FirstName }} {{ doc.LastName }}</h5>
+              
+              <!-- Specializations -->
+              <div *ngIf="doc.Specializations.length > 0" class="mb-1">
+                <span *ngFor="let spec of doc.Specializations" class="badge bg-primary me-1">
+                  {{ spec }}
+                </span>
+              </div>
+
+              <!-- Qualifications -->
+              <p class="text-dark mb-1">
+                <i class="ri-medal-line me-1"></i> {{ doc.Qualifications.join(' • ') }}
+              </p>
+              
+
+              <!-- <div *ngIf="doc.Qualifications.length > 0" class="mb-1">
+                <span *ngFor="let qual of doc.Qualifications" class="bg-primary me-1">
+                  {{ qual }}
+                </span>
+              </div> -->
+              
+
+              <!-- Hospital -->
+              <p class="hospital-name text-muted mb-1">{{ doc.HospitalName }}</p>
+
+              <!-- Experience -->
+              <p class="hospital-name text-muted mb-1">Experience: {{ doc.ExperienceYears }} yrs</p>
+
+              <!-- Address and Fees -->
+              <div class="doctor-stats text-muted">
+                <span class="me-3"><i class="ri-map-pin-2-line"></i> {{ doc.Address }}</span>
+                <span> {{ doc.ConsultationFees | currency:'INR':'symbol':'1.0-0' }}</span>
+              </div>
+
+            </div>
+          </div>
+      
+          <!-- Right: Book Appointment Button -->
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-primary book-btn" (click)="openBookingModal(doc)">
+              Book Appointment
+            </button>
+          </div>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+    <ngb-pagination *ngIf="TotalRecords > 0"
+      class="d-flex justify-content-center shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords"
+      [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3" [boundaryLinks]="true"
+      (pageChange)="loadDoctors()">
+    </ngb-pagination>
+  </div>
+
+</div>
+<!-- Doctor Card -->
+
+
+
+

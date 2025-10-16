@@ -159,7 +159,8 @@ BEGIN
         Address NVARCHAR(500),
         Rating DECIMAL(3,2),
         IsActive BIT,
-        SpecializationNames NVARCHAR(MAX)
+        SpecializationNames NVARCHAR(MAX),
+		QualificationNames NVARCHAR(MAX)
     );
 
     -- Insert filtered data
@@ -189,7 +190,14 @@ BEGIN
             INNER JOIN Specializations SP ON DS2.SpecializationId = SP.SpecializationId
             WHERE DS2.DoctorId = D.DoctorId AND DS2.IsActive = 1
             FOR XML PATH(''), TYPE
-        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS SpecializationNames
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS SpecializationNames,
+		 STUFF((
+            SELECT ', ' + Q.QualificationName
+            FROM DoctorQualifications DQ
+			INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
+            WHERE DQ.DoctorId = D.DoctorId AND Q.IsActive = 1
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS QualificationNames
     FROM DoctorProfiles D
     INNER JOIN UserProfiles U ON D.UserId = U.UserId
     LEFT JOIN Addresses A ON D.AddressId = A.AddressId
@@ -1370,9 +1378,12 @@ AS
 BEGIN
 
     SELECT 
+	    up.UserId,
         up.HashedPassword,
         up.UserRoleId,
-        ur.RoleName
+        ur.RoleName,
+		up.Email,
+		up.UserName
     FROM 
         UserProfiles up
     INNER JOIN 
@@ -1383,6 +1394,59 @@ BEGIN
         AND up.IsActive = 1;
 END
 GO
+
+
+GO
+CREATE OR ALTER PROCEDURE GetDoctorAvailableSlots
+    @DoctorId INT
+AS
+BEGIN
+
+    SELECT 
+        DS.SlotId,
+        DS.DoctorId,
+        DS.SlotDate,
+        DS.StartTime,
+        DS.EndTime,
+        DS.StatusId,
+        S.StatusName
+    FROM DoctorSlots DS
+    INNER JOIN Statuses S ON DS.StatusId = S.StatusId
+    WHERE DS.DoctorId = @DoctorId
+      AND S.StatusName = 'Available' 
+    ORDER BY DS.SlotDate, DS.StartTime;
+END
+GO
+
+GO
+CREATE OR ALTER PROCEDURE GetPatientPersonalInfoByPhone
+    @PhoneNumber NVARCHAR(15)
+AS
+BEGIN
+
+    SELECT
+        p.PatientId,
+        p.FirstName,
+        p.LastName,
+        p.Email,
+        p.PhoneNumber AS ContactNumber,
+        p.DateOfBirth,
+        p.Gender,
+        a.AddressLine AS AddressLine,
+        a.StateId,
+        a.DistrictId,
+        a.TalukaId,
+        a.CityId,
+        a.Pincode
+    FROM
+        PatientProfiles p
+    INNER JOIN
+        Addresses a ON p.AddressId = a.AddressId
+    WHERE
+        p.PhoneNumber = @PhoneNumber
+        AND p.IsActive = 1
+        AND a.IsActive = 1;
+END
 
 
 

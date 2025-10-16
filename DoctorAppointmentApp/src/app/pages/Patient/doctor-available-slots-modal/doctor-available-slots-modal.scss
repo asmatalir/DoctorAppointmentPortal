@@ -1,0 +1,117 @@
+.modal-content-modern {
+    background: #f9fbff;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.4s ease;
+  }
+  
+  .modal-header-modern {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-body-modern {
+    padding: 1.5rem;
+  }
+  
+  .modal-footer-modern {
+    background: #f1f5fb;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  /* --- Sliding Date Chips --- */
+  .date-slider {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scroll-behavior: smooth;
+  }
+  
+  .date-slider::-webkit-scrollbar {
+    height: 6px;
+  }
+  .date-slider::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+  
+  .date-chip {
+    border: none;
+    background: rgba(0, 123, 255, 0.05);
+    color: #007bff;
+    border-radius: 20px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    opacity: 0.7;
+  }
+  
+  .date-chip:hover {
+    background: rgba(0, 123, 255, 0.15);
+    opacity: 1;
+  }
+  
+  .date-chip.active {
+    background: #007bff;
+    color: #fff;
+    font-weight: 600;
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  /* --- Slot Buttons --- */
+  .slot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+  }
+  
+  .slot-btn {
+    background: rgba(0, 123, 255, 0.1);
+    border: 1px solid rgba(0, 123, 255, 0.3);
+    border-radius: 8px;
+    color: #007bff;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    min-width: 100px;
+    opacity: 0.5;
+    transition: all 0.25s ease;
+  }
+  
+  .slot-btn:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+  
+  .slot-btn.active {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  
+  /* --- Animations --- */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

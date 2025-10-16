@@ -86,6 +86,7 @@
     <Compile Include="DAL\Districts.cs" />
     <Compile Include="DAL\DoctorAvailabilities.cs" />
     <Compile Include="DAL\DoctorAvailabilityExceptions.cs" />
+    <Compile Include="DAL\DoctorAvailableSlots.cs" />
     <Compile Include="DAL\Doctors.cs" />
     <Compile Include="DAL\Qualifications.cs" />
     <Compile Include="DAL\Specializations.cs" />
@@ -98,7 +99,9 @@
     <Compile Include="Models\DistrictsModel.cs" />
     <Compile Include="Models\DoctorAvailabilitiesModel.cs" />
     <Compile Include="Models\DoctorAvailabilityExceptionsModel.cs" />
+    <Compile Include="Models\DoctorAvailableSlotsModel.cs" />
     <Compile Include="Models\DoctorsModel.cs" />
+    <Compile Include="Models\PatientDetailsModel.cs" />
     <Compile Include="Models\QualificationsModel.cs" />
     <Compile Include="Models\SpecializationsModel.cs" />
     <Compile Include="Models\StatesModel.cs" />
