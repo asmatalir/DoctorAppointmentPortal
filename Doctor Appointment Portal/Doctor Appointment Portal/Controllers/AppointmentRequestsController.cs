@@ -110,11 +110,11 @@ namespace Doctor_Appointment_Portal.Controllers
         [HttpGet]
         public IHttpActionResult GetPatientDetails(string contactNumber)
         {
-            PatientDetailsModel model = new PatientDetailsModel();
+            AppointmentRequestsModel model = new AppointmentRequestsModel();
             try
             {
 
-                    model = appointmentRequestsDAL.LoadPatientDetails(contactNumber);
+                 model = appointmentRequestsDAL.LoadPatientDetails(contactNumber);
 
                 // Load dropdown lists
 
@@ -131,6 +131,27 @@ namespace Doctor_Appointment_Portal.Controllers
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor details." });
             }
         }
+
+        [HttpPost]
+        public IHttpActionResult SavePatientAppointment(AppointmentRequestsModel model)
+        {
+            try
+            {
+                model.CreatedBy = 6;
+                int isSaved = appointmentRequestsDAL.SavePatientAppointment(model);
+
+                if (isSaved > 0)
+                    return Ok(new { message = "Appointment saved successfully." });
+                else
+                    return Content(HttpStatusCode.BadRequest, new { message = "Failed to save appointment. Please try again." });
+            }
+            catch (Exception ex)
+            {
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while saving appointment.", error = ex.Message });
+            }
+        }
+
+
 
 
     }

@@ -1,0 +1,102 @@
+{
+    "app": {
+      "title": "Mon application de livres",
+      "nav": { "search": "Rechercher un livre", "add": "Ajouter un livre", "login": "Connexion", "logout": "Déconnexion" },
+      "welcome": "Bienvenue, {{name}}"
+    },
+    "filters": {
+    "title": "Filtres de livres",
+    "bookName": {
+      "label": "Nom du livre",
+      "placeholder": "Saisir un titre de livre"
+    },
+    "publishers": {
+      "label": "Sélectionner des éditeurs",
+      "placeholder": "Sélectionner des options"
+    },
+    "isActive": {
+      "label": "Statut actif",
+      "placeholder": "Sélectionner le statut",
+      "all": "Tous",
+      "true": "Vrai",
+      "false": "Faux"
+    },
+    "pageSize": {
+      "label": "Sélectionner la taille de page",
+      "placeholder": "Taille de page"
+    },
+    "actions": {
+      "search": "Rechercher",
+      "reset": "Réinitialiser"
+    }
+  },
+
+  "bookList": {
+    "title": "Liste des livres",
+    "loading": "Chargement...",
+    "empty": "Aucun livre trouvé",
+    "headers": {
+      "id": "ID",
+      "bookName": "Nom du livre",
+      "publisherName": "Nom de l'éditeur",
+      "departmentName": "Nom du département",
+      "supplierName": "Nom du fournisseur",
+      "actions": "Actions"
+    },
+    "actions": {
+      "add": "Ajouter un livre",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    }
+  },
+  "bookForm": {
+    "title": {
+      "add": "Ajouter un nouveau livre",
+      "edit": "Modifier les détails du livre"
+    },
+    "fields": {
+      "bookName": {
+        "label": "Nom du livre",
+        "placeholder": "Saisir le nom du livre",
+        "required": "Le nom du livre est obligatoire"
+      },
+      "publisher": {
+        "label": "Sélectionner l’éditeur*",
+        "placeholder": "-- Sélectionner un éditeur --",
+        "required": "L’éditeur est obligatoire"
+      },
+      "department": {
+        "label": "Sélectionner le département*",
+        "placeholder": "-- Sélectionner un département --",
+        "required": "Le département est obligatoire"
+      },
+      "supplier": {
+        "label": "Sélectionner le fournisseur*",
+        "placeholder": "-- Sélectionner un fournisseur --",
+        "required": "Le fournisseur est obligatoire"
+      },
+      "user": {
+        "label": "Sélectionner l’utilisateur*",
+        "placeholder": "-- Sélectionner un utilisateur --",
+        "required": "L’utilisateur est obligatoire"
+      },
+      "copies": {
+        "label": "Nombre d’exemplaires*",
+        "placeholder": "Saisir le nombre d’exemplaires",
+        "required": "Le nombre d’exemplaires est obligatoire",
+        "min": "Au moins 1 exemplaire"
+      },
+      "isActive": {
+        "label": "Statut actif"
+      }
+    },
+    "actions": {
+      "submit": "Valider",
+      "close": "Fermer"
+    },
+    "formValidation": {
+        "message" : "Veuillez renseigner les champs obligatoires"
+    }
+  }
+  }
+  

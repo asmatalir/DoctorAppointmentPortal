@@ -1,0 +1,112 @@
+﻿@model PurchaseOrderManagementSystemClassLibrary.Models.PurchaseOrderDetailModel
+
+<div class="modal-header" style="background-color: #5b9bd5; color: white;">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Purchase Order Details</h4>
+</div>
+
+<div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+
+    <!-- Purchase Order Summary -->
+    <h4 class="border-bottom pb-2 mb-3 text-secondary">Purchase Order Summary</h4>
+    <table class="table table-borderless">
+        <tr>
+            <th>PO Number:</th>
+            <td>@Model.PurchaseOrder.PurchaseOrderSerialNumber</td>
+            <th>PO Date:</th>
+            <td>@Model.PurchaseOrder.PurchaseOrderDate.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <th>Expected Delivery:</th>
+            <td>@Model.PurchaseOrder.ExpectedDeliveryDate.ToShortDateString()</td>
+            <th>Status:</th>
+            <td>@Model.PurchaseOrder.PurchaseOrderStatus</td>
+        </tr>
+        <tr>
+            <th>Vendor:</th>
+            <td>@Model.PurchaseOrder.VendorName</td>
+            <th>Contact:</th>
+            <td>@Model.PurchaseOrder.VendorContactName</td>
+        </tr>
+        <tr>
+            <th>Total Price:</th>
+            <td colspan="3">@Model.PurchaseOrder.TotalOrderPrice</td>
+        </tr>
+    </table>
+
+    <hr />
+
+    <!-- Products Table -->
+    <h4 class="border-bottom pb-2 mb-3 text-secondary">Product Details</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped align-middle">
+            <thead class="thead-light">
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    @*<th>Actions</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.Products)
+                {
+                    <tr>
+                        <td>@p.ProductName</td>
+                        <td>@p.Quantity</td>
+                        <td>@p.Price</td>
+                        <td>@(p.Quantity * p.Price)</td>
+                        @*<td>
+                            <button class="btn btn-sm btn-warning edit-product" data-id="@p.PurchaseOrderDetailId">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-product" data-id="@p.PurchaseOrderDetailId">Remove</button>
+                        </td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    <!-- Documents Table -->
+    <h4 class="border-bottom pb-2 mb-3 text-secondary">Document Details</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped align-middle">
+            <thead class="thead-light">
+                <tr>
+                    <th>Document Name</th>
+                    <th>File Name</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var doc in Model.Documents)
+                {
+                    <tr>
+                        <td>@doc.DocumentName</td>
+                        <td>
+                            <a href="@Url.Content("~/Uploads/" + doc.DocumentFileName)" target="_blank">
+                                @doc.DocumentName
+                            </a>
+                        </td>
+                        <td>@doc.Notes</td>
+                        <td>
+                            <a href="@Url.Action("DownloadFile", "PurchaseOrder", new { storedName = Path.GetFileName(doc.DocumentFileName), originalName = doc.DocumentName })" class="btn btn-sm btn-primary px-3">
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                            @*<button class="btn btn-sm btn-warning edit-document" data-id="@doc.PurchaseOrdersDocumentId">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-document" data-id="@doc.PurchaseOrdersDocumentId">Remove</button>*@
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

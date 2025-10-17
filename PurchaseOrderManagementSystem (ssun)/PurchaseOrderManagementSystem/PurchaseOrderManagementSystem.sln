@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 14 for Web
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseOrderManagementSystem", "PurchaseOrderManagementSystem\PurchaseOrderManagementSystem.csproj", "{523A185E-497D-4C0C-94AC-242E609DFF4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PurchaseOrderManagementSystemClassLibrary", "PurchaseOrderManagementSystemClassLibrary\PurchaseOrderManagementSystemClassLibrary.csproj", "{D2A69F82-A656-4402-8CFD-FFC880BF0AFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{523A185E-497D-4C0C-94AC-242E609DFF4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{523A185E-497D-4C0C-94AC-242E609DFF4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{523A185E-497D-4C0C-94AC-242E609DFF4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{523A185E-497D-4C0C-94AC-242E609DFF4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A69F82-A656-4402-8CFD-FFC880BF0AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A69F82-A656-4402-8CFD-FFC880BF0AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A69F82-A656-4402-8CFD-FFC880BF0AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A69F82-A656-4402-8CFD-FFC880BF0AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

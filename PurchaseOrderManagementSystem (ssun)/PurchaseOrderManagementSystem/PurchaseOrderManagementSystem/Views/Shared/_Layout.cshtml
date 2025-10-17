@@ -1,0 +1,183 @@
+﻿@*<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Purchase Order System", "PurchaseOrderList", "PurchaseOrder", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><span class="navbar-text">Welcome, @User.Identity.Name</span></li>
+                            <li>@Html.ActionLink("Logout", "Login", "Account")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            @*<footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@@*
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryval")
+        @RenderSection("scripts", required: false)
+    </body>
+    </html>*@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - Purchase Order System</title>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <style>
+            /* Custom Navbar Styles */
+            .navbar-custom {
+                background-color: #2c3e50; /* Dark blue-gray */
+                border-color: transparent;
+            }
+
+                .navbar-custom .navbar-brand,
+                .navbar-custom .navbar-nav > li > a {
+                    color: #ecf0f1;
+                }
+
+                    .navbar-custom .navbar-brand:hover,
+                    .navbar-custom .navbar-nav > li > a:hover,
+                    .navbar-custom .navbar-nav > li > a:focus {
+                        color: #3498db;
+                        background-color: transparent;
+                    }
+
+                .navbar-custom .navbar-nav > .open > a,
+                .navbar-custom .navbar-nav > .open > a:hover,
+                .navbar-custom .navbar-nav > .open > a:focus {
+                    background-color: #34495e;
+                    color: #ffffff;
+                }
+
+                .navbar-custom .navbar-toggle {
+                    border-color: #3498db;
+                }
+
+                    .navbar-custom .navbar-toggle:hover,
+                    .navbar-custom .navbar-toggle:focus {
+                        background-color: #3498db;
+                    }
+
+                    .navbar-custom .navbar-toggle .icon-bar {
+                        background-color: #ecf0f1;
+                    }
+
+                .navbar-custom .dropdown-menu {
+                    background-color: #34495e;
+                    border-color: transparent;
+                }
+
+                    .navbar-custom .dropdown-menu > li > a {
+                        color: #ecf0f1;
+                    }
+
+                        .navbar-custom .dropdown-menu > li > a:hover,
+                        .navbar-custom .dropdown-menu > li > a:focus {
+                            color: #3498db;
+                            background-color: transparent;
+                        }
+
+            .navbar-text-custom {
+                color: #ecf0f1;
+                display: inline-block;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top navbar-custom">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Purchase Order System", "PurchaseOrderList", "PurchaseOrder", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Purchase Orders <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Search POs", "PurchaseOrderList", "PurchaseOrder")</li>
+                                <li>@Html.ActionLink("Create New PO", "AddEditPurchaseOrder", "PurchaseOrder")</li>
+                                <li>@Html.ActionLink("PO List", "PurchaseOrderList", "PurchaseOrder")</li>
+                            </ul>
+                        </li>
+                        <li>@Html.ActionLink("Reports", "Reports", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><span class="navbar-text navbar-text-custom">Welcome, @User.Identity.Name</span></li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "logout-link" })</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Login", "Login", "Account")</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            @*<footer>
+                    <p>&copy; @DateTime.Now.Year - Purchase Order Management System</p>
+                </footer>*@
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryval")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

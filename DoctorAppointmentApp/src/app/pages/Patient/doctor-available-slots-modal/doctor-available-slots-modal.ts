@@ -109,7 +109,7 @@ export class DoctorAvailableSlotsModal implements OnInit {
     }
   
     this.activeModal.close();
-  
+    debugger;
     this.router.navigate(['patient/patientdetails'], {
       queryParams: {
         doctorId: this.doctorId,

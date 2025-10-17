@@ -3,9 +3,9 @@
     <!-- Appointment Summary -->
     <div class="alert alert-info text-center fw-semibold mb-4">
       Booking Appointment with 
-      <span class="text-primary">Dr .{{ doctorName }}</span> on 
-      <span class="text-success">{{ slotDate | date: 'fullDate' }}</span> at 
-      <span class="text-success">{{ startTime }} - {{ endTime }}</span>
+      <span class="text-primary">Dr .{{ appointment.DoctorName }}</span> on 
+      <span class="text-success">{{ appointment.PreferredDate| date: 'fullDate' }}</span> at 
+      <span class="text-success">{{ appointment.StartTime }} - {{ appointment.EndTime }}</span>
     </div>
   
     <div class="card shadow-sm">
@@ -24,7 +24,7 @@
                 <div class="col-lg-6">
                   <input type="text" class="form-control" placeholder="Contact Number"
                          name="ContactNumber"
-                         [(ngModel)]="patient.ContactNumber"
+                         [(ngModel)]="appointment.ContactNumber"
                          (blur)="loadPatientDetails()"
                          required>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="col-lg-6">
                   <input type="email" class="form-control" placeholder="Email"
                          name="Email"
-                         [(ngModel)]="patient.Email">
+                         [(ngModel)]="appointment.PatientEmail">
                 </div>
               </div>
             </div>
@@ -43,18 +43,18 @@
               <div class="row g-4">
                 <div class="col-lg-6">
                   <input type="text" class="form-control" placeholder="First Name"
-                         name="FirstName" [(ngModel)]="patient.FirstName" required>
+                         name="FirstName" [(ngModel)]="appointment.FirstName" required>
                 </div>
                 <div class="col-lg-6">
                   <input type="text" class="form-control" placeholder="Last Name"
-                         name="LastName" [(ngModel)]="patient.LastName" required>
+                         name="LastName" [(ngModel)]="appointment.LastName" required>
                 </div>
                 <div class="col-lg-6">
                   <input type="date" class="form-control" name="DateOfBirth"
-                         [(ngModel)]="patient.DateOfBirth" required>
+                         [(ngModel)]="appointment.DateOfBirth" required>
                 </div>
                 <div class="col-lg-6">
-                  <select class="form-control" name="Gender" [(ngModel)]="patient.Gender" required>
+                  <select class="form-control" name="Gender" [(ngModel)]="appointment.Gender" required>
                     <option value="">Select Gender</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-lg-6">
                   <input type="text" class="form-control" placeholder="Insurance ID"
-                         name="InsuranceId" [(ngModel)]="patient.InsuranceId">
+                         name="InsuranceId" [(ngModel)]="appointment.InsuranceInfo">
                 </div>
               </div>
             </div>
@@ -73,11 +73,11 @@
               <div class="row g-4">
                 <div class="col-lg-12">
                   <textarea class="form-control" placeholder="Medical History"
-                            name="MedicalHistory" [(ngModel)]="patient.MedicalHistory"></textarea>
+                            name="MedicalHistory" [(ngModel)]="appointment.MedicalHistory"></textarea>
                 </div>
                 <div class="col-lg-12">
                   <textarea class="form-control" placeholder="Medical Concern"
-                            name="MedicalConcern" [(ngModel)]="patient.MedicalConcern"></textarea>
+                            name="MedicalConcern" [(ngModel)]="appointment.MedicalConcern"></textarea>
                 </div>
               </div>
             </div>
@@ -87,36 +87,36 @@
               <h6 class="mb-3 text-dark">Address Information</h6>
               <div class="row g-4">
                 <div class="col-lg-3">
-                  <select class="form-control" name="StateId" [(ngModel)]="patient.StateId">
+                  <select class="form-control" name="StateId" [(ngModel)]="appointment.StateId">
                     <option value="">Select State</option>
                     <option *ngFor="let state of statesList" [value]="state.StateId">{{ state.StateName }}</option>
                   </select>
                 </div>
                 <div class="col-lg-3">
-                  <select class="form-control" name="DistrictId" [(ngModel)]="patient.DistrictId">
+                  <select class="form-control" name="DistrictId" [(ngModel)]="appointment.DistrictId">
                     <option value="">Select District</option>
                     <option *ngFor="let district of districtsList" [value]="district.DistrictId">{{ district.DistrictName }}</option>
                   </select>
                 </div>
                 <div class="col-lg-3">
-                  <select class="form-control" name="TalukaId" [(ngModel)]="patient.TalukaId">
+                  <select class="form-control" name="TalukaId" [(ngModel)]="appointment.TalukaId">
                     <option value="">Select Taluka</option>
                     <option *ngFor="let taluka of talukasList" [value]="taluka.TalukaId">{{ taluka.TalukaName }}</option>
                   </select>
                 </div>
                 <div class="col-lg-3">
-                  <select class="form-control" name="CityId" [(ngModel)]="patient.CityId">
+                  <select class="form-control" name="CityId" [(ngModel)]="appointment.CityId">
                     <option value="">Select City</option>
                     <option *ngFor="let city of citiesList" [value]="city.CityId">{{ city.CityName }}</option>
                   </select>
                 </div>
                 <div class="col-lg-8">
                   <input type="text" class="form-control" placeholder="Address Line"
-                         name="Address" [(ngModel)]="patient.AddressLine">
+                         name="Address" [(ngModel)]="appointment.AddressLine">
                 </div>
                 <div class="col-lg-4">
                   <input type="text" class="form-control" placeholder="Pincode"
-                         name="Pincode" [(ngModel)]="patient.Pincode">
+                         name="Pincode" [(ngModel)]="appointment.Pincode">
                 </div>
               </div>
             </div>

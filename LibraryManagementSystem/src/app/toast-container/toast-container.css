@@ -1,0 +1,98 @@
+/* container */
+:host {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 0 !important;
+  pointer-events: none;
+}
+
+ngb-toast {
+  pointer-events: auto;
+}
+
+
+.toast-modern .toast {
+  border: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+}
+
+/* type accents + colors (used for timer) */
+.toast-modern.success {
+  --timer-color: #198754;
+}
+
+.toast-modern.error {
+  --timer-color: #dc3545;
+}
+
+.toast-modern.info {
+  --timer-color: #0dcaf0;
+}
+
+.toast-modern.warning {
+  --timer-color: #ffc107;
+}
+
+.toast-modern.success .toast {
+  border-left: 6px solid #198754;
+}
+
+.toast-modern.error .toast {
+  border-left: 6px solid #dc3545;
+}
+
+.toast-modern.info .toast {
+  border-left: 6px solid #0dcaf0;
+}
+
+.toast-modern.warning .toast {
+  border-left: 6px solid #ffc107;
+}
+
+/* body */
+.toast-body-content {
+  padding: .5rem .75rem;
+  font-size: .95rem;
+}
+
+/* timer strip */
+.toast-timer {
+  height: 3px;
+  width: 100%;
+  background: rgba(0, 0, 0, .08);
+  margin-top: .5rem;
+  overflow: hidden;
+}
+
+.toast-timer .bar {
+  height: 100%;
+  width: 100%;
+  background: var(--timer-color, #0d6efd);
+  transform-origin: left center;
+  animation-name: toastShrink;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  /* stay at 0 at the end */
+}
+
+/* make the bar move (shrink left->right) */
+@keyframes toastShrink {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* optional: pause on hover */
+.toast-modern .toast:hover .bar {
+  animation-play-state: paused;
+}

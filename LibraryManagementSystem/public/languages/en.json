@@ -1,0 +1,101 @@
+{
+    "app": {
+      "title": "My Book App",
+      "nav": { "search": "Search Book", "add": "Add Book", "login": "Login", "logout": "Logout" },
+      "welcome": "Welcome, {{name}}"
+    },
+    "filters": {
+    "title": "Book Filters",
+    "bookName": {
+      "label": "Book Name",
+      "placeholder": "Type a book title"
+    },
+    "publishers": {
+      "label": "Select Publishers",
+      "placeholder": "Select options"
+    },
+    "isActive": {
+      "label": "Active Status",
+      "placeholder": "Select Active Status",
+      "all": "All",
+      "true": "True",
+      "false": "False"
+    },
+    "pageSize": {
+      "label": "Select Page Size",
+      "placeholder": "Page Size"
+    },
+    "actions": {
+      "search": "Search",
+      "reset": "Reset"
+    }
+  },
+  "bookList": {
+    "title": "Book List",
+    "loading": "Loading...",
+    "empty": "No books found",
+    "headers": {
+      "id": "ID",
+      "bookName": "Book Name",
+      "publisherName": "Publisher Name",
+      "departmentName": "Department Name",
+      "supplierName": "Supplier Name",
+      "actions": "Actions"
+    },
+    "actions": {
+      "add": "Add Book",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+  "bookForm": {
+    "title": {
+      "add": "Add New Book",
+      "edit": "Edit Book Details"
+    },
+    "fields": {
+      "bookName": {
+        "label": "Book Name*",
+        "placeholder": "Enter book name",
+        "required": "Book Name is required"
+      },
+      "publisher": {
+        "label": "Select Publisher*",
+        "placeholder": "-- Select Publisher --",
+        "required": "Publisher is required"
+      },
+      "department": {
+        "label": "Select Department*",
+        "placeholder": "-- Select Department --",
+        "required": "Department is required"
+      },
+      "supplier": {
+        "label": "Select Supplier*",
+        "placeholder": "-- Select Supplier --",
+        "required": "Supplier is required"
+      },
+      "user": {
+        "label": "Select Users*",
+        "placeholder": "-- Select User --",
+        "required": "User is required"
+      },
+      "copies": {
+        "label": "Number Of Copies*",
+        "placeholder": "Enter number of copies",
+        "required": "Number of Copies is required",
+        "min": "Minimum 1 copy required"
+      },
+      "isActive": {
+        "label": "Active Status"
+      }
+    },
+    "actions": {
+      "submit": "Submit",
+      "close": "Close"
+    },
+    "formValidation": {
+        "message" : "Plase fill out the required fields"
+    }
+  }
+  }
+  

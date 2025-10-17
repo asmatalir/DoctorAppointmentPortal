@@ -1,0 +1,210 @@
+﻿@model PurchaseOrderManagementSystemClassLibrary.Models.UserInfoModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-wrapper {
+            width: 100%; 
+
+        }
+
+        .login-panel {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background-color: #4a6bff;
+            border-color: #3a56cc;
+            border-radius: 8px;
+        }
+
+            .btn-primary:hover {
+                background-color: #3a56cc;
+                border-color: #2a42aa;
+            }
+
+        .text-danger {
+            font-size: 0.9em;
+        }
+
+        .panel-heading {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4a6bff;
+            background: transparent;
+        }
+
+            .modal-dialog.modal-custom {
+        width: 500px;
+        margin: 100px auto;
+    }
+
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+        background-color: #f7f9fc;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+        .modal-header {
+            background-color: #f8f9ff;
+            border-bottom: 1px solid #e0e5ff;
+            padding: 15px 20px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+    .modal-header .modal-title {
+        font-size: 20px;
+        color: #4e54c8;
+    }
+
+    .modal-header .close {
+        color: #000;
+        opacity: 0.6;
+        font-size: 24px;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        padding: 15px 20px;
+        background-color: #f1f3f6;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+
+        .form-control:focus {
+            border-color: #4a6bff;
+            box-shadow: 0 0 0 0.2rem rgba(74, 107, 255, 0.25);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container login-wrapper">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel">
+                    <div class="panel-heading">Secure Login</div>
+
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
+                    {
+                        <div class="form-group">
+                            <label for="UserName">User Name*</label>
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "Enter username", required = "required" })
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PrimaryPassword">Password*</label>
+                            @Html.PasswordFor(m => m.EnteredPrimaryPassword, new { @class = "form-control", placeholder = "Enter password", required = "required" })
+                            @Html.ValidationMessageFor(m => m.EnteredPrimaryPassword, "", new { @class = "text-danger" })
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="otpModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-custom">
+            <div class="modal-content">
+                @using (Html.BeginForm("VerifySecondaryPassword", "Account", FormMethod.Post, new { id = "otpForm" }))
+                   {
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                        <h4 class="modal-title">Enter OTP</h4>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Hidden("UserName", "", new { id = "otpUserName" })
+
+                        <div class="form-group">
+                            <label for="SecondaryPassword">OTP</label>
+                            <input type="text" name="EnteredSecondaryPassword" class="form-control" placeholder="Enter OTP" required />
+                        </div>
+
+                        <div id="otpError" class="text-danger" style="display:none;"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-block">Verify</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $("#loginForm").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Login", "Account")',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        debugger;
+                        $("#otpUserName").val(response.userName);
+                        $("#otpModal").modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        $("#otpModal").modal("show");
+                    } else {
+                        alert("Invalid UserName or Password");
+                    }
+                }
+            });
+        });
+
+        $("#otpForm").submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("VerifySecondaryPassword", "Account")',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        $("#otpError").text(response.error).show();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

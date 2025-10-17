@@ -1,0 +1,124 @@
+<div class="container my-4">
+<div class="modal-header">
+  <br>
+  <br>
+  <h5 class="modal-title">{{ (model.BookId ? 'bookForm.title.edit' : 'bookForm.title.add') | transloco}}</h5>
+  <!-- <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button> -->
+</div>
+<div class="card shadow border-0 p-4">
+
+  <div class="modal-body">
+    <form #addEditForm="ngForm" *ngIf="model" (ngSubmit)="onClick(addEditForm)" novalidate>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="BookName" class="form-label">{{'bookForm.fields.bookName.label' | transloco}} </label>
+            <input required="" type="text" class="form-control"
+              [class.is-invalid]="BookName.invalid && (BookName.touched || addEditForm.submitted)" id="BookName"
+              [(ngModel)]="model.BookName" name="BookName"
+              [placeholder]="'bookForm.fields.bookName.placeholder' | transloco" #BookName="ngModel">
+            <!-- <span class="help-block" *ngIf="BookName.invalid && (BookName.touched || addEditForm.submitted)">Book Name is required</span> -->
+            <div class="invalid-feedback">{{'bookForm.fields.bookName.required' | transloco}}</div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">{{'bookForm.fields.publisher.label' | transloco}}</label>
+            <select class="form-select" required
+              [class.is-invalid]="PublisherId.invalid && (PublisherId.touched || addEditForm.submitted)"
+              [(ngModel)]="model.PublisherId" name="PublisherId" #PublisherId="ngModel">
+              <option [ngValue]="null">-- {{ 'bookForm.fields.publisher.placeholder' | transloco }} --</option>
+              <option *ngFor="let publisher of publishers" [value]="publisher.PublisherId">
+                {{ publisher.PublisherName }}
+              </option>
+            </select>
+            <div class="invalid-feedback">{{ 'bookForm.fields.publisher.required' | transloco }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">{{ 'bookForm.fields.department.label' | transloco }}</label>
+            <select class="form-select" required
+              [class.is-invalid]="DepartmentId.invalid && (DepartmentId.touched || addEditForm.submitted)"
+              [(ngModel)]="model.DepartmentId" name="DepartmentId" #DepartmentId="ngModel">
+              <option [ngValue]="null">-- {{ 'bookForm.fields.department.placeholder' | transloco }} --</option>
+              <option *ngFor="let department of departments" [value]="department.DepartmentId">
+                {{ department.DepartmentName }}
+              </option>
+            </select>
+            <div class="invalid-feedback">{{ 'bookForm.fields.department.required' | transloco }}</div>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label ">{{ 'bookForm.fields.supplier.label' | transloco }}</label>
+            <select class="form-select" required
+              [class.is-invalid]="SupplierId.invalid && (SupplierId.touched || addEditForm.submitted)"
+              [(ngModel)]="model.SupplierId" name="SupplierId" #SupplierId="ngModel">
+              <option [ngValue]="null">-- {{ 'bookForm.fields.supplier.placeholder' | transloco }} --</option>
+              <option *ngFor="let supplier of suppliers" [value]="supplier.SupplierId">
+                {{ supplier.SupplierName }}
+              </option>
+            </select>
+            <div class="invalid-feedback">{{ 'bookForm.fields.supplier.required' | transloco }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">{{ 'bookForm.fields.user.label' | transloco }}</label>
+            <select class="form-select" required
+              [class.is-invalid]="UserId.invalid && (UserId.touched || addEditForm.submitted)"
+              [(ngModel)]="model.CreatedBy" name="UserId" #UserId="ngModel">
+              <option [ngValue]="null">-- {{ 'bookForm.fields.user.placeholder' | transloco }} --</option>
+              <option *ngFor="let user of users" [value]="user.UserId">
+                {{ user.UserRole }}
+              </option>
+            </select>
+            <div class="invalid-feedback">{{ 'bookForm.fields.user.required' | transloco }}</div>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="NoOfCopies" class="form-label">{{ 'bookForm.fields.copies.label' | transloco }}</label>
+            <input type="number" required
+              [class.is-invalid]="NoOfCopies.invalid && (NoOfCopies.touched || addEditForm.submitted)" min="1"
+              class="form-control" id="NoOfCopies" [(ngModel)]="model.NoOfCopies" name="NoOfCopies"
+              [placeholder]="'bookForm.fields.copies.placeholder' | transloco" #NoOfCopies="ngModel">
+              <div class="invalid-feedback" *ngIf="NoOfCopies.errors?.['required']">
+                {{ 'bookForm.fields.copies.required' | transloco }}
+              </div>
+              <div class="invalid-feedback" *ngIf="NoOfCopies.errors?.['min']">
+                {{ 'bookForm.fields.copies.min' | transloco }}
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3">
+
+
+        <div class="col-md-6">
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="isActive" [(ngModel)]="model.IsActive"
+              name="IsActive" />
+            <label class="form-check-label" for="isActive">
+              {{ 'bookForm.fields.isActive.label' | transloco }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">{{ 'bookForm.actions.submit' | transloco }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>

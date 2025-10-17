@@ -68,15 +68,17 @@ export class DoctorsList implements OnInit {
     });
   }
 
-
+  
   openBookingModal(doctor: any) {
     const modalRef = this.modalService.open(DoctorAvailableSlotsModal, { size: 'lg', centered: true });
   
     // ✅ Set inputs correctly
+    doctor.SelectedSpecializationId=1;
     modalRef.componentInstance.doctorId = doctor.DoctorId;
     modalRef.componentInstance.doctorName = `${doctor.FirstName} ${doctor.LastName}`;
     modalRef.componentInstance.SpecializationId = doctor.SelectedSpecializationId;
-
+     
+    debugger;
     modalRef.result.then(
       (result) => {
         if (result) {

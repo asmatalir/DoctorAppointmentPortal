@@ -1,0 +1,62 @@
+
+<div class="container my-4">
+  <div class="card shadow p-4 mb-4 border-0">
+    <h4 class="mb-3 text-primary text-start">{{'filters.title' | transloco}}</h4>
+    <br>
+<form #searchForm="ngForm" (ngSubmit)="onSearch()" class="row g-3">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="BookNameSearch" class="form-label">{{'filters.bookName.label' | transloco}}</label>
+        <input type="text" class="form-control" id="BookNameSearch" [(ngModel)]="filtersToSend.BookNameSearch" name="BookNameSearch" [placeholder]="'filters.bookName.placeholder' | transloco">
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label for="Publishers" class="form-label">{{'filters.publishers.label' | transloco}}</label>
+        <ng-multiselect-dropdown
+          name="SelectedPublishers"
+          [placeholder]="'filters.publishers.label' | transloco"
+          [data]="Publishers"
+          [(ngModel)]="filtersToSend.SelectedPublishers"
+          [settings]="dropdownSettings">
+        </ng-multiselect-dropdown>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">{{'filters.isActive.label' | transloco}}</label>
+        <select class="form-select" [(ngModel)]="filtersToSend.SelectedIsActive" name="SelectedIsActive" >
+          <option selected disabled>{{'filters.isActive.placeholder' | transloco}}</option>
+          <option value="-1">{{'filters.isActive.all' | transloco}}</option>
+          <option value="1">{{'filters.isActive.true' | transloco}}</option>
+          <option value="0">{{'filters.isActive.false' | transloco}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row align-items-end">
+    <div class="col-md-4">
+      <label class="form-label">{{'filters.pageSize.label' | transloco}}</label>
+      <select class="form-select" [(ngModel)]="filtersToSend.PageSize" name="PageSize">
+        <option selected disabled>{{'filters.pageSize.placeholder' | transloco}}</option>
+        <option value="3">3</option>
+        <option value="7">7</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+
+  <div class="col-12 mt-3 text-center">
+    <button type="submit" class="btn btn-primary me-2">{{'filters.actions.search' | transloco}}</button>
+    <button type="button" class="btn btn-secondary" (click)="ClearFilters()">{{'filters.actions.reset' | transloco}}</button>
+  </div>
+
+  </div>
+</form>
+</div>
+<app-books-list [filters]="filtersToSend"></app-books-list>
+</div>
+

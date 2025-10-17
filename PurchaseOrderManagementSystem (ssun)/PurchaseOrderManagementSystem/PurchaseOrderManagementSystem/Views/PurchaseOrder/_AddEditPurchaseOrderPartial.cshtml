@@ -1,0 +1,357 @@
+﻿@model PurchaseOrderManagementSystemClassLibrary.Models.PurchaseOrderModel
+
+@{
+    var isEdit = Model.PurchaseOrderId > 0;
+}
+
+<form id="purchaseOrderForm" enctype="multipart/form-data">
+    <input type="hidden" name="PurchaseOrderId" value="@Model.PurchaseOrderId" />
+    <h4>@(isEdit ? "Edit Purchase Order" : "Add New Purchase Order")</h4>
+
+    @if (isEdit)
+    {
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label>PO Number</label>
+                <input type="text" class="form-control" name="PurchaseOrderSerialNumber" value="@Model.PurchaseOrderSerialNumber" readonly />
+            </div>
+            <div class="col-md-4 form-group">
+                <label>PO Date</label>
+                <input type="date" class="form-control" name="PurchaseOrderDate" value="@Model.PurchaseOrderDate.ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-4 form-group">
+                <label>Expected Delivery Date</label>
+                <input type="date" class="form-control" name="ExpectedDeliveryDate" value="@(Model.ExpectedDeliveryDate == DateTime.MinValue ? DateTime.Now.ToString("yyyy-MM-dd") : @Model.ExpectedDeliveryDate.ToString("yyyy-MM-dd"))" required />
+                @Html.ValidationMessageFor(m => m.ExpectedDeliveryDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+
+    <div class="row">
+            <div class="col-md-4 form-group">
+                <label>Vendor</label>
+                @Html.DropDownList("VendorId", new SelectList(Model.VendorsList, "VendorId", "VendorName", Model.VendorId), "-- Select Vendor --", new { @class = "form-control", id = "vendorId", required = "required" })
+                @Html.ValidationMessageFor(m => m.VendorId, "", new { @class = "text-danger" })
+            </div>
+        <div class="col-md-4 form-group">
+            <label>Vendor Contact</label>
+            @Html.DropDownList("VendorContactId", Model.VendorContactsList != null ? new SelectList(Model.VendorContactsList, "VendorContactId", "Name", Model.VendorContactId) : new SelectList(new List<SelectListItem>(), "Value", "Text"), "-- Select Contact --", new { @class = "form-control", id = "vendorContactId", required = "required" })
+            @Html.ValidationMessageFor(m => m.VendorContactId, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4 form-group">
+            <label>Payment Terms</label>
+            <input type="text" name="PaymentTerms" class="form-control" value="@Model.PaymentTerms" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 form-group">
+            <label>Order Notes</label>
+            <textarea name="OrderNotes" class="form-control">@Model.OrderNotes</textarea>
+        </div>
+        <div class="col-md-4 form-group">
+            <label>Invoice Received</label>
+            <input type="checkbox" name="InvoiceReceived" @(Model.InvoiceReceived == 1 ? "checked" : "") />
+        </div>
+        <div class="col-md-4 form-group">
+            @if (isEdit)
+            {
+                <label>Status</label>
+                @Html.DropDownList("PurchaseOrderStatusId", new SelectList(Model.PurchaseOrderStatusList, "PurchaseOrderStatusId", "PurchaseOrderStatus", Model.PurchaseOrderStatusId), "-- Select Status --", new { @class = "form-control" })
+            }
+            else
+            {
+                <input type="hidden" name="PurchaseOrderStatusId" value="1" />
+            }
+        </div>
+    </div>
+
+
+
+
+    <hr />
+
+
+    <!-- Products Table -->
+    <h5>Products</h5>
+    <button type="button" class="btn btn-primary mb-2" id="addProductRow">Add Product</button>
+    <table class="table table-bordered" id="productsTable">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ProductsList != null && Model.ProductsList.Any())
+            {
+                for (int i = 0; i < Model.ProductsList.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.DropDownList($"ProductsList[{i}].ProductId", new SelectList(Model.ProductList, "ProductId", "ProductName", Model.ProductsList[i].ProductId), "-- Select --", new { @class = "form-control" })
+                        </td>
+                        <td><input type="number" name="ProductsList[@i].Quantity" class="form-control" value="@Model.ProductsList[i].Quantity" required /></td>
+                        <td><input type="number" name="ProductsList[@i].Price" class="form-control" value="@Model.ProductsList[i].Price" required /></td>
+                        <td><button type="button" class="btn btn-danger remove-product">Remove</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <!-- Documents Upload -->
+    @*<h5>Documents</h5>
+        <input type="file" name="UploadedFiles" id="UploadedFiles" multiple class="form-control mb-3" />
+        @if (Model.DocumentsList != null && Model.DocumentsList.Any())
+        {
+            <h6>Uploaded Documents</h6>
+            <table class="table table-bordered" id="uploadedFilesTable">
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>File</th>
+                        <th>Notes</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.DocumentsList.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input type="text" name="DocumentsList[@i].DocumentName" class="form-control"
+                                       value="@Model.DocumentsList[i].DocumentName" readonly />
+                            </td>
+                            <td>
+                                <a href="@Url.Content(Model.DocumentsList[i].DocumentFileName)" target="_blank">
+                                    @System.IO.Path.GetFileName(Model.DocumentsList[i].DocumentFileName)
+                                </a>
+                                <input type="hidden" name="DocumentsList[@i].DocumentFileName" value="@Model.DocumentsList[i].DocumentFileName" />
+                            </td>
+                            <td>
+                                <input type="text" name="DocumentsList[@i].Notes" class="form-control"
+                                       value="@Model.DocumentsList[i].Notes" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger remove-document">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }*@
+
+    <h5>Documents</h5>
+    <input type="file" id="UploadedFiles" multiple class="form-control mb-3" />
+
+    <!-- Always present table for both existing and new uploaded files -->
+    <table class="table table-bordered" id="uploadedFilesTable">
+        <thead>
+            <tr>
+                <th>Document Name</th>
+                <th>Notes</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Existing Documents (if any) -->
+            @if (Model.DocumentsList != null && Model.DocumentsList.Any())
+            {
+                for (int i = 0; i < Model.DocumentsList.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input type="text" name="DocumentsList[@i].DocumentName" class="form-control" value="@Model.DocumentsList[i].DocumentName" readonly />
+                            <input type="hidden" name="DocumentsList[@i].DocumentFileName" value="@Model.DocumentsList[i].DocumentFileName" />
+                        </td>
+                        <td>
+                            <input type="text" name="DocumentsList[@i].Notes" class="form-control" value="@Model.DocumentsList[i].Notes" />
+
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-danger remove-document">Remove</button></td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+    <div class="text-right">
+        <button type="submit" class="btn btn-success">@(isEdit ? "Update" : "Save") Purchase Order</button>
+    </div>
+
+</form>
+
+<script>
+    $(document).ready(function () {
+        let rowIdx = $('#productsTable tbody tr').length;
+        let uploadedFiles = [];
+
+        $('#addProductRow').click(function () {
+            const row =`
+            <tr>
+                <td>
+                    <select name="ProductsList[${rowIdx}].ProductId" class="form-control">
+                        @foreach (var prod in Model.ProductList)
+                        {
+                            <option value="@prod.ProductId">@prod.ProductName</option>
+                        }
+                    </select>
+                </td>
+                <td><input type="number" name="ProductsList[${rowIdx}].Quantity" class="form-control" required /></td>
+                <td><input type="number" name="ProductsList[${rowIdx}].Price" class="form-control" required /></td>
+                <td><button type="button" class="btn btn-danger remove-product">Remove</button></td>
+            </tr>`;
+            $('#productsTable tbody').append(row);
+            rowIdx++;
+        });
+
+
+        $('#UploadedFiles').on('change', function () {
+            const newFiles = Array.from(this.files);
+            const tableBody = $('#uploadedFilesTable tbody');
+
+            const startingIndex = uploadedFiles.length; 
+
+            newFiles.forEach((file, i) => {
+                const currentIndex = startingIndex + i;
+
+                uploadedFiles.push(file); 
+
+                const row = `
+        <tr class="new-upload-row" data-index="${currentIndex}">
+            <td>
+                <input type="text" class="form-control" value="${file.name}" readonly />
+            </td>
+            <td>
+                <input type="text" class="form-control file-note" data-upload-index="${currentIndex}" />
+            </td>
+            <td>
+                <button type="button" class="btn btn-danger remove-document">Remove</button>
+            </td>
+        </tr>`;
+
+                tableBody.append(row);
+            });
+
+            
+            this.value = '';
+        });
+
+
+        $(document).on('click', '.remove-product', function () {
+            $(this).closest('tr').remove();
+            reindexProductRows();
+        });
+
+
+        $(document).on('click', '.remove-document', function () {
+            const row = $(this).closest('tr');
+
+            if (row.hasClass('new-upload-row')) {
+                const index = row.data('index');
+         
+                uploadedFiles.splice(index, 1);
+            
+                row.remove();
+                
+                $('#uploadedFilesTable tbody tr.new-upload-row').each(function (i) {
+                    $(this).attr('data-index', i);
+                    $(this).find('.file-note').attr('data-upload-index', i);
+                });
+            } else {
+                
+                row.remove();
+                reindexDocumentRows();
+            }
+        });
+
+
+        function reindexProductRows() {
+            $('#productsTable tbody tr').each(function (index) {
+                $(this).find('input, select, textarea').each(function () {
+                    const nameAttr = $(this).attr('name');
+                    if (nameAttr) {
+                        const newName = nameAttr.replace(/\[\d+\]/, `[${index}]`);
+                        $(this).attr('name', newName);
+                    }
+
+                    const idAttr = $(this).attr('id');
+                    if (idAttr) {
+                        const newId = idAttr.replace(/\_\d+$/, `_${index}`);
+                        $(this).attr('id', newId);
+                    }
+                });
+            });
+        }
+
+        function reindexDocumentRows() {
+            $('#uploadedFilesTable tbody tr').each(function (index) {
+                
+                const docNameInput = $(this).find('input[name^="DocumentsList["][name$="].DocumentName"]');
+                const docFileNameInput = $(this).find('input[name^="DocumentsList["][name$="].DocumentFileName"]');
+                const noteInput = $(this).find('input[name^="DocumentsList["][name$="].Notes"]');
+
+                if (docNameInput.length > 0) {
+                    docNameInput.attr('name', `DocumentsList[${index}].DocumentName`);
+                }
+
+                if (docFileNameInput.length > 0) {
+                    docFileNameInput.attr('name', `DocumentsList[${index}].DocumentFileName`);
+                }
+
+                if (noteInput.length > 0) {
+                    noteInput.attr('name', `DocumentsList[${index}].Notes`);
+                }
+            });
+        }
+
+
+
+        $('#purchaseOrderForm').submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $('#uploadedFilesTable tbody tr.new-upload-row').each(function (index) {
+                const note = $(this).find('.file-note').val();
+                const file = uploadedFiles[index]; 
+
+                if (file) {
+                    formData.append(`UploadedFiles[${index}]`, file);
+                    formData.append(`DocumentNotes[${index}]`, note);
+                }
+            });
+
+
+
+            $.ajax({
+                url: '@Url.Action("SavePurchaseOrder", "PurchaseOrder")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (resp) {
+                    if (resp.success) {
+                        alert(resp.message);
+                        $('#sharedModal').modal('hide');
+                    }
+                    else {
+                        alert("Error: " + resp.message);
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong.");
+                }
+            });
+        });
+       
+
+      });
+</script>

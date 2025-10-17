@@ -1,0 +1,65 @@
+<!-- Add loading state and empty state -->
+<!-- <div *ngIf="loading" class="text-center p-3">
+  <div class="spinner-border text-primary" role="status"></div>
+</div> -->
+<ng-template #confirmTpl let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Delete book</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    Are you sure you want to delete "<strong>{{ pendingBookName }}</strong>"?
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-outline-secondary" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-danger" (click)="modal.close(true)">Delete</button>
+  </div>
+</ng-template>
+<br>
+<div class="card shadow p-4 border-0">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-3 text-primary">{{'bookList.title' | transloco}}</h4>
+    <div class="btn-group">
+      <!-- Current page -->
+      <button type="button" class="btn btn-outline-secondary" (click)="exportCsvPage()">CSV</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="exportXlsxPage()">Excel</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="exportPdfPage()">PDF</button>
+    </div>
+    <!-- <button type="button" class="btn btn-primary" (click)="openAddEditModal()">Add Book(Modal)</button> -->
+    <button type="button" class="btn btn-primary" (click)="openAddEditPage()">{{'bookList.actions.add' | transloco}}</button>
+  </div>
+<div *ngIf="!loading" class="table-responsive shadow-sm rounded">
+<table *ngIf="Books && Books.length > 0"  class="table table-striped table-hover align-middle mb-0" id="booksTable">
+    <thead>
+      <tr>
+        <th scope="col">{{'bookList.headers.id' | transloco}}</th>
+        <th scope="col" (click)="sortBy('BookName')">{{'bookList.headers.bookName' | transloco}}</th>
+        <th scope="col" (click)="sortBy('PublisherName')">{{'bookList.headers.publisherName' | transloco}}</th>
+        <th scope="col" (click)="sortBy('DepartmentName')">{{'bookList.headers.departmentName' | transloco}}</th>
+        <th scope="col" (click)="sortBy('SupplierName')">{{'bookList.headers.supplierName' | transloco}}</th>
+        <!-- <th>Actions</th> -->
+        <th colspan="2">{{'bookList.headers.actions' | transloco}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of Books">
+        <td>{{ book.BookId }}</td>
+        <td>{{ book.BookName }}</td>
+        <td>{{ book.PublisherName }}</td>
+        <td>{{ book.DepartmentName }}</td>
+        <td>{{ book.SupplierName }}</td>
+        <!-- <td><button class="btn btn-sm btn-primary" (click)="openAddEditModal(book.BookId)"> Edit Modal </button></td> -->
+        <td><button class="btn btn-sm btn-primary" (click)="openAddEditPage(book.BookId)"> {{'bookList.actions.edit' | transloco}} </button></td>
+        <td><button class="btn btn-outline-primary btn-sm delete-btn" (click)="deleteBook(book)"> {{'bookList.actions.delete' | transloco}} </button></td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <div *ngIf="Books && Books.length === 0">{{'bookList.empty' | transloco}}</div>
+  <ngb-pagination *ngIf="!loading && TotalRecords > 0" class="d-flex justify-content-center mt-3 shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords" [(page)]="filters.PageNo" [pageSize]="filters.PageSize" [maxSize]="3"  [boundaryLinks]="true" [attr.data-key]="TotalRecords" (pageChange)="getBooks()"/>
+  </div>
+  </div>
+
+  

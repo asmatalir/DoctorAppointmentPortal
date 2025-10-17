@@ -1,0 +1,198 @@
+﻿@model PurchaseOrderManagementSystemClassLibrary.Models.PurchaseOrderModel
+<div class="main-container">
+    <div class="filter-container">
+        <h4 class="mb-0">Search Purchase Orders</h4>
+        <br />
+        <form id="FilterForm">
+            <div class="row align-items-center">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label for="SearchedVendorName" class="form-label">Vendor Name</label>
+                    @Html.TextBoxFor(model => model.SearchedVendorName, new { @class = "form-control", id = "SearchedVendorName" })
+                </div>
+                <div class="col-md-4 col-sm-3 col-lg-4">
+                    <label for="SelectedCategory" class="form-label">Select Categories</label>
+                    @Html.ListBoxFor(model => model.SelectedCategories, new MultiSelectList(Model.ProductCategoryList, "ProductCategoryId", "ProductCategory"), new { @class = "form-control selectpicker", multiple = "multiple", @id = "SelectedCategories", @name = "SelectedCategories", @data_live_search = "true", @data_selected_text_format = "count > 2", @data_actions_box = "true" })
+                </div>
+                <div class="col-md-4 col-sm-3 col-lg-4">
+                    <label for="SelectedProducts" class="form-label">Select Products</label>
+                    @Html.ListBoxFor(model => model.SelectedProducts, new MultiSelectList(Model.ProductList, "ProductId", "ProductName"), new { @class = "form-control selectpicker", multiple = "multiple", @id = "SelectedProducts", @name = "SelectedProducts", @data_live_search = "true", @data_selected_text_format = "count > 2", @data_actions_box = "true" })
+                </div>
+            </div>
+
+            <br />
+            <div class="row align-items-center">
+
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label for="FromDate" class="form-label">PO From Date</label>
+                    @Html.TextBoxFor(model => model.FromDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @id = "FromDate" })
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label for="ToDate" class="form-label">PO To Date</label>
+                    @Html.TextBoxFor(model => model.ToDate, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @id = "ToDate" })
+                </div>
+
+                <div class="col-md-4 col-sm-3 col-lg-4">
+                    <label for="SelectedStatus" class="form-label">Select Status</label>
+                    @Html.ListBoxFor(model => model.SelectedStatus, new MultiSelectList(Model.PurchaseOrderStatusList, "PurchaseOrderStatusId", "PurchaseOrderStatus"), new { @class = "form-control selectpicker", multiple = "multiple", @id = "SelectedStatus", @name = "SelectedStatus", @data_live_search = "true", @data_selected_text_format = "count > 2", @data_actions_box = "true" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group row justify-content-center align-items-center">
+                <div class="col-md-1 col-lg-offset-5 col-sm-3 col-sm-offset-5">
+                    <button type="submit" class="submit-btn btn btn-primary active w-100 "> Search </button>
+                </div>
+
+                <div class="col-md-1">
+                    <button type="button" class="reset-btn btn active w-100"> Reset </button>
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.PageNo, new { id = "PageNo" })
+            @Html.Hidden("SortColumn", Model.SortColumn, new { id = "SortColumn" })
+            @Html.Hidden("SortDirection", Model.SortDirection, new { id = "SortDirection" })
+        </form>
+
+    </div>
+    <div id="loadingDiv" class="mt-3 text-center" style="display:none;">
+        <img src="~/Content/loading.gif" alt="Loading..." />
+    </div>
+    <div id="purchaseOrderTableContainer">
+        <!-- AJAX will load the Purchase Order Partial List Here -->
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        let currentSortColumn = '@Model.SortColumn';
+        let currentSortDirection = '@Model.SortDirection';
+        let resetPageNo = false;
+
+        $(document).on('click', '.sortable', function () {
+
+            const clickedColumn = $(this).data('column');
+            let sortDirection = 'ASC';
+
+            if (clickedColumn === currentSortColumn) {
+                sortDirection = currentSortDirection === 'ASC' ? 'DESC' : 'ASC';
+            }
+
+            currentSortColumn = clickedColumn;
+            currentSortDirection = sortDirection;
+
+            $('#SortColumn').val(currentSortColumn);
+            $('#SortDirection').val(currentSortDirection);
+
+            const formData = $('#FilterForm').serialize();
+
+            loadPurchaseOrderTable(formData);
+        });
+
+        function loadPurchaseOrderTable(formData) {
+            $("#loadingDiv").show();
+            $("#bookTable").hide();
+            $.ajax({
+                url: '@Url.Action("PurchaseOrderListPartial", "PurchaseOrder")',
+                type: 'POST',
+                data: formData,
+                success: function (partialViewHtml) {
+                    $('#purchaseOrderTableContainer').html(partialViewHtml);
+                },
+                error: function () {
+                    alert('Error loading purchase order data.');
+                },
+                complete: function () {
+                    $("#loadingDiv").hide();
+                    $("#bookTable").show();
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+
+            $('.selectpicker').selectpicker();
+
+
+            var initialData = $('#FilterForm').serialize();
+            loadPurchaseOrderTable(initialData);
+
+
+            $('#FilterForm').submit(function (e) {
+                e.preventDefault();
+                const from = new Date($('#FromDate').val());
+                const to = new Date($('#ToDate').val());
+
+                if ($('#FromDate').val() && $('#ToDate').val() && from > to) {
+                    alert("To Date must be greater than or equal to From Date");
+                    return;
+                }
+
+                if (resetPageNo) {
+                    $('#PageNo').val(1);
+                    resetPageNo = false;
+                }
+                var formData = $(this).serialize();
+                loadPurchaseOrderTable(formData);
+            });
+
+            $('.submit-btn').click(function () {
+                resetPageNo = true;
+            });
+
+            // Handle Reset button
+            $('.reset-btn').click(function () {
+                $("#SearchedVendorName").val('');
+                $('#SelectedCategories').val([]).selectpicker('refresh');
+                $('#SelectedProducts').val([]).selectpicker('refresh');
+                $('#SelectedStatus').val([]).selectpicker('refresh');
+                $('#FromDate').val('');
+                $('#ToDate').val('');
+                $('#PageNo').val(1);
+                $('#FilterForm').submit();
+            });
+
+            // Handle pagination clicks
+            $(document).on('click', '.page-btn', function () {
+                var page = $(this).data("page");
+                $('#PageNo').val(page);
+                $('#FilterForm').submit();
+            });
+
+            $('#btnOpenPurchaseOrderForm').click(function () {
+                window.location.href = '@Url.Action("AddEditPurchaseOrder", "PurchaseOrder")';
+            });
+        });
+    </script>
+}
+
+<style>
+    /*body{
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+        }*/
+    .main-container {
+        max-width: 1100px;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+        border: 2px solid rgba(0, 0, 0, 0.15);
+        min-height: 600px;
+    }
+
+    .filter-container {
+        border: 2px solid #f2f3cd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        /*background-color: #f8f9fa;*/ /* optional light background */
+        /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);*/ /* optional subtle shadow */
+    }
+
+    .filter-title {
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+        color: black;
+    }
+</style>

@@ -1,0 +1,20 @@
+Consider copies of books as individual
+id name care services address phone contractY/N Status
+Title
+Search + List + edit + add
+Edit - Save close edit for each row
+page control
+add worker in title bar 
+http://dev.carehomeselection.co.uk/CHSTrackPreprod
+deactivate in edit page
+Collapsable search box
+List edit delete add
+
+
+Book category
+Subject
+Publishers
+Lookup table
+isActive is compulsory for lookup table
+
+Status name is mandatory

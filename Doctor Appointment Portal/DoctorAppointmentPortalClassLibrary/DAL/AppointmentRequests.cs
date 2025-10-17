@@ -266,9 +266,9 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             return isUpdated;
         }
 
-        public PatientDetailsModel LoadPatientDetails(string contactNumber)
+        public AppointmentRequestsModel LoadPatientDetails(string contactNumber)
         {
-            PatientDetailsModel model = new PatientDetailsModel();
+            AppointmentRequestsModel model = new AppointmentRequestsModel();
 
             try
             {
@@ -283,7 +283,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                         DataTable dt = ds.Tables[0];
                         model.FirstName = Convert.ToString(dt.Rows[0]["FirstName"]);
                         model.LastName = Convert.ToString(dt.Rows[0]["LastName"]);
-                        model.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        model.PatientEmail = Convert.ToString(dt.Rows[0]["Email"]);
                         model.ContactNumber = Convert.ToString(dt.Rows[0]["ContactNumber"]);
                         model.DateOfBirth = Convert.ToDateTime(dt.Rows[0]["DateOfBirth"]);
                         model.Gender = Convert.ToString(dt.Rows[0]["Gender"]);
@@ -306,6 +306,144 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             return model;
         }
+
+        public int SavePatientAppointment(AppointmentRequestsModel appointment)
+        {
+            int resultCode = -1;
+
+            try
+            {
+                DbCommand cmd = db.GetStoredProcCommand("SavePatientAppointment");
+
+                // Patient Info
+                if (!string.IsNullOrEmpty(appointment.FirstName))
+                    db.AddInParameter(cmd, "@FirstName", DbType.String, appointment.FirstName);
+                else
+                    db.AddInParameter(cmd, "@FirstName", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.LastName))
+                    db.AddInParameter(cmd, "@LastName", DbType.String, appointment.LastName);
+                else
+                    db.AddInParameter(cmd, "@LastName", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.PatientEmail))
+                    db.AddInParameter(cmd, "@Email", DbType.String, appointment.PatientEmail);
+                else
+                    db.AddInParameter(cmd, "@Email", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.ContactNumber))
+                    db.AddInParameter(cmd, "@PhoneNumber", DbType.String, appointment.ContactNumber);
+                else
+                    db.AddInParameter(cmd, "@PhoneNumber", DbType.String, DBNull.Value);
+
+                if (appointment.DateOfBirth != DateTime.MinValue)
+                    db.AddInParameter(cmd, "@DateOfBirth", DbType.Date, appointment.DateOfBirth);
+                else
+                    db.AddInParameter(cmd, "@DateOfBirth", DbType.Date, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.Gender))
+                    db.AddInParameter(cmd, "@Gender", DbType.String, appointment.Gender);
+                else
+                    db.AddInParameter(cmd, "@Gender", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.InsuranceInfo))
+                    db.AddInParameter(cmd, "@InsuranceInfo", DbType.String, appointment.InsuranceInfo);
+                else
+                    db.AddInParameter(cmd, "@InsuranceInfo", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.MedicalHistory))
+                    db.AddInParameter(cmd, "@MedicalHistory", DbType.String, appointment.MedicalHistory);
+                else
+                    db.AddInParameter(cmd, "@MedicalHistory", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.AddressLine))
+                    db.AddInParameter(cmd, "@AddressLine", DbType.String, appointment.AddressLine);
+                else
+                    db.AddInParameter(cmd, "@AddressLine", DbType.String, DBNull.Value);
+
+                // Slot Info
+                if (appointment.PreferredDate != DateTime.MinValue)
+                    db.AddInParameter(cmd, "@SlotDate", DbType.Date, appointment.PreferredDate);
+                else
+                    db.AddInParameter(cmd, "@SlotDate", DbType.Date, DBNull.Value);
+
+                if (appointment.StartTime != TimeSpan.Zero)
+                    db.AddInParameter(cmd, "@StartTime", DbType.Time, DateTime.Today.Add(appointment.StartTime));
+                else
+                    db.AddInParameter(cmd, "@StartTime", DbType.Time, DBNull.Value);
+
+                if (appointment.EndTime != TimeSpan.Zero)
+                    db.AddInParameter(cmd, "@EndTime", DbType.Time, DateTime.Today.Add(appointment.EndTime));
+                else
+                    db.AddInParameter(cmd, "@EndTime", DbType.Time, DBNull.Value);
+
+                if (appointment.SelectedSpecializationId > 0)
+                    db.AddInParameter(cmd, "@SpecializationId", DbType.Int32, appointment.SelectedSpecializationId);
+                else
+                    db.AddInParameter(cmd, "@SpecializationId", DbType.Int32, DBNull.Value);
+
+                // Address Info
+                if (appointment.StateId > 0)
+                    db.AddInParameter(cmd, "@StateId", DbType.Int32, appointment.StateId);
+                else
+                    db.AddInParameter(cmd, "@StateId", DbType.Int32, DBNull.Value);
+
+                if (appointment.DistrictId > 0)
+                    db.AddInParameter(cmd, "@DistrictId", DbType.Int32, appointment.DistrictId);
+                else
+                    db.AddInParameter(cmd, "@DistrictId", DbType.Int32, DBNull.Value);
+
+                if (appointment.TalukaId > 0)
+                    db.AddInParameter(cmd, "@TalukaId", DbType.Int32, appointment.TalukaId);
+                else
+                    db.AddInParameter(cmd, "@TalukaId", DbType.Int32, DBNull.Value);
+
+                if (appointment.CityId > 0)
+                    db.AddInParameter(cmd, "@CityId", DbType.Int32, appointment.CityId);
+                else
+                    db.AddInParameter(cmd, "@CityId", DbType.Int32, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.Pincode))
+                    db.AddInParameter(cmd, "@Pincode", DbType.String, appointment.Pincode);
+                else
+                    db.AddInParameter(cmd, "@Pincode", DbType.String, DBNull.Value);
+
+                // Doctor and Slot
+                if (appointment.DoctorId > 0)
+                    db.AddInParameter(cmd, "@DoctorId", DbType.Int32, appointment.DoctorId);
+                else
+                    db.AddInParameter(cmd, "@DoctorId", DbType.Int32, DBNull.Value);
+
+                if (appointment.SlotId > 0)
+                    db.AddInParameter(cmd, "@SlotId", DbType.Int32, appointment.SlotId);
+                else
+                    db.AddInParameter(cmd, "@SlotId", DbType.Int32, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.MedicalConcern))
+                    db.AddInParameter(cmd, "@MedicalConcern", DbType.String, appointment.MedicalConcern);
+                else
+                    db.AddInParameter(cmd, "@MedicalConcern", DbType.String, DBNull.Value);
+
+                if (appointment.CreatedBy > 0)
+                    db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, appointment.CreatedBy);
+                else
+                    db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, DBNull.Value);
+
+                // Output parameter for inserted appointment ID
+                db.AddOutParameter(cmd, "@AppointmentId", DbType.Int32, 4);
+
+                db.ExecuteNonQuery(cmd);
+
+                resultCode = Convert.ToInt32(db.GetParameterValue(cmd, "@AppointmentId"));
+                return resultCode;
+            }
+            catch (Exception ex)
+            {
+                // errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace, appointment.CreatedBy);
+                return -1;
+            }
+        }
+
     }
 
 

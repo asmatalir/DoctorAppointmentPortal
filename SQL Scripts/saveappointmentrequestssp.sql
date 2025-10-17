@@ -1,4 +1,5 @@
-CREATE PROCEDURE SavePatientAppointment
+CREATE OR ALTER PROCEDURE SavePatientAppointment
+
     @FirstName NVARCHAR(50),
     @LastName NVARCHAR(50),
     @Email NVARCHAR(100),
@@ -8,21 +9,26 @@ CREATE PROCEDURE SavePatientAppointment
     @InsuranceInfo NVARCHAR(100),
     @MedicalHistory NVARCHAR(300),
     @AddressLine NVARCHAR(200),
+	@SlotDate DATE,
+	@StartTime TIME,
+	@EndTime TIME,
+	@SpecializationId INT,
     @StateId INT,
     @DistrictId INT,
     @TalukaId INT,
     @CityId INT,
     @Pincode NVARCHAR(10),
     @DoctorId INT,
-    @SlotId INT,  -- The doctor slot being booked
+    @SlotId INT,  
     @MedicalConcern NVARCHAR(300),
     @CreatedBy INT
 AS
 BEGIN
-    SET NOCOUNT ON;
 
     DECLARE @PatientId INT;
     DECLARE @AddressId INT;
+	DECLARE @PendingStatusId INT;
+    DECLARE @BookedStatusId INT;
 
     -- Check if patient exists by PhoneNumber
     SELECT @PatientId = PatientId 
@@ -74,13 +80,50 @@ BEGIN
         SET @PatientId = SCOPE_IDENTITY();
     END
 
-    -- Insert into AppointmentRequests
-    INSERT INTO AppointmentRequests(PatientId, DoctorId, MedicalConcern, AppointmentDate, StatusId, CreatedOn)
-    VALUES (@PatientId, @DoctorId, @MedicalConcern, GETDATE(), 1, GETDATE());  -- StatusId = 1 => Pending
 
-    -- Update the Doctor Slot as Booked
-    UPDATE DoctorAvailabilities
-    SET Status = 'Booked'  -- Or use IsBooked = 1 if that’s the column
-    WHERE DoctorAvailabilityId = @SlotId;
+	SELECT TOP 1 @PendingStatusId = StatusId
+	FROM Statuses
+	WHERE StatusName = 'Pending';
+
+	-- Insert into AppointmentRequests with fetched StatusId
+	INSERT INTO AppointmentRequests
+	(
+		PatientId,
+		DoctorId,
+		SpecializationId,
+		MedicalConcern,
+		PreferredDate,
+		StartTime,
+		EndTime,
+		FinalDate,
+		FinalStartTime,
+		FinalEndTime,		
+		StatusId,
+		CreatedOn
+	)
+	VALUES
+	(
+		@PatientId,
+		@DoctorId,
+		@SpecializationId,
+		@MedicalConcern,
+		@SlotDate,
+		@StartTime,
+		@EndTime,
+		@SlotDate,
+		@StartTime,
+		@EndTime,
+		@PendingStatusId,
+		GETDATE()
+	); 
+
+	SELECT TOP 1 @BookedStatusId = StatusId
+	FROM Statuses
+	WHERE StatusName = 'Booked';
+
+	-- Update the Doctor Slot as Booked
+	UPDATE DoctorSlots
+	SET StatusId = @BookedStatusId
+	WHERE SlotId = @SlotId;
 
 END

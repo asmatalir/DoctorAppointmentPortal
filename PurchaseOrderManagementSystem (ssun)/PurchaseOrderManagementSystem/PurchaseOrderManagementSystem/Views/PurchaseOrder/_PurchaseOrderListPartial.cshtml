@@ -1,0 +1,141 @@
+﻿@model PurchaseOrderManagementSystemClassLibrary.Models.PurchaseOrderModel
+        <div class="filter-container">
+            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                    <h4 style="margin: 0;">Purchase Order List</h4>
+                </div>
+                <div>
+                    <a href="@Url.Action("AddEditPurchaseOrder", "PurchaseOrder")" class="btn btn-sm btn-success">
+                        + New PO
+                    </a>
+
+                </div>
+            </div>
+            <div style="overflow-y: auto; max-height: 321px; ">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>PO Number</th>
+                                <th>
+                                    <a href="#" class="sortable" data-column="PurchaseOrderDate">
+                                        PO Date
+                                        <span>
+                                            @if (Model.SortColumn == "PurchaseOrderDate")
+                                            {
+                                                @(Model.SortDirection == "ASC" ? "↑" : "↓")
+                                            }
+                                            else
+                                            {
+                                                <text>⇅</text>
+                                            }
+                                        </span>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="sortable" data-column="ExpectedDeliveryDate">
+                                        Expected Delivery
+                                        <span>
+                                            @if (Model.SortColumn == "ExpectedDeliveryDate")
+            {
+                                                @(Model.SortDirection == "ASC" ? "↑" : "↓")
+                                            }
+                                            else
+                                            {
+                                                <text>⇅</text>
+                                            }
+                                        </span>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="#" class="sortable" data-column="VendorName">
+                                        Vendor
+                                        <span>
+                                            @if (Model.SortColumn == "VendorName")
+                                            {
+                                                @(Model.SortDirection == "ASC" ? "↑" : "↓")
+                                            }
+                                            else
+                                            {
+                                                <text>⇅</text>
+                                            }
+                                        </span>
+                                    </a>
+                                </th>
+                                <th>Vendor Contact</th>
+                                <th>Status</th>
+                                <th>
+                                    <a href="#" class="sortable" data-column="TotalOrderPrice">
+                                        Total Price
+                                        <span>
+                                            @if (Model.SortColumn == "TotalOrderPrice")
+                                            {
+                                                @(Model.SortDirection == "ASC" ? "↑" : "↓")
+                                            }
+                                            else
+                                            {
+                                                <text>⇅</text>
+                                            }
+                                        </span>
+                                    </a>
+                                </th>
+                                <th colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var po in Model.PurchaseOrders)
+            {
+                                <tr>
+                                    <td>@po.PurchaseOrderSerialNumber</td>
+                                    <td>@po.PurchaseOrderDate.ToShortDateString()</td>
+                                    <td>@po.ExpectedDeliveryDate.ToShortDateString()</td>
+                                    <td>@po.VendorName</td>
+                                    <td>@po.VendorContactName</td>
+                                    <td>@po.PurchaseOrderStatus</td>
+                                    <td>@po.TotalOrderPrice</td>
+                                    <td>
+                                        <a href="@Url.Action("GetPurchaseOrderDetails", "PurchaseOrder", new { id = po.PurchaseOrderId })" class="btn btn-sm view-details">
+                                            View Details
+                                        </a>
+
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("AddEditPurchaseOrder", "PurchaseOrder", new { id = po.PurchaseOrderId })" class="btn btn-sm btn-primary edit-purchase-order">
+                                            <i class="fa fa-edit"></i> Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br />
+        <div class="card-footer text-center">
+            Page @Model.PageNo of @Model.TotalPages
+            <div class="btn-group mt-2">
+                @if (Model.PageNo > 1)
+            {
+                    <button type="button" class="btn btn-sm btn-secondary page-btn" data-page="@(Model.PageNo - 1)">Previous</button>
+                }
+                @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                    <button type="button" class="btn btn-sm @(i == Model.PageNo ? "btn-primary" : "btn-outline-primary") page-btn" data-page="@i">@i</button>
+                }
+                @if (Model.PageNo < Model.TotalPages)
+            {
+                    <button type="button" class="btn btn-sm btn-secondary page-btn" data-page="@(Model.PageNo + 1)">Next</button>
+                }
+            </div>
+        </div>
+
+    </div>
+
+<style>
+    th {
+    white-space: nowrap;     
+    text-align: center;        
+    vertical-align: middle;   
+}
+ 
+</style>

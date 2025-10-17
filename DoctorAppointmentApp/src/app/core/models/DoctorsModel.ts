@@ -37,6 +37,7 @@ export class DoctorsModel {
     HospitalName?: string = '';
     Specialization : string = '';
     SelectedSpecializationId : number;
+    SpecializationId : number;
     SpecializationIds: string = '';  
     QualificationIds: string = ''; 
     Rating : number;

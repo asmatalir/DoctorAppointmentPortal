@@ -23,8 +23,14 @@ export class AppointmentRequestService {
       return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/DoctorAppointmentUpdateStatus',model);
     }
 
-    GetPatientDetails(contactNumber: string): Observable<PatientDetailsModel> {
-      return this.http.get<PatientDetailsModel>(environment.apiBaseUrl + 'AppointmentRequests/GetPatientDetails' ,{params: { contactNumber: contactNumber }});
+    GetPatientDetails(contactNumber: string): Observable<AppointmentRequestsModel> {
+      debugger;
+      return this.http.get<AppointmentRequestsModel>(environment.apiBaseUrl + 'AppointmentRequests/GetPatientDetails' ,{params: { contactNumber: contactNumber }});
+    }
+    
+
+    SavePatientAppointment(model: AppointmentRequestsModel): Observable<any> {
+      return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/SavePatientAppointment', model);
     }
     
 

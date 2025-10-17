@@ -1,0 +1,23 @@
+<ng-container *ngFor="let t of toastSvc.getAll(); trackBy: trackById">
+  <ngb-toast
+    [header]="t.header ?? ''"
+    [autohide]="true"
+    [delay]="t.delay ?? 2500"
+    [animation]="true"
+    [class.toast-modern]="true"
+    [class.success]="t.type==='success'"
+    [class.error]="t.type==='error'"
+    [class.info]="t.type==='info'"
+    [class.warning]="t.type==='warning'"
+    (hidden)="toastSvc.remove(t.id)">
+
+    <div class="toast-body-content">
+      <div class="toast-message">{{ t.message }}</div>
+
+      <!-- Countdown bar -->
+      <div class="toast-timer" *ngIf="(t.delay ?? 0) > 0" role="progressbar" aria-label="time remaining">
+        <div class="bar" [style.animationDuration]="(t.delay ?? 2500) + 'ms'"></div>
+      </div>
+    </div>
+  </ngb-toast>
+</ng-container>

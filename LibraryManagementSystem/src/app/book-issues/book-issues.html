@@ -1,0 +1,108 @@
+<div class="container my-4">
+<div class="card shadow border-0 p-4">
+
+<h5>{{ model.IssueId === 0 ? 'Issue Book' : 'Edit Issue Book' }}</h5>
+<br>
+
+<form #BookIssueForm="ngForm" *ngIf="model" (ngSubmit)="onSubmit()" novalidate>
+
+  <input type="hidden" [(ngModel)]="model.IssueId" name="IssueId" />
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Select Member</label>
+        <select [(ngModel)]="model.MemberId" name="MemberId" class="form-control" required>
+          <option value="">-- Select Member --</option>
+          <option *ngFor="let member of MembersList" [value]="member.MemberId"> {{ member.MemberName }} </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Issue Date</label>
+        <input type="date" [(ngModel)]="model.IssueDate" name="IssueDate" class="form-control" required />
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label>Due Date</label>
+        <input readonly type="date" [(ngModel)]="model.DueDate" name="DueDate" class="form-control" required />
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <button type="button" class="btn btn-primary mb-3" (click)="addBookRow()" > Add Book</button>
+
+  <table class="table table-bordered" *ngIf="SelectedBooks && SelectedBooks.length > 0">
+    <thead>
+      <tr>
+        <th>Book Name</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bookRow of this.SelectedBooks; let i = index">
+        <td>
+            <select [(ngModel)]="bookRow.BookId" name="BookId{{ i }}" class="form-control" required>
+                <option [ngValue]="null">-- Select Book --</option>
+                <option *ngFor="let book of BooksList" [ngValue]="book.BookId">
+                  {{ book.BookName }}
+                </option>
+              </select>
+              
+        </td>
+        <td>
+          <input type="number" [(ngModel)]="bookRow.Quantity" name="Quantity{{ i }}" min="1"
+            class="form-control" required />
+        </td>
+        <td>
+          <button type="button" class="btn btn-danger btn-sm" (click)="removeBookRow(i)">
+            Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <br>
+  <div class="form-group">
+    <label>Uploaded Documents</label>
+    <input type="file"  multiple accept=".pdf,.doc,.docx,image/*"  class="form-control mb-2" (change)="onFileSelected($event)" />
+    <br>
+    <table class="table table-bordered mt-2" *ngIf="(UploadedFiles && UploadedFiles.length > 0) || (NewUploadedFiles && NewUploadedFiles.length > 0)" >
+      <thead>
+        <tr>
+          <th>File Name</th>
+          <th>Size / Link</th>
+          <th colspan="2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let file of UploadedFiles; let i = index">
+          <td>{{ file.FileName }}</td>
+          <td><a [href]="file.FilePath" target="_blank">View</a></td>
+          <td><button type="button" class="btn btn-danger btn-sm" (click)="removeExistingFile(i)">Remove</button></td>
+          <td><button type="button" class="btn btn-sm btn-outline-primary" (click)="DownloadFile(file)"> Download</button></td>
+        </tr>
+        <tr *ngFor="let file of NewUploadedFiles; let i = index">
+          <td>{{ file.FileName }}</td>
+          <td><a [href]="file.FilePath" target="_blank">View</a></td>
+          <td><button type="button" class="btn btn-danger btn-sm" (click)="removeNewFile(i)">Remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" class="btn btn-success">
+    {{ model.IssueId === 0 ? 'Issue Books' : 'Save' }}
+  </button>
+</form>
+</div>
+</div>

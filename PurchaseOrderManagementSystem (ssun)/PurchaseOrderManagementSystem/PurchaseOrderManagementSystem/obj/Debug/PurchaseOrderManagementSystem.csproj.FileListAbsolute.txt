@@ -1,0 +1,318 @@
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\csc.exe
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Collections.Immutable.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Reflection.Metadata.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\vbc.exe
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe.config
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll.config
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.pdb
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Data.SqlCe.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.ObjectBuilder2.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Web.Infrastructure.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\WebGrease.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.pdb
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.pdb
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.xml
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.csprojResolveAssemblyReference.cache
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.dll
+D:\OneDrive - Rheal Software Pvt Ltd\Projects\Training Projects\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\csc.exe
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Collections.Immutable.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Reflection.Metadata.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\vbc.exe
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe.config
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll.config
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Data.SqlCe.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.ObjectBuilder2.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Web.Infrastructure.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\WebGrease.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.csprojResolveAssemblyReference.cache
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.pdb
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\csc.exe
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\vbc.exe
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll.config
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.pdb
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\WebGrease.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.pdb
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.pdb
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.xml
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.csproj.AssemblyReference.cache
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.csproj.CoreCompileInputs.cache
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\Purchase.A13B917D.Up2Date
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.dll
+C:\Users\HP\Downloads\PurchaseOrderManagementSystem (sat)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\csc.exe
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Collections.Immutable.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\System.Reflection.Metadata.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\vbc.exe
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\roslyn\VBCSCompiler.exe.config
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll.config
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystem.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.EnterpriseLibrary.Data.SqlCe.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Practices.ObjectBuilder2.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Web.Infrastructure.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\WebGrease.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\PurchaseOrderManagementSystemClassLibrary.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Bcl.TimeProvider.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Abstractions.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.JsonWebTokens.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Logging.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Microsoft.IdentityModel.Tokens.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Buffers.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Diagnostics.DiagnosticSource.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Memory.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Numerics.Vectors.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Encodings.Web.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Text.Json.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Threading.Tasks.Extensions.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.ValueTuple.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Helpers.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Mvc.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Optimization.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.Razor.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Deployment.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\System.Web.WebPages.Razor.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Antlr3.Runtime.pdb
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\bin\Newtonsoft.Json.xml
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.csprojResolveAssemblyReference.cache
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.dll
+D:\Projects\Training Projects-2\PurchaseOrderManagementSystem (ssun)\PurchaseOrderManagementSystem\PurchaseOrderManagementSystem\obj\Debug\PurchaseOrderManagementSystem.pdb

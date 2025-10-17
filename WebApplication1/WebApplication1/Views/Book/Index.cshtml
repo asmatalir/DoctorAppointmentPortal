@@ -1,0 +1,33 @@
+﻿
+@model System.Data.DataTable
+
+<h2>Books List</h2>
+
+@if (Model != null && Model.Rows.Count > 0)
+{
+    <table border="1">
+        <tr>
+            <th>Book ID</th>
+            <th>Book Name</th>
+            <th>Publisher</th>
+            <th>Department</th>
+            <th>Supplier</th>
+        </tr>
+        @foreach (System.Data.DataRow row in Model.Rows)
+        {
+            <tr>
+                <td>@row["BookId"]</td>
+                <td>@row["BookName"]</td>
+                <td>@row["PublisherName"]</td>
+                <td>@row["DepartmentName"]</td>
+                <td>@row["SupplierName"]</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No books found.</p>
+}
+
+
