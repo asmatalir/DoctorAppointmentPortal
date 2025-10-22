@@ -4,6 +4,8 @@ import { SpecializationsModel } from '../../../core/models/SpecializationsModel'
 import { AppointmentRequestService } from '../../../core/services/appointment-request-service';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { StatusesModel } from '../../../core/models/StatusesModel';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DoctorAvailableSlotsModal } from '../../Patient/doctor-available-slots-modal/doctor-available-slots-modal';
 
 @Component({
   selector: 'app-doctor-appointment-requests',
@@ -23,7 +25,8 @@ export class DoctorAppointmentRequests {
   @ViewChild('filterOffcanvas') offcanvasRef: any;
 
   constructor(private appointmentRequestService : AppointmentRequestService,
-    private offcanvas: NgbOffcanvas
+    private offcanvas: NgbOffcanvas,
+    private modalService: NgbModal
   ) { }
 
 
@@ -51,6 +54,37 @@ export class DoctorAppointmentRequests {
       }
     });
   }
+
+   openBookingModal(doctor: any,action : string) {
+      const modalRef = this.modalService.open(DoctorAvailableSlotsModal, { size: 'lg', centered: true });
+    
+      // ✅ Set inputs correctly
+      doctor.SelectedSpecializationId=1;
+      modalRef.componentInstance.doctorId = doctor.DoctorId;
+      modalRef.componentInstance.doctorName = doctor.DoctorName;
+      modalRef.componentInstance.doctorEmail = doctor.DoctorEmail;
+      modalRef.componentInstance.patientName = doctor.PatientName;
+      modalRef.componentInstance.patientEmail = doctor.PatientEmail;
+      modalRef.componentInstance.appointmentRequestId = doctor.AppointmentRequestId;
+      modalRef.componentInstance.oldSlotId = doctor.SlotId;
+      modalRef.componentInstance.action = action;
+      modalRef.componentInstance.SpecializationId = doctor.SelectedSpecializationId;
+  
+       
+      debugger;
+      modalRef.result.then(
+        (result) => {
+          if (result === 'rescheduled') {  
+            console.log('Appointment rescheduled, reloading list...');
+            this.loadAppointmentRequests(); 
+          }
+          else {
+            console.log('Modal closed with result:', result);
+          }
+        },
+        () => {} 
+      );
+    }
 
   openEnd(content: TemplateRef<any>) {
     this.offcanvas.open(content, { position: 'end' });

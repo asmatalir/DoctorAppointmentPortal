@@ -121,9 +121,31 @@
               </div>
             </div>
     
+            
+
+
+           <!-- Section: Optional Medical Document -->
+            <div class="p-3 mb-4 border rounded bg-light">
+              <h6 class="mb-3 text-dark">
+                Medical Document <span class="text-muted">(Optional)</span>
+              </h6>
+              <div class="row g-4">
+                <div class="col-lg-12">
+                  <input 
+                    type="file" 
+                    class="form-control" 
+                    (change)="onFileSelected($event)"
+                    accept=".pdf,.doc,.docx,.jpg,.png"
+                  >
+                  <small class="text-muted">Allowed formats: PDF, DOC, DOCX, JPG, PNG | Max size: {{ maxFileSizeMB }} MB</small>
+                </div>
+              </div>
+            </div>
+
             <div class="mt-4 text-end">
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
+
     
           </form>
       </div>

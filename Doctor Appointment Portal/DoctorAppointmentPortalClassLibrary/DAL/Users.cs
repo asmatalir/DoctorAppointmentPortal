@@ -38,6 +38,8 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     model.RoleName = row["RoleName"].ToString();
                     model.Email = row["Email"].ToString();
                     model.UserName = row["UserName"].ToString();
+                    model.DoctorId = Convert.ToInt32(row["DoctorId"]);
+
 
 
 

@@ -27,7 +27,13 @@ public class JwtAuthorizeAttribute : AuthorizeAttribute
 
         if (string.IsNullOrEmpty(token)) return false;
 
+
+
+
+
         var tokenHandler = new JwtSecurityTokenHandler();
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
         try
         {
             SecurityToken validatedToken;

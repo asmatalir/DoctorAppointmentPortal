@@ -235,7 +235,6 @@ CREATE TABLE PatientDocuments(
    DocumentName VARCHAR(150) NOT NULL,
    DocumentFileName VARCHAR(255) NOT NULL,
    IsActive BIT NOT NULL DEFAULT 1,
-   CreatedBy INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(UserId),
    CreatedOn DATETIME NOT NULL,
    LastModifiedBy INT FOREIGN KEY REFERENCES UserProfiles(UserId),
    LastModifiedOn DATETIME

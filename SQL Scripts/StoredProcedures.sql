@@ -1,4 +1,4 @@
-CREATE OR ALTER   PROCEDURE DoctorsGetList  
+﻿CREATE OR ALTER   PROCEDURE DoctorsGetList  
 @TotalCount INT OUTPUT
 /*  
 ***********************************************************************************************  
@@ -151,6 +151,7 @@ BEGIN
         FirstName NVARCHAR(50),
         LastName NVARCHAR(50),
         Gender CHAR(1),
+		Email NVARCHAR(100),
         ExperienceYears INT,
         ConsultationFees DECIMAL(10,2),
         Description NVARCHAR(300),
@@ -169,6 +170,7 @@ BEGIN
         ISNULL(U.FirstName, '') AS FirstName,
         ISNULL(U.LastName, '') AS LastName,
         ISNULL(U.Gender, '') AS Gender,
+		ISNULL(U.Email, '') AS Email,
         ISNULL(D.ExperienceYears, 0) AS ExperienceYears,
         ISNULL(D.ConsultationFees, 0) AS ConsultationFees,
         ISNULL(D.Description, '') AS Description,
@@ -1270,6 +1272,7 @@ CREATE OR ALTER PROCEDURE DoctorAppointmentRequestsGetList
     @PatientName NVARCHAR(100) = NULL,
     @SpecializationId INT = NULL,
 	@StatusId INT = NULL,
+	@AppointmentType NVARCHAR(20) = 'Upcoming',
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @PageNumber INT = 1,
@@ -1286,10 +1289,12 @@ BEGIN
         PatientName NVARCHAR(100),
         DoctorId INT,
         DoctorName NVARCHAR(100),
+		DoctorEmail NVARCHAR(150),
 		PatientEmail NVARCHAR(150),
         SpecializationId INT,
         SpecializationName NVARCHAR(150),
         MedicalConcern NVARCHAR(300),
+		SlotId INT,
         FinalStartTime TIME,
         FinalEndTime TIME,
         FinalDate DATE,
@@ -1309,10 +1314,12 @@ BEGIN
         ISNULL(PP.FirstName,'') + ' ' + ISNULL(PP.LastName,'') AS PatientName,		
         AR.DoctorId,
         ISNULL(U.FirstName,'') + ' ' + ISNULL(U.LastName,'') AS DoctorName,
+		ISNULL(U.Email,'') AS DoctorEmail,
 		ISNULL(PP.Email,'') AS PatientEmail,
         AR.SpecializationId,
         ISNULL(SP.SpecializationName,'') AS SpecializationName,
         AR.MedicalConcern,
+		 DS.SlotId, 
         AR.FinalStartTime,
         AR.FinalEndTime,
         AR.FinalDate,
@@ -1329,10 +1336,20 @@ BEGIN
     LEFT JOIN Specializations SP ON AR.SpecializationId = SP.SpecializationId
     LEFT JOIN Statuses S ON AR.StatusId = S.StatusId
     LEFT JOIN UserProfiles UM ON AR.LastModifiedBy = UM.UserId
+	    LEFT JOIN DoctorSlots DS 
+        ON AR.DoctorId = DS.DoctorId
+        AND AR.FinalDate = DS.SlotDate
+        AND AR.FinalStartTime = DS.StartTime
+        AND AR.FinalEndTime = DS.EndTime
     WHERE AR.DoctorId = @DoctorId                       -- Filter for this doctor
         AND (@PatientName IS NULL OR PP.FirstName + ' ' + PP.LastName LIKE '%' + @PatientName + '%')
         AND (@SpecializationId IS NULL OR AR.SpecializationId = @SpecializationId)
 		AND (@StatusId IS NULL OR AR.StatusId = @StatusId)
+		AND (
+			@AppointmentType = 'All'
+			OR (@AppointmentType = 'Upcoming' AND AR.FinalDate >= CAST(GETDATE() AS DATE))
+			OR (@AppointmentType = 'Past' AND AR.FinalDate < CAST(GETDATE() AS DATE))
+           )
         AND (@FromDate IS NULL OR AR.PreferredDate >= @FromDate)
         AND (@ToDate IS NULL OR AR.PreferredDate < DATEADD(DAY, 1, @ToDate))
 
@@ -1382,12 +1399,16 @@ BEGIN
         up.UserRoleId,
         ur.RoleName,
 		up.Email,
-		up.UserName
+		up.UserName,
+		dp.DoctorId
     FROM 
         UserProfiles up
     INNER JOIN 
         UserRoles ur
         ON up.UserRoleId = ur.UserRoleId
+    LEFT JOIN 
+        DoctorProfiles dp
+        ON dp.UserId = up.UserId
     WHERE 
         up.UserName = @UserName
         AND up.IsActive = 1;
@@ -1471,6 +1492,8 @@ CREATE OR ALTER PROCEDURE SavePatientAppointment
     @DoctorId INT,
     @SlotId INT,  
     @MedicalConcern NVARCHAR(300),
+	@DocumentFileName NVARCHAR(255) = NULL,
+    @DocumentFilePath NVARCHAR(500) = NULL,
     @CreatedBy INT,
 	@AppointmentId INT OUTPUT 
 AS
@@ -1573,6 +1596,26 @@ BEGIN
 
 	SET @AppointmentId = SCOPE_IDENTITY();
 
+	IF @DocumentFileName IS NOT NULL AND @DocumentFilePath IS NOT NULL
+BEGIN
+    INSERT INTO PatientDocuments
+    (
+        AppointmentRequestId,
+        DocumentName,
+        DocumentFileName,
+        IsActive,
+        CreatedOn
+    )
+    VALUES
+    (
+        @AppointmentId,
+        @DocumentFileName,   -- Original name or description
+        @DocumentFilePath,   -- Saved file path on server
+        1,
+        GETDATE()
+    )
+END
+
 	SELECT TOP 1 @BookedStatusId = StatusId
 	FROM Statuses
 	WHERE StatusName = 'Booked';
@@ -1588,10 +1631,153 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
 
-	SET @AppointmentId = 0;
+	SET @AppointmentId=0;
 	END CATCH
 
 END
+GO
+
+GO
+CREATE OR ALTER PROCEDURE RescheduleAppointment
+    @AppointmentRequestId INT,
+    @OldSlotId INT,
+    @NewSlotId INT,
+    @NewStartTime TIME,
+    @NewEndTime TIME,
+    @NewDate DATE,
+    @DoctorId INT
+AS
+BEGIN
+
+    DECLARE @BookedStatusId INT;
+    DECLARE @RescheduledStatusId INT;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- 🔹 Get status IDs dynamically
+        SELECT @BookedStatusId = StatusId FROM Statuses WHERE StatusName = 'Booked';
+        SELECT @RescheduledStatusId = StatusId FROM Statuses WHERE StatusName = 'Rescheduled';
+
+        -- 🔹 Mark old slot as Rescheduled
+        UPDATE DoctorSlots
+        SET StatusId = @RescheduledStatusId
+        WHERE SlotId = @OldSlotId;
+
+        -- 🔹 Mark new slot as Booked
+        UPDATE DoctorSlots
+        SET StatusId = @BookedStatusId
+        WHERE SlotId = @NewSlotId;
+
+        -- 🔹 Update final slot info in AppointmentRequests
+        UPDATE AppointmentRequests
+        SET 
+            FinalStartTime = @NewStartTime,
+            FinalEndTime = @NewEndTime,
+            FinalDate = @NewDate,
+			StatusId = @RescheduledStatusId, 
+            LastModifiedOn = GETDATE(),
+            LastModifiedBy = @DoctorId
+        WHERE AppointmentRequestId = @AppointmentRequestId;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+
+GO
+CREATE OR ALTER PROCEDURE GenerateDoctorSlots
+    @FromDate DATE,
+    @ToDate DATE,
+    @CreatedBy INT
+AS
+BEGIN
+
+    DECLARE @AvailableStatusId INT;
+    SELECT @AvailableStatusId = StatusId
+    FROM Statuses
+    WHERE StatusName = 'Available';
+
+    ---------------------------------------
+    -- 1️⃣ Generate regular availability slots
+    ---------------------------------------
+    INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+    SELECT 
+        DA.DoctorId,
+        DATEADD(DAY, v.number, @FromDate) AS SlotDate,
+        DATEADD(MINUTE, n.number * DA.SlotDuration, DA.StartTime) AS StartTime,
+        DATEADD(MINUTE, (n.number + 1) * DA.SlotDuration, DA.StartTime) AS EndTime,
+        @AvailableStatusId AS StatusId,
+        @CreatedBy,
+        GETDATE()
+    FROM DoctorAvailability DA
+    CROSS JOIN master.dbo.spt_values v
+    CROSS JOIN master.dbo.spt_values n
+    LEFT JOIN DoctorSlots S
+        ON S.DoctorId = DA.DoctorId
+        AND S.SlotDate = DATEADD(DAY, v.number, @FromDate)
+        AND S.StartTime = DATEADD(MINUTE, n.number * DA.SlotDuration, DA.StartTime)
+    WHERE v.type = 'P'
+      AND n.type = 'P'
+      AND DATEADD(DAY, v.number, @FromDate) <= @ToDate
+      AND ((DATEPART(WEEKDAY, DATEADD(DAY, v.number, @FromDate)) + @@DATEFIRST - 2) % 7) + 1 = DA.DayOfWeek
+      AND S.SlotId IS NULL
+      AND n.number < DATEDIFF(MINUTE, DA.StartTime, DA.EndTime) / DA.SlotDuration
+      AND NOT EXISTS (
+            SELECT 1
+            FROM DoctorAvailabilityExceptions E
+            WHERE E.DoctorId = DA.DoctorId
+              AND E.ExceptionDate = DATEADD(DAY, v.number, @FromDate)
+              AND E.IsAvailable = 0
+              AND DATEADD(MINUTE, n.number * DA.SlotDuration, DA.StartTime) < E.EndTime
+              AND DATEADD(MINUTE, (n.number + 1) * DA.SlotDuration, DA.StartTime) > E.StartTime
+        );
+
+    ---------------------------------------
+    -- 2️⃣ Generate slots for special working days
+    ---------------------------------------
+    INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+    SELECT 
+        E.DoctorId,
+        E.ExceptionDate AS SlotDate,
+        DATEADD(MINUTE, n.number * DA.SlotDuration, E.StartTime) AS StartTime,
+        DATEADD(MINUTE, (n.number + 1) * DA.SlotDuration, E.StartTime) AS EndTime,
+        @AvailableStatusId AS StatusId,
+        @CreatedBy,
+        GETDATE()
+    FROM DoctorAvailabilityExceptions E
+    JOIN DoctorAvailability DA
+        ON DA.DoctorId = E.DoctorId
+    CROSS JOIN master.dbo.spt_values n
+    LEFT JOIN DoctorSlots S
+        ON S.DoctorId = E.DoctorId
+        AND S.SlotDate = E.ExceptionDate
+        AND S.StartTime = DATEADD(MINUTE, n.number * DA.SlotDuration, E.StartTime)
+    WHERE n.type = 'P'
+      AND E.IsAvailable = 1
+      AND E.StartTime IS NOT NULL
+      AND n.number < DATEDIFF(MINUTE, E.StartTime, E.EndTime) / DA.SlotDuration
+      AND S.SlotId IS NULL
+      -- Avoid generating slots overlapping absent periods
+      AND NOT EXISTS (
+            SELECT 1
+            FROM DoctorAvailabilityExceptions EX
+            WHERE EX.DoctorId = E.DoctorId
+              AND EX.IsAvailable = 0
+              AND EX.ExceptionDate = E.ExceptionDate
+              AND DATEADD(MINUTE, n.number * DA.SlotDuration, E.StartTime) < EX.EndTime
+              AND DATEADD(MINUTE, (n.number + 1) * DA.SlotDuration, E.StartTime) > EX.StartTime
+      );
+END;
+GO
+
+
+
+
 
 
 

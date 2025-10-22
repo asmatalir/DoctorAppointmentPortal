@@ -1,30 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DoctorList } from './pages/admin/doctor-list/doctor-list';
-import { DoctorAddedit } from './pages/admin/doctor-addedit/doctor-addedit';
-import { DoctorAvailability } from './pages/admin/doctor-availability/doctor-availability';
-import { DoctorsList } from './pages/Patient/doctors-list/doctors-list';
-import { AppointmentRequests } from './pages/admin/appointment-requests/appointment-requests';
-import { DoctorAppointmentRequests } from './pages/doctor/doctor-appointment-requests/doctor-appointment-requests';
-import { Login } from './account/login/login';
 import { AuthGuard } from './core/guards/auth-guard';
-import { PatientForm } from './pages/Patient/patient-form/patient-form';
+import { Navbar } from './shared/navbar/navbar';
+import { MainLayout } from './shared/main-layout/main-layout';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, 
-  { path: 'login', component: Login },
-  { path: 'doctors', component: DoctorList ,canActivate: [AuthGuard]},     
-  { path: 'doctorss', component: DoctorsList },
-  { path: 'doctors/add', component: DoctorAddedit },
-  { path: 'doctors/edit/:id', component: DoctorAddedit },
-  { path: 'doctors/availability/:id', component: DoctorAvailability },
-  { path: 'doctors/appointmentrequests', component: AppointmentRequests },
-  { path: 'doctors/doctorappointmentrequests', component: DoctorAppointmentRequests },
-  { path: 'patient/patientdetails', component: PatientForm },
+  // standalone login page
+  { 
+    path: 'login', 
+    loadChildren: () => import('./account/login/login.module').then(m => m.LoginModule) 
+  },
 
+  // main layout with navbar
+  {
+    path: '',
+    component: MainLayout,
+    canActivate : [AuthGuard], // MainLayoutComponent
+    children: [
+      { path: 'admin', loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule) },
+      { path: 'doctor', loadChildren: () => import('./pages/doctor/doctor.module').then(m => m.DoctorModule) },
+      { path: 'patient', loadChildren: () => import('./pages/Patient/patient.module').then(m => m.PatientModule) }
+    ]
+  },
 
-  { path: '**', redirectTo: '/doctors' }                   
+  // wildcard fallback
+  { path: '**', redirectTo: '/login' }
 ];
+
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

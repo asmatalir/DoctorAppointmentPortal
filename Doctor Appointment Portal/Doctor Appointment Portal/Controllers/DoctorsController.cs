@@ -2,10 +2,9 @@
 using DoctorAppointmentPortalClassLibrary.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using Doctor_Appointment_Portal.Helper;
 
 namespace Doctor_Appointment_Portal.Controllers
 {
@@ -117,7 +116,7 @@ namespace Doctor_Appointment_Portal.Controllers
             {
                 int doctorId = -1;
 
-                // Insert new doctor
+                model.HashedPassword = PasswordHasher.HashPassword(model.HashedPassword);
                 doctorId = doctorsDAL.SaveDoctorDetails(model);
                 return Ok(new { success = true, message = "Doctor created successfully.", doctorId });
 

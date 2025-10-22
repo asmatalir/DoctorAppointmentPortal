@@ -19,6 +19,7 @@ export class AppointmentRequestsModel {
     FinalStartTime: string;
     FinalEndTime: string;
     FinalDate: string;
+    AppointmentType : string = 'Upcoming';
 
 
     FirstName: string;           // @FirstName
@@ -32,6 +33,7 @@ export class AppointmentRequestsModel {
 
     DoctorName: string;
     SlotId: number;  
+    OldSlotId : number;
 
     CreatedOn: string;
     LastModifiedBy: number;

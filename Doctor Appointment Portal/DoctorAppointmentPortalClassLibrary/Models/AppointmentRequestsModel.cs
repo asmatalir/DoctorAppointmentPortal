@@ -28,6 +28,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public string MedicalConcern { get; set; }
         public DateTime PreferredDate { get; set; }
         public int SlotId { get; set; }
+        public int OldSlotId { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public TimeSpan FinalStartTime { get; set; }
@@ -42,6 +43,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public string PatientName { get; set; }
         public string DoctorName { get; set; }
         public string StatusName { get; set; }
+        public string AppointmentType { get; set; }
 
         public int StateId { get; set; }
         public int DistrictId { get; set; }
@@ -70,5 +72,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public List<DistrictsModel> DistrictsList { get; set; }
         public List<TalukasModel> TalukasList { get; set; }
         public List<CitiesModel> CitiesList { get; set; }
+
+        public FileDetailModel UploadedFile { get; set; }
     }
 }

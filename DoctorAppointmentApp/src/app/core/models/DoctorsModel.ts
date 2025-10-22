@@ -28,7 +28,7 @@ export class DoctorsModel {
     ConsultationFees: number | null = null;
     DateOfBirth?: string = '';            
     ContactNumber?: string = '';          
-    Email?: string = '';                  
+    DoctorEmail?: string = '';                  
     UserName?: string = '';               
     HashedPassword?: string = '';  
     Specializations: any[] = [];          

@@ -76,7 +76,9 @@ export class DoctorsList implements OnInit {
     doctor.SelectedSpecializationId=1;
     modalRef.componentInstance.doctorId = doctor.DoctorId;
     modalRef.componentInstance.doctorName = `${doctor.FirstName} ${doctor.LastName}`;
+    modalRef.componentInstance.doctorEmail = doctor.DoctorEmail;
     modalRef.componentInstance.SpecializationId = doctor.SelectedSpecializationId;
+
      
     debugger;
     modalRef.result.then(

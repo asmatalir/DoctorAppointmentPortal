@@ -22,7 +22,8 @@ namespace Doctor_Appointment_Portal.Helper
                 new Claim(ClaimTypes.NameIdentifier, model.UserId.ToString()), 
                 new Claim(ClaimTypes.Name, model.UserName),                    
                 new Claim(ClaimTypes.Email, model.Email ?? string.Empty),       
-                new Claim(ClaimTypes.Role, model.RoleName ?? string.Empty),         
+                new Claim(ClaimTypes.Role, model.RoleName ?? string.Empty),
+                new Claim("DoctorId", model.DoctorId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

@@ -101,6 +101,7 @@
     <Compile Include="Models\DoctorAvailabilityExceptionsModel.cs" />
     <Compile Include="Models\DoctorAvailableSlotsModel.cs" />
     <Compile Include="Models\DoctorsModel.cs" />
+    <Compile Include="Models\FileDetailModel.cs" />
     <Compile Include="Models\PatientDetailsModel.cs" />
     <Compile Include="Models\QualificationsModel.cs" />
     <Compile Include="Models\SpecializationsModel.cs" />

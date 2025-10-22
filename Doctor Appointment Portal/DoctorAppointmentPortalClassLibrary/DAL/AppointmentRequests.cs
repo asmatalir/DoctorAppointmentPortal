@@ -169,6 +169,14 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 {
                     db.AddInParameter(com, "@StatusId", DbType.Int32, DBNull.Value);
                 }
+                if (!string.IsNullOrEmpty(model.AppointmentType))
+                {
+                    db.AddInParameter(com, "@AppointmentType", DbType.String, model.AppointmentType);
+                }
+                else
+                {
+                    db.AddInParameter(com, "@AppointmentType", DbType.String, DBNull.Value);
+                }
 
                 // Start Date filter
                 if (model.FromDate.HasValue)
@@ -214,10 +222,12 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                             PatientName = Convert.ToString(row["PatientName"]),
                             DoctorId = Convert.ToInt32(row["DoctorId"]),
                             DoctorName = Convert.ToString(row["DoctorName"]),
+                            DoctorEmail = Convert.ToString(row["DoctorEmail"]),
                             PatientEmail = Convert.ToString(row["PatientEmail"]),
                             MedicalConcern = Convert.ToString(row["MedicalConcern"]),
                             SpecializationId = row["SpecializationId"] != DBNull.Value ? Convert.ToInt32(row["SpecializationId"]) : 0,
                             SpecializationName = Convert.ToString(row["SpecializationName"]),
+                            SlotId = row["SlotId"] != DBNull.Value ? Convert.ToInt32(row["SlotId"]) : 0,
                             FinalStartTime = row["FinalStartTime"] != DBNull.Value ? (TimeSpan)row["FinalStartTime"] : TimeSpan.Zero,
                             FinalEndTime = row["FinalEndTime"] != DBNull.Value ? (TimeSpan)row["FinalEndTime"] : TimeSpan.Zero,
                             FinalDate = row["FinalDate"] != DBNull.Value ? Convert.ToDateTime(row["FinalDate"]) : DateTime.MinValue,
@@ -265,6 +275,39 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             return isUpdated;
         }
+
+        public bool RescheduleAppointment(AppointmentRequestsModel model)
+        {
+            bool isUpdated = false;
+
+            try
+            {
+                // Create command for stored procedure
+                DbCommand com = db.GetStoredProcCommand("RescheduleAppointment");
+
+                // Add input parameters from model
+                db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, model.AppointmentRequestId);
+                db.AddInParameter(com, "@OldSlotId", DbType.Int32, model.OldSlotId);
+                db.AddInParameter(com, "@NewSlotId", DbType.Int32, model.SlotId);
+                db.AddInParameter(com, "@NewStartTime", DbType.String, model.StartTime.ToString(@"hh\:mm\:ss"));
+                db.AddInParameter(com, "@NewEndTime", DbType.String, model.EndTime.ToString(@"hh\:mm\:ss"));
+                db.AddInParameter(com, "@NewDate", DbType.Date, model.PreferredDate);
+                db.AddInParameter(com, "@DoctorId", DbType.Int32, model.DoctorId);
+
+                // Execute stored procedure
+                int rowsAffected = db.ExecuteNonQuery(com);
+
+                isUpdated = rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                // Log error if needed
+                Console.WriteLine($"Error in RescheduleAppointment: {ex.Message}");
+            }
+
+            return isUpdated;
+        }
+
 
         public AppointmentRequestsModel LoadPatientDetails(string contactNumber)
         {
@@ -368,14 +411,14 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(cmd, "@SlotDate", DbType.Date, DBNull.Value);
 
                 if (appointment.StartTime != TimeSpan.Zero)
-                    db.AddInParameter(cmd, "@StartTime", DbType.Time, DateTime.Today.Add(appointment.StartTime));
+                    db.AddInParameter(cmd, "@StartTime", DbType.String, appointment.StartTime.ToString(@"hh\:mm\:ss"));
                 else
-                    db.AddInParameter(cmd, "@StartTime", DbType.Time, DBNull.Value);
+                    db.AddInParameter(cmd, "@StartTime", DbType.String, DBNull.Value);
 
                 if (appointment.EndTime != TimeSpan.Zero)
-                    db.AddInParameter(cmd, "@EndTime", DbType.Time, DateTime.Today.Add(appointment.EndTime));
+                    db.AddInParameter(cmd, "@EndTime", DbType.String, appointment.EndTime.ToString(@"hh\:mm\:ss"));
                 else
-                    db.AddInParameter(cmd, "@EndTime", DbType.Time, DBNull.Value);
+                    db.AddInParameter(cmd, "@EndTime", DbType.String, DBNull.Value);
 
                 if (appointment.SelectedSpecializationId > 0)
                     db.AddInParameter(cmd, "@SpecializationId", DbType.Int32, appointment.SelectedSpecializationId);
@@ -423,6 +466,26 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(cmd, "@MedicalConcern", DbType.String, appointment.MedicalConcern);
                 else
                     db.AddInParameter(cmd, "@MedicalConcern", DbType.String, DBNull.Value);
+                if (appointment.UploadedFile != null && !string.IsNullOrEmpty(appointment.UploadedFile.FileName))
+                {
+                    db.AddInParameter(cmd, "@DocumentFileName", DbType.String, appointment.UploadedFile.FileName);
+                }
+                else
+                {
+                    db.AddInParameter(cmd, "@DocumentFileName", DbType.String, DBNull.Value);
+                }
+
+
+                // Saved file path (relative path on server)
+                if (appointment.UploadedFile != null && !string.IsNullOrEmpty(appointment.UploadedFile.FilePath))
+                {
+                    db.AddInParameter(cmd, "@DocumentFilePath", DbType.String, appointment.UploadedFile.FilePath);
+                }
+                else
+                {
+                    db.AddInParameter(cmd, "@DocumentFilePath", DbType.String, DBNull.Value);
+                }
+
 
                 if (appointment.CreatedBy > 0)
                     db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, appointment.CreatedBy);

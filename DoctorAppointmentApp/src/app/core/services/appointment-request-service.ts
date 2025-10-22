@@ -29,10 +29,12 @@ export class AppointmentRequestService {
     }
     
 
-    SavePatientAppointment(model: AppointmentRequestsModel): Observable<any> {
-      return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/SavePatientAppointment', model);
+    SavePatientAppointment(formData: FormData): Observable<any> {
+      return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/SavePatientAppointment', formData);
     }
     
-
+    RescheduleAppointment(model: AppointmentRequestsModel): Observable<any> {
+     return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/DoctorAppointmentUpdateStatus', model);   
+    }
     
 }

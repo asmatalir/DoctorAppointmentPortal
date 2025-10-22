@@ -69,6 +69,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                             FirstName = Convert.ToString(row["FirstName"]),
                             LastName = Convert.ToString(row["LastName"]),
                             Gender = Convert.ToString(row["Gender"]),
+                            DoctorEmail = Convert.ToString(row["Email"]),
                             ExperienceYears = Convert.ToInt32(row["ExperienceYears"]),
                             ConsultationFees = Convert.ToDecimal(row["ConsultationFees"]),
                             Description = Convert.ToString(row["Description"]),
@@ -111,7 +112,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                         model.DoctorId = Convert.ToInt32(dt.Rows[0]["DoctorId"]);
                         model.FirstName = Convert.ToString(dt.Rows[0]["FirstName"]);
                         model.LastName = Convert.ToString(dt.Rows[0]["LastName"]);
-                        model.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        model.DoctorEmail = Convert.ToString(dt.Rows[0]["Email"]);
                         model.ContactNumber = Convert.ToString(dt.Rows[0]["ContactNumber"]);
                         model.Gender = Convert.ToString(dt.Rows[0]["Gender"]);
                         model.ExperienceYears = Convert.ToInt32(dt.Rows[0]["ExperienceYears"]);
@@ -162,7 +163,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 if (doctor.DoctorId > 0)
                     db.AddInParameter(cmd, "@DoctorId", DbType.String, doctor.DoctorId);
                 else
-                    db.AddInParameter(cmd, "@FirstName", DbType.String, DBNull.Value);
+                    db.AddInParameter(cmd, "@DoctorId", DbType.String, DBNull.Value);
                 if (!string.IsNullOrEmpty(doctor.FirstName))
                     db.AddInParameter(cmd, "@FirstName", DbType.String, doctor.FirstName);
                 else
@@ -173,8 +174,8 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 else
                     db.AddInParameter(cmd, "@LastName", DbType.String, DBNull.Value);
 
-                if (!string.IsNullOrEmpty(doctor.Email))
-                    db.AddInParameter(cmd, "@Email", DbType.String, doctor.Email);
+                if (!string.IsNullOrEmpty(doctor.DoctorEmail))
+                    db.AddInParameter(cmd, "@Email", DbType.String, doctor.DoctorEmail);
                 else
                     db.AddInParameter(cmd, "@Email", DbType.String, DBNull.Value);
 

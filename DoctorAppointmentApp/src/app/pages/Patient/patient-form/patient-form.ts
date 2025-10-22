@@ -16,11 +16,14 @@ export class PatientForm {
 
   doctorId!: number;
   doctorName : string;
+  doctorEmail : string;
   slotId!: number;
   startTime!: string;
   endTime!: string;
   slotDate!: string;
   speializationId : number;
+  selectedFile: File | null = null;
+  maxFileSizeMB = 5;
 
   statesList: any[] = [];
   districtsList: any[] = [];
@@ -36,6 +39,7 @@ export class PatientForm {
     this.route.queryParams.subscribe(params => {
       this.appointment.DoctorId = +params['doctorId'];
       this.appointment.DoctorName = params['doctorName'];
+      this.appointment.DoctorEmail = params['doctorEmail'],
       this.appointment.SlotId = +params['slotId'];
       this.appointment.StartTime = params['startTime'];
       this.appointment.EndTime = params['endTime'];
@@ -52,6 +56,7 @@ export class PatientForm {
     const doctorContext = {
       DoctorId: this.appointment.DoctorId,
       DoctorName: this.appointment.DoctorName,
+      DoctorEmail : this.appointment.DoctorEmail,
       SlotId: this.appointment.SlotId,
       StartTime: this.appointment.StartTime,
       EndTime: this.appointment.EndTime,
@@ -83,21 +88,48 @@ export class PatientForm {
         }
       });
   }
+
+onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+  if (file) {
+    const maxSizeBytes = this.maxFileSizeMB * 1024 * 1024;
+
+    if (file.size > maxSizeBytes) {
+      alert(`File size should not exceed ${this.maxFileSizeMB} MB.`);
+      event.target.value = ''; 
+      this.selectedFile = null;
+      return;
+    }
+
+    this.selectedFile = file;
+  } else {
+    this.selectedFile = null;
+  }
+}
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       alert('Please fill all required fields before submitting.');
       return;
     }
+      const formData = new FormData();
+     const appointmentJson = JSON.stringify(this.appointment);
+    formData.append('model', appointmentJson);
+
+    // Append optional file if selected
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile, this.selectedFile.name); 
+    }
   
-    // Prepare model data (assuming your form is bound to a variable like `this.appointmentModel`)
   
-    this.appointmentRequestService.SavePatientAppointment(this.appointment).subscribe({
+    this.appointmentRequestService.SavePatientAppointment(formData).subscribe({
       next: (response) => {
         console.log('Appointment saved:', response);
         alert('Appointment saved successfully!');
         
         form.resetForm();
         this.appointment = {} as AppointmentRequestsModel;
+        this.selectedFile = null;
       },
       error: (error) => {
         console.error('Error while saving appointment:', error);

@@ -51,5 +51,26 @@ namespace DoctorAppointmentPortal.Controllers
                 return identity?.FindFirst(ClaimTypes.Role)?.Value;
             }
         }
+
+        protected int CurrentDoctorId
+        {
+            get
+            {
+                var identity = User?.Identity as ClaimsIdentity;
+
+                // Case-insensitive check
+                var doctorIdClaim = identity?.Claims
+                    ?.FirstOrDefault(c => c.Type.Equals("DoctorId", StringComparison.OrdinalIgnoreCase));
+
+                if (doctorIdClaim != null && int.TryParse(doctorIdClaim.Value, out int id))
+                    return id;
+
+                return 0;
+            }
+        }
+
+
+
+
     }
 }

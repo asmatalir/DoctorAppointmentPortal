@@ -71,7 +71,7 @@
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="javascript:void(0);" (click)="rescheduleAppointment()">
+                      <a class="dropdown-item" href="javascript:void(0);" (click)="openBookingModal(req,'Rescheduled')">
                         Reschedule
                       </a>
                     </li>
@@ -130,6 +130,16 @@
               </option>
             </select>
           </div>
+
+          <div class="mb-3">
+            <label class="form-label">Appointment Type</label>
+            <select class="form-select" [(ngModel)]="filters.AppointmentType" name="AppointmentType">
+              <option [ngValue]="'Upcoming'">Upcoming / Today</option>
+              <option [ngValue]="'Past'">Past</option>
+              <option [ngValue]="'All'">All</option>
+            </select>
+          </div>
+
   
         <!-- Date Range -->
         <div class="mb-3">

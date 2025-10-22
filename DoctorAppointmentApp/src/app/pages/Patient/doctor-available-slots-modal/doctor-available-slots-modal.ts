@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { Router } from '@angular/router';
+import { AppointmentRequestsModel } from '../../../core/models/AppointmentRequestsModel';
+import { Action } from 'rxjs/internal/scheduler/Action';
+import { AppointmentRequestService } from '../../../core/services/appointment-request-service';
 
 @Component({
   selector: 'app-doctor-available-slots-modal',
@@ -13,6 +16,15 @@ export class DoctorAvailableSlotsModal implements OnInit {
   @Input() doctorId!: number;
   @Input() SpecializationId!: number;
   @Input() doctorName!: string;
+  @Input() doctorEmail!: string;
+  @Input() patientName!: string;
+  @Input() patientEmail!: string;
+  @Input() oldSlotId!: number;
+  @Input() action!: string;
+  @Input() appointmentRequestId!: number;
+
+
+
 
   next7Days: { label: string; date: Date }[] = [];
   selectedDate?: Date;
@@ -25,18 +37,19 @@ export class DoctorAvailableSlotsModal implements OnInit {
   constructor(
     public activeModal: NgbActiveModal,
     private doctorService: DoctorsService,
+    private appointmentRequestService : AppointmentRequestService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.generateNext7Days();
+    this.generateNext14Days();
     this.fetchDoctorSlots();
   }
 
-  generateNext7Days() {
+  generateNext14Days() {
     const today = new Date();
     this.next7Days = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 14; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
       const label = date.toLocaleDateString('en-US', {
@@ -101,26 +114,84 @@ export class DoctorAvailableSlotsModal implements OnInit {
     this.selectedSlotId = slotId;
   }
 
-  confirmAppointment() {
-    const selectedSlot = this.filteredSlots.find(s => s.SlotId === this.selectedSlotId);
-    if (!selectedSlot) {
-      alert('Please select a slot before confirming.');
-      return;
-    }
+  // confirmAppointment() {
+  //   const selectedSlot = this.filteredSlots.find(s => s.SlotId === this.selectedSlotId);
+  //   if (!selectedSlot) {
+  //     alert('Please select a slot before confirming.');
+  //     return;
+  //   }
   
+  //   this.activeModal.close();
+  //   debugger;
+  //   this.router.navigate(['patient/patientdetails'], {
+  //     queryParams: {
+  //       doctorId: this.doctorId,
+  //       doctorName: this.doctorName,
+  //       doctorEmail : this.doctorEmail,
+  //       slotId: selectedSlot.SlotId,
+  //       startTime: selectedSlot.StartTime,
+  //       endTime: selectedSlot.EndTime,
+  //       slotDate: selectedSlot.SlotDate,
+  //       specializationId : this.SpecializationId
+  //     }
+  //   });
+  // }
+
+  confirmAppointment() {
+  const selectedSlot = this.filteredSlots.find(s => s.SlotId === this.selectedSlotId);
+  if (!selectedSlot) {
+    alert('Please select a slot before confirming.');
+    return;
+  }
+  debugger;
+  const appointmentModel: any = {
+    DoctorId: this.doctorId,
+    SpecializationId: this.SpecializationId,
+    OldSlotId : this.oldSlotId,
+    SlotId: selectedSlot.SlotId,
+    PreferredDate: selectedSlot.SlotDate,
+    StartTime: selectedSlot.StartTime,
+    EndTime: selectedSlot.EndTime,
+    DoctorName: this.doctorName,
+    DoctorEmail: this.doctorEmail,
+    PatientName: this.patientName,
+    Action : this.action,
+    PatientEmail: this.patientEmail
+  };
+
+  if (this.appointmentRequestId) {
+
+    appointmentModel.AppointmentRequestId = this.appointmentRequestId;
+
+    this.appointmentRequestService.RescheduleAppointment(appointmentModel).subscribe({
+      next: (response) => {
+        alert('Appointment rescheduled successfully.');        
+        this.activeModal.close('rescheduled');
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to reschedule appointment.');
+      }
+    });
+  } else {
+    // 👤 Patient booking new appointment
     this.activeModal.close();
-    debugger;
-    this.router.navigate(['patient/patientdetails'], {
+    this.router.navigate(['patient/patient-form'], {
       queryParams: {
-        doctorId: this.doctorId,
-        doctorName: this.doctorName,
-        slotId: selectedSlot.SlotId,
-        startTime: selectedSlot.StartTime,
-        endTime: selectedSlot.EndTime,
-        slotDate: selectedSlot.SlotDate,
-        specializationId : this.SpecializationId
+        doctorId: appointmentModel.DoctorId,
+        doctorName: appointmentModel.DoctorName,
+        doctorEmail: appointmentModel.DoctorEmail,
+        slotId: appointmentModel.SlotId,
+        startTime: appointmentModel.StartTime,
+        endTime: appointmentModel.EndTime,
+        slotDate: appointmentModel.PreferredDate,
+        specializationId: appointmentModel.SpecializationId
       }
     });
   }
+}
+
+
+  
   
 }
