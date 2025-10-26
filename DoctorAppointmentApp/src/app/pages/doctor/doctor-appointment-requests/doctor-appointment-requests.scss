@@ -1,0 +1,8 @@
+button[ngbDropdownToggle]::after {
+    display: none; /* hides the default dropdown arrow */
+}
+.action-btn:disabled {
+  opacity: 0.2;       /* make it faded */
+  cursor: not-allowed; /* show not-allowed cursor */
+  pointer-events: none; /* prevent clicks */
+}

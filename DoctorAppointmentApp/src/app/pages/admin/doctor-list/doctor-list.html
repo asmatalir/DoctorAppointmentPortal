@@ -1,41 +1,45 @@
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4>Doctor List</h4>
-      <button class="btn btn-primary" (click)="openAddEditDoctor()">Add Doctor</button>
-    </div>
-  
-    <!-- <div class="input-group mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5>Manage Doctors</h5>
+  </div>
+
+  <!-- <div class="input-group mb-3">
       <span class="input-group-text"><i class="bi bi-search"></i></span>
       <input type="text" class="form-control" placeholder="Search..." [(ngModel)]="searchTerm">
     </div> -->
-
-    <div class="row mb-3 g-2 align-items-center">
-        <!-- Search Text -->
-        <div class="col-md-6">
-          <input type="text" class="form-control" placeholder="Search by doctor name or hospital..." [(ngModel)]="filters.SearchedDoctorName" (ngModelChange)="onFilterChange()">
-        </div>
-      
-        <!-- Specialization Dropdown -->
-        <div class="col-md-4">
-            <select class="form-select" [(ngModel)]="filters.SelectedSpecializationId" (change)="onFilterChange()">
-              <option [ngValue]="null">All Specializations</option>
-              <option *ngFor="let spec of specializationsList" [ngValue]="spec.SpecializationId">
-                {{ spec.SpecializationName }}
-              </option>
-            </select>
-          </div>
-          
-          
-      
-        <!-- Optional: Clear Button -->
-        <div class="col-md-2">
-            <button class="btn btn-secondary w-100" (click)="ClearFilters()">Clear</button>
-
-        </div>
+  <div class="filter-block p-3 mb-4 rounded border bg-white shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5>Doctor List</h5>
+      <button class="btn btn-primary" (click)="openAddEditDoctor()">Add Doctor</button>
+    </div>
+    <div class="row mb-3 g-2 align-items-end">
+      <!-- Search Text -->
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Doctor Name</label>
+        <input type="text" class="form-control" placeholder="Search by doctor name"
+          [(ngModel)]="filters.SearchedDoctorName" (ngModelChange)="onFilterChange()">
       </div>
-      
-  
-    <table class="table table-striped table-bordered align-middle">
+
+      <!-- Specialization Dropdown -->
+      <div class="col-md-4 mb-2 mb-md-0">
+        <label class="form-label fw-semibold">Specialization</label>
+        <ng-select [items]="specializationsList" bindLabel="SpecializationName" bindValue="SpecializationId"
+          placeholder="Select Specialization" [(ngModel)]="filters.SelectedSpecializationId" [clearable]="true"
+          (change)="onFilterChange()">
+        </ng-select>
+      </div>
+
+
+
+      <!-- Optional: Clear Button -->
+      <div class="col-md-2">
+        <button class="btn btn-secondary w-100" (click)="ClearFilters()">Clear</button>
+
+      </div>
+    </div>
+
+
+    <table class="table table-striped table-bordered align-middle" *ngIf="filteredDoctors && filteredDoctors.length > 0; else noResults">
       <thead class="table-light">
         <tr>
           <th>Name</th>
@@ -43,37 +47,47 @@
           <th>Experience (Years)</th>
           <th>Consultation Fees (₹)</th>
           <th>Hospital</th>
-          <th>Address</th>
+          <th>Hospital Address</th>
           <th>Rating</th>
           <th style="width:150px;">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let doc of filteredDoctors"  style="cursor: pointer;">
-            <td>Dr.{{ doc.FirstName }} {{ doc.LastName }}</td>
-            <td>{{ doc.Gender }}</td>
-            <td>{{ doc.ExperienceYears }} yrs</td>
-            <td>₹{{ doc.ConsultationFees }}</td>
-            <td>{{ doc.HospitalName }}</td>
-            <td>{{ doc.Address }}</td>
-            <td>{{ doc.Rating }}</td>
-            <td>
-                <button class="btn btn-sm btn-success me-2" (click)="openAddEditDoctor(doc.DoctorId)">Edit</button>
-                <button class="btn btn-sm btn-danger" >Delete</button>
-              </td>
-          </tr>
+        <tr *ngFor="let doc of filteredDoctors" style="cursor: pointer;">
+          <td>Dr.{{ doc.FirstName }} {{ doc.LastName }}</td>
+          <td>{{ doc.Gender }}</td>
+          <td>{{ doc.ExperienceYears }} yrs</td>
+          <td>₹{{ doc.ConsultationFees }}</td>
+          <td>{{ doc.HospitalName }}</td>
+          <td>{{ doc.Address }}</td>
+          <td>{{ doc.Rating }}</td>
+          <td>
+            <i class="ri-edit-2-line action-icon me-3" (click)="openAddEditDoctor(doc.DoctorId)" title="Edit"></i>
+            <i class="ri-delete-bin-line action-icon delete-icon me-3" title="Delete"></i>
+            <i class="ri-calendar-line action-icon text-primary" (click)="openDoctorAvailability(doc.DoctorId)"
+              title="Availability"></i>
+          </td>
+        </tr>
       </tbody>
     </table>
-  
+
+    <ng-template #noResults>
+        <div class="text-center py-5 text-muted">
+          <i class="ri-emotion-sad-line fs-2 d-block mb-2"></i>
+          <h6>No results found</h6>
+          <p class="mb-0">Try adjusting your filters or search criteria.</p>
+        </div>
+      </ng-template>
+
     <!-- Pagination -->
     <div class="d-flex justify-content-end mt-3">
-        <ngb-pagination *ngIf="!loading && TotalRecords > 0"
-          class="d-flex justify-content-center shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords"
-          [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3" [boundaryLinks]="true"
-          (pageChange)="loadDoctors()">
-        </ngb-pagination>
-      </div>
-  
+      <ngb-pagination *ngIf="!loading && TotalRecords > 0"
+        class="d-flex justify-content-center shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords"
+        [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3" [boundaryLinks]="true"
+        (pageChange)="loadDoctors()">
+      </ngb-pagination>
+    </div>
+
     <!-- Add/Edit Modal
     <div class="modal fade show d-block" tabindex="-1" *ngIf="showAddModal">
       <div class="modal-dialog modal-lg">
@@ -141,7 +155,7 @@
         </div>
       </div>
     </div> -->
-  
+
     <!-- Delete Confirmation Modal
     <div class="modal fade show d-block" tabindex="-1" *ngIf="showDeleteModal">
       <div class="modal-dialog">
@@ -157,4 +171,4 @@
       </div>
     </div> -->
   </div>
-  
+</div>

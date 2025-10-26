@@ -234,6 +234,110 @@ BEGIN
 END;
 GO
 
+--FFinal Version
+CREATE OR ALTER PROCEDURE DoctorsGetList  
+    @DoctorName NVARCHAR(100) = NULL,
+    @SpecializationId INT = NULL,
+    @CityId INT = NULL,
+    @Gender CHAR(1) = NULL,
+    @PageNumber INT = 1,
+    @PageSize INT = 10,
+    @TotalCount INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Create temp table for filtered results
+    CREATE TABLE #FilteredDoctors
+    (
+        DoctorId INT,
+        FirstName NVARCHAR(50),
+        LastName NVARCHAR(50),
+        Gender CHAR(1),
+        Email NVARCHAR(100),
+        ExperienceYears INT,
+        ConsultationFees DECIMAL(10,2),
+        Description NVARCHAR(300),
+        HospitalName NVARCHAR(200),
+        Address NVARCHAR(500),
+        Rating DECIMAL(3,2),
+        IsActive BIT,
+        SpecializationNames NVARCHAR(MAX),
+        QualificationNames NVARCHAR(MAX)
+    );
+
+    -- Insert filtered data
+    INSERT INTO #FilteredDoctors
+    SELECT
+        D.DoctorId,
+        ISNULL(U.FirstName, '') AS FirstName,
+        ISNULL(U.LastName, '') AS LastName,
+        ISNULL(U.Gender, '') AS Gender,
+        ISNULL(U.Email, '') AS Email,
+        ISNULL(D.ExperienceYears, 0) AS ExperienceYears,
+        ISNULL(D.ConsultationFees, 0) AS ConsultationFees,
+        ISNULL(D.Description, '') AS Description,
+        ISNULL(D.HospitalName, '') AS HospitalName,
+        ISNULL(CONCAT(
+            ISNULL(A.AddressLine, ''), ', ',
+            ISNULL(C.CityName, ''), ', ',
+            ISNULL(T.TalukaName, ''), ', ',
+            ISNULL(DI.DistrictName, ''), ', ',
+            ISNULL(S.StateName, ''), ' - ',
+            ISNULL(A.Pincode, '')
+        ), '') AS Address,
+        ISNULL(D.Rating, 0) AS Rating,
+        ISNULL(D.IsActive, 0) AS IsActive,
+        STUFF((
+            SELECT ', ' + SP.SpecializationName
+            FROM DoctorSpecializations DS2
+            INNER JOIN Specializations SP ON DS2.SpecializationId = SP.SpecializationId
+            WHERE DS2.DoctorId = D.DoctorId AND DS2.IsActive = 1
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS SpecializationNames,
+        STUFF((
+            SELECT ', ' + Q.QualificationName
+            FROM DoctorQualifications DQ
+            INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
+            WHERE DQ.DoctorId = D.DoctorId AND Q.IsActive = 1
+            FOR XML PATH(''), TYPE
+        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS QualificationNames
+    FROM DoctorProfiles D
+    INNER JOIN UserProfiles U ON D.UserId = U.UserId
+    LEFT JOIN Addresses A ON D.AddressId = A.AddressId
+    LEFT JOIN States S ON A.StateId = S.StateId
+    LEFT JOIN Districts DI ON A.DistrictId = DI.DistrictId
+    LEFT JOIN Talukas T ON A.TalukaId = T.TalukaId
+    LEFT JOIN Cities C ON A.CityId = C.CityId
+    WHERE D.IsActive = 1
+      AND (@DoctorName IS NULL OR U.FirstName LIKE '%' + @DoctorName + '%' OR U.LastName LIKE '%' + @DoctorName + '%')
+      AND (@CityId IS NULL OR A.CityId = @CityId)
+      AND (@Gender IS NULL OR U.Gender = @Gender)
+      AND (
+            @SpecializationId IS NULL
+            OR EXISTS (
+                SELECT 1
+                FROM DoctorSpecializations DS
+                WHERE DS.DoctorId = D.DoctorId
+                  AND DS.SpecializationId = @SpecializationId
+                  AND DS.IsActive = 1
+            )
+          );
+
+    -- Total count
+    SELECT @TotalCount = COUNT(*) FROM #FilteredDoctors;
+
+    -- Paginated result
+    SELECT *
+    FROM #FilteredDoctors
+    ORDER BY FirstName, LastName
+    OFFSET (@PageNumber - 1) * @PageSize ROWS
+    FETCH NEXT @PageSize ROWS ONLY;
+
+    DROP TABLE #FilteredDoctors;
+END;
+GO
+
 
 GO
 CREATE   PROCEDURE DoctorSpecializationGetList  
@@ -376,6 +480,7 @@ BEGIN
     ORDER BY CityName
 END
 GO
+
 
 GO
 CREATE OR ALTER PROCEDURE StatusesGetList
@@ -662,9 +767,9 @@ BEGIN
 
             -- 2. Insert Addresses
             INSERT INTO Addresses
-            (AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive, CreatedBy, CreatedOn)
+            (AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive,CreatedOn)
             VALUES
-            (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, @CreatedBy, @CurrentDate);
+            (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, @CurrentDate);
 
             SET @AddressId = SCOPE_IDENTITY();
 
@@ -690,7 +795,6 @@ BEGIN
                 Email = @Email,
                 ContactNumber = @ContactNumber,
                 UserName = @UserName,
-                HashedPassword = @HashedPassword,
                 Gender = @Gender,
                 DateOfBirth = @DateOfBirth,
                 LastModifiedBy = @CreatedBy,
@@ -1023,7 +1127,9 @@ BEGIN
 
         -- Soft delete removed availabilities
         UPDATE DA
-        SET DA.IsActive = 0
+        SET DA.IsActive = 0,
+		    DA.LastModifiedBy = @CreatedBy,
+            DA.LastModifiedOn = GETDATE()
         FROM DoctorAvailability DA
         LEFT JOIN @TempAvailabilities T
             ON DA.DayOfWeek = T.DayOfWeek
@@ -1036,7 +1142,9 @@ BEGIN
 
         -- Reactivate existing availabilities if present in XML
         UPDATE DA
-        SET DA.IsActive = 1
+        SET DA.IsActive = 1,
+		    DA.LastModifiedBy = @CreatedBy,
+            DA.LastModifiedOn = GETDATE()
         FROM DoctorAvailability DA
         JOIN @TempAvailabilities T
             ON DA.DoctorId = @DoctorId
@@ -1104,7 +1212,9 @@ BEGIN
 
         -- Soft delete removed exceptions
         UPDATE DAE
-        SET DAE.IsActive = 0
+        SET DAE.IsActive = 0,
+		    DAE.LastModifiedBy = @CreatedBy,
+            DAE.LastModifiedOn = GETDATE()
         FROM DoctorAvailabilityExceptions DAE
         LEFT JOIN @TempExceptions T
             ON DAE.ExceptionDate = T.ExceptionDate
@@ -1118,7 +1228,9 @@ BEGIN
         UPDATE DAE
         SET DAE.IsActive = 1,
             DAE.IsAvailable = T.IsAvailable,
-            DAE.Reason = T.Reason
+            DAE.Reason = T.Reason,
+			DAE.LastModifiedBy = @CreatedBy,
+            DAE.LastModifiedOn = GETDATE()
         FROM DoctorAvailabilityExceptions DAE
         JOIN @TempExceptions T
             ON DAE.DoctorId = @DoctorId
@@ -1179,6 +1291,8 @@ CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
     @PatientName NVARCHAR(100) = NULL,
     @DoctorName NVARCHAR(100) = NULL,
     @SpecializationId INT = NULL,
+	@StatusId INT = NULL,
+	@AppointmentType NVARCHAR(20) = 'Upcoming',
     @FromDate DATE = NULL,
     @ToDate DATE = NULL,
     @PageNumber INT = 1,
@@ -1186,7 +1300,6 @@ CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
     @TotalCount INT OUTPUT
 AS
 BEGIN
-    SET NOCOUNT ON;
 
     -- Temporary table to store filtered results
     CREATE TABLE #FilteredAppointments
@@ -1247,8 +1360,20 @@ BEGIN
         AND (@PatientName IS NULL OR PP.FirstName + ' ' + PP.LastName LIKE '%' + @PatientName + '%')
         AND (@DoctorName IS NULL OR U.FirstName + ' ' + U.LastName LIKE '%' + @DoctorName + '%')
         AND (@SpecializationId IS NULL OR AR.SpecializationId = @SpecializationId)
-		AND (@FromDate IS NULL OR  AR.PreferredDate >= @FromDate)
-        AND (@ToDate IS NULL OR  AR.PreferredDate < DATEADD(DAY, 1, @ToDate))
+		AND (@StatusId IS NULL OR AR.StatusId = @StatusId)
+		AND (
+			@AppointmentType = 'All'
+			OR (
+				@AppointmentType = 'Upcoming'
+				AND DATEADD(SECOND, DATEDIFF(SECOND, 0, AR.FinalStartTime), CAST(AR.FinalDate AS DATETIME)) >= GETDATE()
+			    )
+			OR (
+				@AppointmentType = 'Past'
+				AND DATEADD(SECOND, DATEDIFF(SECOND, 0, AR.FinalEndTime), CAST(AR.FinalDate AS DATETIME)) < GETDATE()
+			   )
+		     )
+		AND (@FromDate IS NULL OR  AR.FinalDate >= @FromDate)
+        AND (@ToDate IS NULL OR  AR.FinalDate < DATEADD(DAY, 1, @ToDate))
 
     -- Total count
     SELECT @TotalCount = COUNT(*) FROM #FilteredAppointments;
@@ -1347,11 +1472,17 @@ BEGIN
 		AND (@StatusId IS NULL OR AR.StatusId = @StatusId)
 		AND (
 			@AppointmentType = 'All'
-			OR (@AppointmentType = 'Upcoming' AND AR.FinalDate >= CAST(GETDATE() AS DATE))
-			OR (@AppointmentType = 'Past' AND AR.FinalDate < CAST(GETDATE() AS DATE))
-           )
-        AND (@FromDate IS NULL OR AR.PreferredDate >= @FromDate)
-        AND (@ToDate IS NULL OR AR.PreferredDate < DATEADD(DAY, 1, @ToDate))
+			OR (
+				@AppointmentType = 'Upcoming'
+				AND DATEADD(SECOND, DATEDIFF(SECOND, 0, AR.FinalStartTime), CAST(AR.FinalDate AS DATETIME)) >= GETDATE()
+			    )
+			OR (
+				@AppointmentType = 'Past'
+				AND DATEADD(SECOND, DATEDIFF(SECOND, 0, AR.FinalEndTime), CAST(AR.FinalDate AS DATETIME)) < GETDATE()
+			   )
+		     )
+        AND (@FromDate IS NULL OR AR.FinalDate >= @FromDate)
+        AND (@ToDate IS NULL OR AR.FinalDate < DATEADD(DAY, 1, @ToDate))
 
     -- Total count
     SELECT @TotalCount = COUNT(*) FROM #FilteredAppointments;
@@ -1370,7 +1501,8 @@ GO
 GO
 CREATE OR ALTER PROCEDURE UpdateAppointmentStatus
     @AppointmentRequestId INT,
-    @StatusName NVARCHAR(50)
+    @StatusName NVARCHAR(50),
+	@LastModifiedBy INT
 AS
 BEGIN
 
@@ -1382,8 +1514,10 @@ BEGIN
 
     UPDATE AppointmentRequests
     SET StatusId = @StatusId,
+	    LastModifiedBy = @LastModifiedBy,
         LastModifiedOn = GETDATE()
-    WHERE AppointmentRequestId = @AppointmentRequestId;
+    WHERE AppointmentRequestId = @AppointmentRequestId
+	AND StatusId = (SELECT StatusId FROM Statuses WHERE StatusName = 'Pending');
 END
 GO
 
@@ -1494,7 +1628,6 @@ CREATE OR ALTER PROCEDURE SavePatientAppointment
     @MedicalConcern NVARCHAR(300),
 	@DocumentFileName NVARCHAR(255) = NULL,
     @DocumentFilePath NVARCHAR(500) = NULL,
-    @CreatedBy INT,
 	@AppointmentId INT OUTPUT 
 AS
 BEGIN
@@ -1526,7 +1659,6 @@ BEGIN
             TalukaId = @TalukaId,
             CityId = @CityId,
             Pincode = @Pincode,
-            LastModifiedBy = @CreatedBy,
             LastModifiedOn = GETDATE()
         WHERE AddressId = @AddressId;
 
@@ -1545,8 +1677,8 @@ BEGIN
     ELSE
     BEGIN
         -- Patient does not exist, insert into Address
-        INSERT INTO Addresses(AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive, CreatedBy, CreatedOn)
-        VALUES (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, @CreatedBy, GETDATE());
+        INSERT INTO Addresses(AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive,CreatedOn)
+        VALUES (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, GETDATE());
 
         SET @AddressId = SCOPE_IDENTITY();
 
@@ -1650,18 +1782,22 @@ AS
 BEGIN
 
     DECLARE @BookedStatusId INT;
-    DECLARE @RescheduledStatusId INT;
+    DECLARE @AvailableStatusId INT;
+	DECLARE @RescheduledStatusId INT;
+
 
     BEGIN TRY
         BEGIN TRANSACTION;
 
         -- 🔹 Get status IDs dynamically
         SELECT @BookedStatusId = StatusId FROM Statuses WHERE StatusName = 'Booked';
-        SELECT @RescheduledStatusId = StatusId FROM Statuses WHERE StatusName = 'Rescheduled';
+        SELECT @AvailableStatusId = StatusId FROM Statuses WHERE StatusName = 'Available';
+		SELECT @RescheduledStatusId = StatusId FROM Statuses WHERE StatusName = 'Rescheduled';
+
 
         -- 🔹 Mark old slot as Rescheduled
         UPDATE DoctorSlots
-        SET StatusId = @RescheduledStatusId
+        SET StatusId = @AvailableStatusId
         WHERE SlotId = @OldSlotId;
 
         -- 🔹 Mark new slot as Booked
@@ -1678,7 +1814,8 @@ BEGIN
 			StatusId = @RescheduledStatusId, 
             LastModifiedOn = GETDATE(),
             LastModifiedBy = @DoctorId
-        WHERE AppointmentRequestId = @AppointmentRequestId;
+        WHERE AppointmentRequestId = @AppointmentRequestId
+		AND StatusId = (SELECT StatusId FROM Statuses WHERE StatusName = 'Pending');
 
         COMMIT TRANSACTION;
     END TRY
@@ -1687,9 +1824,9 @@ BEGIN
         THROW;
     END CATCH
 END
-
-
 GO
+
+
 CREATE OR ALTER PROCEDURE GenerateDoctorSlots
     @FromDate DATE,
     @ToDate DATE,
@@ -1774,6 +1911,81 @@ BEGIN
       );
 END;
 GO
+
+
+-- Get all active states
+CREATE OR ALTER PROCEDURE GetStates
+AS
+BEGIN
+    SELECT
+		StateId,
+		StateName
+	FROM
+		States
+	WHERE
+		IsActive = 1
+	ORDER BY
+		StateName;
+END
+GO
+
+-- Get districts by state
+CREATE OR ALTER PROCEDURE GetDistrictsByState
+    @StateId INT
+AS
+BEGIN
+    SELECT
+		DistrictId,
+		DistrictName,
+		StateId
+	FROM
+		Districts 
+    WHERE
+		StateId = @StateId
+		AND IsActive = 1 
+    ORDER BY
+		DistrictName;
+END
+GO
+
+-- Get talukas by district
+CREATE OR ALTER PROCEDURE GetTalukasByDistrict
+    @DistrictId INT
+AS
+BEGIN
+    SELECT
+		TalukaId,
+		TalukaName,
+		DistrictId
+	FROM
+		Talukas 
+    WHERE
+		DistrictId = @DistrictId
+		AND IsActive = 1 
+    ORDER BY
+		TalukaName;
+END
+GO
+
+-- Get cities by taluka
+CREATE OR ALTER PROCEDURE GetCitiesByTaluka
+    @TalukaId INT
+AS
+BEGIN
+    SELECT
+		CityId,
+		CityName,
+		TalukaId
+	FROM
+		Cities 
+    WHERE
+		TalukaId = @TalukaId
+		AND IsActive = 1 
+    ORDER BY
+		CityName;
+END
+GO
+
 
 
 

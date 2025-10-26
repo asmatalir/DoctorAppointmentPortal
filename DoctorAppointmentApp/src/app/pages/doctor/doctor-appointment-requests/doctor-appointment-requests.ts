@@ -55,22 +55,22 @@ export class DoctorAppointmentRequests {
     });
   }
 
-   openBookingModal(doctor: any,action : string) {
+   openBookingModal(appointment: any,action : string) {
+    debugger;
       const modalRef = this.modalService.open(DoctorAvailableSlotsModal, { size: 'lg', centered: true });
-    
+      debugger;
       // ✅ Set inputs correctly
-      doctor.SelectedSpecializationId=1;
-      modalRef.componentInstance.doctorId = doctor.DoctorId;
-      modalRef.componentInstance.doctorName = doctor.DoctorName;
-      modalRef.componentInstance.doctorEmail = doctor.DoctorEmail;
-      modalRef.componentInstance.patientName = doctor.PatientName;
-      modalRef.componentInstance.patientEmail = doctor.PatientEmail;
-      modalRef.componentInstance.appointmentRequestId = doctor.AppointmentRequestId;
-      modalRef.componentInstance.oldSlotId = doctor.SlotId;
+      appointment.SelectedSpecializationId=1;
+      modalRef.componentInstance.doctorId = appointment.DoctorId;
+      modalRef.componentInstance.doctorName = appointment.DoctorName;
+      modalRef.componentInstance.doctorEmail = appointment.DoctorEmail;
+      modalRef.componentInstance.patientName = appointment.PatientName;
+      modalRef.componentInstance.patientEmail = appointment.PatientEmail;
+      modalRef.componentInstance.appointmentRequestId = appointment.AppointmentRequestId;
+      modalRef.componentInstance.oldSlotId = appointment.SlotId;
       modalRef.componentInstance.action = action;
-      modalRef.componentInstance.SpecializationId = doctor.SelectedSpecializationId;
+      modalRef.componentInstance.SpecializationId = appointment.SelectedSpecializationId;
   
-       
       debugger;
       modalRef.result.then(
         (result) => {
@@ -104,23 +104,28 @@ export class DoctorAppointmentRequests {
   updateAppointmentStatus(appointment: any, status: string) {
     if(status == 'Accepted')
     {
-      this.model.Action = 'Approved';
+      appointment.Action = 'Approved';
     }
     else
     {
-      this.model.Action = 'Rejected';
+      appointment.Action = 'Rejected';
     }
-    this.model.PatientEmail = appointment.PatientEmail;
-    this.model.AppointmentRequestId= appointment.AppointmentRequestId;
-    this.model.FinalDate = appointment.FinalDate;
-    this.model.DoctorName = appointment.DoctorName;
-    this.model.PatientName = appointment.PatientName;
-    this.model.FinalStartTime = appointment.FinalStartTime;
-    this.model.FinalEndTime = appointment.FinalEndTime;
+    // this.model.PatientEmail = appointment.PatientEmail;
+    // this.model.AppointmentRequestId= appointment.AppointmentRequestId;
+    // this.model.FinalDate = appointment.FinalDate;
+    // this.model.DoctorName = appointment.DoctorName;
+    // this.model.DoctorEmail = appointment.DoctorEmail;
+    // this.model.PatientName = appointment.PatientName;
+    // this.model.FinalStartTime = appointment.FinalStartTime;
+    // this.model.FinalEndTime = appointment.FinalEndTime;
     // this.model = appointment;
-    console.log("Appointment Id  " + this.model.AppointmentRequestId)
-    console.log("Patient Email " + this.model.PatientEmail)
-    this.appointmentRequestService.UpdateStatus(this.model)
+    appointment.StartTime = appointment.FinalStartTime;
+    appointment.EndTime = appointment.FinalEndTime;
+    appointment.PreferredDate = appointment.FinalDate;
+    debugger;
+    console.log("Appointment Id  " + appointment.startTime)
+    console.log("Patient Email " + appointment.startTime)
+    this.appointmentRequestService.UpdateStatus(appointment)
         .subscribe({
             next: () => {
                 alert(`Appointment ${status.toLowerCase()} and emails sent!`);

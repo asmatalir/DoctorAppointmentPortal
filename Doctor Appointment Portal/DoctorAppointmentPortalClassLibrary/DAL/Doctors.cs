@@ -1,5 +1,6 @@
 ﻿using DoctorAppointmentPortalClassLibrary.Models;
 using Microsoft.Practices.EnterpriseLibrary.Data;
+using Microsoft.Practices.ObjectBuilder2;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -44,14 +45,19 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 {
                     db.AddInParameter(com, "@SpecializationId", DbType.String, DBNull.Value);
                 }
-                if (model.SelectedCity > 0)
+                if (model.SelectedCityId > 0)
                 {
-                    db.AddInParameter(com, "@CityId", DbType.String, model.SelectedCity);
+                    db.AddInParameter(com, "@CityId", DbType.String, model.SelectedCityId);
                 }
                 else
                 {
                     db.AddInParameter(com, "@CityId", DbType.String, DBNull.Value);
                 }
+                if (!string.IsNullOrEmpty(model.Gender))
+                    db.AddInParameter(com, "@Gender", DbType.String, model.Gender);
+                else
+                    db.AddInParameter(com, "@Gender", DbType.String, DBNull.Value);
+
                 db.AddInParameter(com, "@PageNumber", DbType.Int32, model.PageNumber);
                 db.AddInParameter(com, "@PageSize", DbType.Int32, model.PageSize);
                 db.AddOutParameter(com, "@TotalCount", DbType.Int32, sizeof(int));
@@ -204,7 +210,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 else
                     db.AddInParameter(cmd, "@DateOfBirth", DbType.Date, DBNull.Value);
 
-                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, 6);
+                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, doctor.CreatedBy);
 
                 // Professional Info
                 if (doctor.ExperienceYears > 0)
@@ -305,7 +311,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(cmd, "@DoctorId", DbType.Int32, DBNull.Value);
 
 
-                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, 6);
+                db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, doctor.CreatedBy);
 
                 // Convert availability list to XML
                 string availabilitiesXml = ConvertAvailabilitiesToXml(doctor.DoctorAvailabilityList);

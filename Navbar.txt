@@ -1,0 +1,129 @@
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+    <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand" href="#">
+        <img src="/images/DrNow-logo2.png" alt="Logo">
+      </a>
+
+      <!-- Toggler for mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu items -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+                <li class="nav-item" *ngFor="let item of menuItems">
+                  <a class="nav-link" [routerLink]="item.link">{{ item.name }}</a>
+                </li>
+              </ul>
+
+        <!-- Right side: Location + Login -->
+        <form class="d-flex align-items-center">
+          <!-- <input class="location-search me-2" type="search" placeholder="Search doctors, clinics, hospitals..." aria-label="Search"> -->
+
+          <ng-container *ngIf="username; else loginBtn">
+            <div class="user-info dropdown">
+              <!-- Profile Image & Dropdown toggle -->
+              <img 
+                [src]="profileImage" 
+                alt="Profile" 
+                class="profile-img dropdown-toggle" 
+                data-bs-toggle="dropdown" 
+                aria-expanded="false"
+              >
+          
+              <!-- Name & Role -->
+              <div class="user-details">
+                <div class="username">{{ username }}</div>
+                <div class="role">{{ role }}</div>
+              </div>
+          
+              <!-- Dropdown Menu -->
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
+                <li><a class="dropdown-item" routerLink="/appointments">My Appointments</a></li>
+                <li><a class="dropdown-item" routerLink="/settings">Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" (click)="logout()">Logout</a></li>
+              </ul>
+              
+            </div>
+          </ng-container>
+          
+          <ng-template #loginBtn>
+            <button class="btn btn-login" type="button">Login / Signup</button>
+          </ng-template>
+           
+             </form>
+      </div>
+    </div>
+  </nav>
+
+
+
+.navbar-brand img {
+  height: 35px;
+}
+
+.nav-link {
+  font-weight: 500;
+  color: #2d2d2d !important;
+  margin-right: 20px;
+}
+
+.nav-link:hover {
+  color: #199fd9 !important;
+}
+
+.btn-login {
+  border: 1px solid #199fd9;
+  color: #199fd9;
+  border-radius: 20px;
+  padding: 5px 15px;
+}
+
+.btn-login:hover {
+  background-color: #199fd9;
+  color: white;
+}
+
+.location-search {
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  padding: 6px 15px;
+  width: 300px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.role {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+/* Optional: adjust dropdown position */
+.dropdown-menu {
+  min-width: 120px;
+}

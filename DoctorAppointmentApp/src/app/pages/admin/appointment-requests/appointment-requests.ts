@@ -3,6 +3,7 @@ import { AppointmentRequestsModel } from '../../../core/models/AppointmentReques
 import { AppointmentRequestService } from '../../../core/services/appointment-request-service';
 import { SpecializationsModel } from '../../../core/models/SpecializationsModel';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { StatusesModel } from '../../../core/models/StatusesModel';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class AppointmentRequests {
   filters : AppointmentRequestsModel = new AppointmentRequestsModel();
   AppointmentRequestList : AppointmentRequestsModel[]=[];
   specializationsList : SpecializationsModel[] = [];
+  statusesList : StatusesModel[] = [];
   TotalRecords : number = 0;
   
   @ViewChild('filterOffcanvas') offcanvasRef: any;
@@ -39,6 +41,7 @@ export class AppointmentRequests {
         // Extract the actual doctors array from the response
         this.AppointmentRequestList = data.AppointmentRequestList || [];
         this.specializationsList = data.SpecializationsList || [];
+        this.statusesList = data.StatusesList || [];
         this.TotalRecords = data.TotalRecords;       
         console.log("Total Records: " + this.TotalRecords)
         this.loading = false;

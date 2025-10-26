@@ -6,6 +6,7 @@ import { QualificationsModel } from '../../../core/models/QualificationsModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorAvailabileSlotsModel } from '../../../core/models/DoctorAvailableSlotsModel';
 import { DoctorAvailableSlotsModal } from '../doctor-available-slots-modal/doctor-available-slots-modal';
+import { CitiesModel } from '../../../core/models/CitiesModel';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class DoctorsList implements OnInit {
   doctorsList: DoctorsModel[] = [];
   specializationsList : SpecializationsModel[] = [];
   qualificationsList : QualificationsModel[] = [];
-  loading: boolean = false;
+  CitiesList : CitiesModel[] = [];
   filters : DoctorsModel = new DoctorsModel();
   TotalRecords : number = 0;
 
@@ -34,7 +35,7 @@ export class DoctorsList implements OnInit {
   }
 
   loadDoctors() {
-    this.loading = true;
+    debugger;
     this.doctorsService.DoctorsGetList(this.filters).subscribe({
       next: (data: any) => {
         debugger;
@@ -42,6 +43,7 @@ export class DoctorsList implements OnInit {
         this.doctorsList = data.DoctorsList || [];
         this.specializationsList = data.SpecializationsList || [];
         this.qualificationsList = data.QualificationsList || [];
+        this.CitiesList = data.CitiesList || [];
         this.TotalRecords = data.TotalRecords;
 
         this.doctorsList = this.doctorsList.map(doc => {
@@ -59,11 +61,9 @@ export class DoctorsList implements OnInit {
         
                 
 
-        this.loading = false;
       },
       error: (err) => {
         console.error('Error loading doctors:', err);
-        this.loading = false;
       }
     });
   }
@@ -109,6 +109,12 @@ export class DoctorsList implements OnInit {
     });
     return grouped;
   }
+clearFilters() {
+  this.filters.SelectedSpecializationId = null;
+  this.filters.SelectedCityId = null;
+  this.filters.Gender = '';
+  this.loadDoctors(); // reload list
+}
   
 
 }

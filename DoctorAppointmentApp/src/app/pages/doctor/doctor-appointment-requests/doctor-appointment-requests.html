@@ -15,11 +15,11 @@
         </div>
     </div> -->
 
-
+<div class="filter-block p-3 mb-4 rounded border bg-white shadow-sm">
     <div class="row mb-3 g-2 align-items-center">
         <!-- Search Text -->
         <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Search by doctor name..." [(ngModel)]="filters.SearchedPatientName" (ngModelChange)="onFilterChange()">
+            <input type="text" class="form-control" placeholder="Search by doctor name..." [(ngModel)]="filters.SearchedDoctorName" (ngModelChange)="onFilterChange()">
         </div>
     
           
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-    <table class="table table-striped table-bordered align-middle">
+    <table class="table table-striped table-bordered align-middle" *ngIf="AppointmentRequestList && AppointmentRequestList.length > 0; else noAppointments">
       <thead class="table-light">
         <tr>
           <th>Patient</th>
@@ -56,8 +56,8 @@
             <td>{{ req.StatusName }}</td>
             <td>
                 <div class="dropdown" ngbDropdown>
-                  <button class="btn btn-sm btn-outline-primary" ngbDropdownToggle>
-                    Actions <i class="ri-more-2-fill"></i>
+                  <button class="btn btn-sm btn-outline-dark" ngbDropdownToggle action-btn [disabled]="req.StatusName !== 'Pending'">
+                    <i class="ri-more-2-fill"></i>
                   </button>
                   <ul class="dropdown-menu" ngbDropdownMenu>
                     <li>
@@ -82,6 +82,14 @@
       </tbody>
     </table>
 
+          <ng-template #noAppointments>
+        <div class="text-center py-5 text-muted">
+          <i class="ri-emotion-sad-line fs-2 d-block mb-2"></i>
+          <h6>No results found</h6>
+          <p class="mb-0">Try adjusting your filters or search criteria.</p>
+        </div>
+      </ng-template>
+
     <!-- <--Pagination --> 
      <div class="d-flex justify-content-end mt-3">
         <ngb-pagination *ngIf="!loading && TotalRecords > 0"
@@ -90,6 +98,7 @@
           (pageChange)="loadAppointmentRequests()">
         </ngb-pagination>
     </div>
+</div>
 </div>
 <ng-template #filterOffcanvas let-offcanvas>
     <!-- Offcanvas Header -->
@@ -134,7 +143,7 @@
           <div class="mb-3">
             <label class="form-label">Appointment Type</label>
             <select class="form-select" [(ngModel)]="filters.AppointmentType" name="AppointmentType">
-              <option [ngValue]="'Upcoming'">Upcoming / Today</option>
+              <option [ngValue]="'Upcoming'">Upcoming</option>
               <option [ngValue]="'Past'">Past</option>
               <option [ngValue]="'All'">All</option>
             </select>

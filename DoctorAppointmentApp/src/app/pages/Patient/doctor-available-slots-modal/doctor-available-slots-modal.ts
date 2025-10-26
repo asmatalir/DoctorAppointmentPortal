@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,ChangeDetectorRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ export class DoctorAvailableSlotsModal implements OnInit {
 
 
 
-  next7Days: { label: string; date: Date }[] = [];
+  next14Days: { label: string; date: Date }[] = [];
   selectedDate?: Date;
   allSlots: any[] = [];
   filteredSlots: any[] = [];
@@ -38,17 +38,20 @@ export class DoctorAvailableSlotsModal implements OnInit {
     public activeModal: NgbActiveModal,
     private doctorService: DoctorsService,
     private appointmentRequestService : AppointmentRequestService,
-    private router: Router
+    private router: Router,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    debugger;
     this.generateNext14Days();
     this.fetchDoctorSlots();
   }
+  
 
   generateNext14Days() {
     const today = new Date();
-    this.next7Days = [];
+    this.next14Days = [];
     for (let i = 0; i < 14; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
@@ -57,7 +60,7 @@ export class DoctorAvailableSlotsModal implements OnInit {
         day: 'numeric',
         month: 'short'
       });
-      this.next7Days.push({ label, date });
+      this.next14Days.push({ label, date });
     }
   }
 
@@ -76,6 +79,8 @@ export class DoctorAvailableSlotsModal implements OnInit {
         } else {
           this.errorMsg = response?.Message || 'No slots found.';
         }
+        
+        this.cd.detectChanges();
       },
       error: (err) => {
         this.isLoading = false;

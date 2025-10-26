@@ -1,8 +1,15 @@
-<div class="container p-4 mt-4">
-  <div class="card shadow-sm">
-    <div class="card-header text-dark">
+<div class="container  mt-4">
+
+  <!-- <div class="card-header text-dark">
       <h5 class="mb-0">{{ doctor.DoctorId ? 'Edit Doctor' : 'Add Doctor' }}</h5>
-    </div>
+    </div> -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>{{ doctor.DoctorId ? 'Edit Doctor' : 'Add Doctor' }} Details</h4>
+  </div>
+  <div class="card shadow-sm">
+    <!-- <div class="card-header text-dark">
+      <h5 class="mb-0">Doctor Details</h5>
+    </div> -->
     <div class="card-body">
 
       <form #doctorForm="ngForm" (ngSubmit)="onSubmit(doctorForm)">
@@ -12,199 +19,211 @@
           <h6 class="mb-3 text-dark">Personal Information</h6>
           <div class="row g-4">
             <div class="col-lg-6">
-              <input type="text" class="form-control" placeholder="First Name"
-                     name="FirstName" [(ngModel)]="doctor.FirstName" required>
+              <input type="text" class="form-control" placeholder="First Name" name="FirstName"
+                [(ngModel)]="doctor.FirstName" required #FirstName="ngModel"
+                [class.is-invalid]="FirstName.invalid && (FirstName.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">First Name is required</div>
             </div>
             <div class="col-lg-6">
-              <input type="text" class="form-control" placeholder="Last Name"
-                     name="LastName" [(ngModel)]="doctor.LastName" required>
+              <input type="text" class="form-control" placeholder="Last Name" name="LastName"
+                [(ngModel)]="doctor.LastName" required #LastName="ngModel"
+                [class.is-invalid]="LastName.invalid && (LastName.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Last Name is required</div>
             </div>
             <div class="col-lg-6">
-              <select class="form-control" name="Gender" [(ngModel)]="doctor.Gender" required>
+              <select class="form-control" name="Gender" [(ngModel)]="doctor.Gender" required #Gender="ngModel"
+                [class.is-invalid]="Gender.invalid && (Gender.touched || doctorForm.submitted)">
                 <option value="">Select Gender</option>
                 <option value="M">Male</option>
                 <option value="F">Female</option>
               </select>
+              <div class="invalid-feedback">Gender is required</div>
             </div>
             <div class="col-lg-6">
-              <input type="date" class="form-control" name="DateOfBirth" [(ngModel)]="doctor.DateOfBirth" required>
+              <input type="date" class="form-control" name="DateOfBirth" [(ngModel)]="doctor.DateOfBirth" required
+                #DateOfBirth="ngModel" [max]="today"
+                [class.is-invalid]="DateOfBirth.invalid && (DateOfBirth.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Date of Birth is required</div>
             </div>
             <div class="col-lg-6">
-              <input type="text" class="form-control" placeholder="Contact Number"
-                     name="ContactNumber" [(ngModel)]="doctor.ContactNumber" required>
+              <input type="text" class="form-control" placeholder="Contact Number" name="ContactNumber"
+                [(ngModel)]="doctor.ContactNumber" required #ContactNumber="ngModel" minlength="10" maxlength="15"
+                [class.is-invalid]="ContactNumber.invalid && (ContactNumber.touched || doctorForm.submitted)" >
+              <div class="invalid-feedback" *ngIf="ContactNumber.errors?.['required']">Contact Number is required</div>
+              <div class="invalid-feedback" *ngIf="ContactNumber.errors?.['minlength']">Contact Number is too short</div>
+              <div class="invalid-feedback" *ngIf="ContactNumber.errors?.['maxlength']">Contact Number is too long</div>
             </div>
             <div class="col-lg-6">
-              <input type="email" class="form-control" placeholder="Email"
-                     name="Email" [(ngModel)]="doctor.DoctorEmail" required>
+              <input type="email" class="form-control" placeholder="Email" name="Email" [(ngModel)]="doctor.DoctorEmail"
+                required #DoctorEmail="ngModel"
+                [class.is-invalid]="DoctorEmail.invalid && (DoctorEmail.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Valid Email is required</div>
             </div>
             <div class="col-lg-6">
-              <input type="text" class="form-control" placeholder="User Name"
-                     name="UserName" [(ngModel)]="doctor.UserName" required>
+              <input type="text" class="form-control" placeholder="User Name" name="UserName"
+                [(ngModel)]="doctor.UserName" required #UserName="ngModel"
+                [class.is-invalid]="UserName.invalid && (UserName.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">User Name is required</div>
             </div>
             <div class="col-lg-6">
-              <input type="password" class="form-control" placeholder="Password"
-                     name="Password" [(ngModel)]="doctor.HashedPassword" required>
+              <input type="password" class="form-control" placeholder="Password" *ngIf="!doctor.DoctorId"
+                name="Password" [(ngModel)]="doctor.HashedPassword" required #Password="ngModel"
+                [class.is-invalid]="Password.invalid && (Password.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Password is required</div>
             </div>
           </div>
         </div>
 
 
-  
+
         <!-- Section 2: Professional Information -->
-<div class="p-3 mb-4 border rounded bg-light">
-    <h6 class="mb-3 text-dark fw-bold">Professional Information</h6>
-    <div class="row g-4">
-  
-      <!-- Experience -->
-      <div class="col-lg-4">
-        <input type="number" class="form-control" placeholder="Experience (Years)"
-               name="ExperienceYears" [(ngModel)]="doctor.ExperienceYears" required>
-      </div>
-  
-      <!-- Consultation Fees -->
-      <div class="col-lg-4">
-        <input type="number" class="form-control" placeholder="Consultation Fees"
-               name="ConsultationFees" [(ngModel)]="doctor.ConsultationFees" required>
-      </div>
-  
-      <!-- Hospital Name -->
-      <div class="col-lg-4">
-        <input type="text" class="form-control" placeholder="Hospital Name"
-               name="HospitalName" [(ngModel)]="doctor.HospitalName" required>
-      </div>
-  
-      <!-- Specializations (Multi-select) -->
-      <!-- <div class="col-lg-6">
-        <label class="form-label">Specializations</label>
-        <select class="form-control" name="Specializations" [(ngModel)]="doctor.Specializations" multiple>
-          <option *ngFor="let spec of specializationsList" [value]="spec.SpecializationId">
-            {{ spec.SpecializationName }}
-          </option>
-        </select>
-      </div>
-  
-       Qualifications (Multi-select) 
-      <div class="col-lg-6">
-        <label class="form-label">Qualifications</label>
-        <select class="form-control" name="Qualifications" [(ngModel)]="doctor.Qualifications" multiple>
-          <option *ngFor="let qual of qualificationsList" [value]="qual.QualificationId">
-            {{ qual.QualificationName }}
-          </option>
-        </select>
-      </div> -->
-  
-      <!-- Specializations (Multi-select) -->
-<!-- Specializations Multi-select -->
-<div class="col-lg-6">
-    <label class="form-label">Specializations</label>
-    <ng-select 
-    [items]="specializationsList"   
-    [(ngModel)]="SpecializationIds"
-    bindLabel="SpecializationName"
-    bindValue="SpecializationId"
-    [multiple]="true"
-    name="Specializations" 
-    class="form-control">
-</ng-select>
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark fw-bold">Professional Information</h6>
 
-  </div>
-  
-  <!-- Qualifications Multi-select -->
-  <div class="col-lg-6">
-    <label class="form-label">Qualifications</label>
-    <ng-select
-      [items]="qualificationsList"
-      bindLabel="QualificationName"
-      bindValue="QualificationId"
-      [(ngModel)]="QualificationIds"
-      [multiple]="true"
-      [closeOnSelect]="false"       
-      [hideSelected]="true"        
-      [clearable]="true" 
-      name="Qualifications" 
-      class="form-control custom-ng-select">
-    </ng-select>
-  </div>
-  
-  
-      <!-- Rating -->
-      <div class="col-lg-6">
-        <input type="number" class="form-control" placeholder="Rating"
-               name="Rating" [(ngModel)]="doctor.Rating" min="0" max="5" step="0.1">
-      </div>
-  
-      <!-- Description -->
-      <div class="col-lg-12">
-        <textarea class="form-control" placeholder="Description (Optional)"
-                  name="Description" [(ngModel)]="doctor.Description"></textarea>
-      </div>
-  
-    </div>
-  </div>
-  
+          <div class="row g-4">
+            <!-- Experience -->
+            <div class="col-lg-4">
+              <input type="number" class="form-control" placeholder="Experience (Years)" name="ExperienceYears"
+                [(ngModel)]="doctor.ExperienceYears" required min="0" #ExperienceYears="ngModel"
+                [class.is-invalid]="ExperienceYears.invalid && (ExperienceYears.touched || doctorForm.submitted)">
+              <div class="invalid-feedback" *ngIf="ExperienceYears.errors?.['required']">Experience is required</div>
+              <div class="invalid-feedback" *ngIf="ExperienceYears.errors?.['min']">Must be at least 0 years</div>
+            </div>
 
-  
+            <!-- Consultation Fees -->
+            <div class="col-lg-4">
+              <input type="number" class="form-control" placeholder="Consultation Fees" name="ConsultationFees"
+                [(ngModel)]="doctor.ConsultationFees" required min="0" #ConsultationFees="ngModel"
+                [class.is-invalid]="ConsultationFees.invalid && (ConsultationFees.touched || doctorForm.submitted)">
+              <div class="invalid-feedback" *ngIf="ConsultationFees.errors?.['required']">Fees are required</div>
+              <div class="invalid-feedback" *ngIf="ConsultationFees.errors?.['min']">Must be positive</div>
+            </div>
+
+            <!-- Hospital Name -->
+            <div class="col-lg-4">
+              <input type="text" class="form-control" placeholder="Hospital Name" name="HospitalName"
+                [(ngModel)]="doctor.HospitalName" required #HospitalName="ngModel"
+                [class.is-invalid]="HospitalName.invalid && (HospitalName.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Hospital Name is required</div>
+            </div>
+
+            <!-- Specializations -->
+            <div class="col-lg-6">
+              <label class="form-label">Specializations</label>
+              <ng-select [items]="specializationsList" [(ngModel)]="SpecializationIds" bindLabel="SpecializationName"
+                bindValue="SpecializationId" [multiple]="true" name="Specializations"
+                placeholder="Select Specializations" required #Specializations="ngModel"
+                [class.is-invalid]="Specializations.invalid && (Specializations.touched || doctorForm.submitted)">
+              </ng-select>
+              <div class="invalid-feedback">Select at least one specialization</div>
+            </div>
+
+            <!-- Qualifications -->
+            <div class="col-lg-6">
+              <label class="form-label">Qualifications</label>
+              <ng-select [items]="qualificationsList" bindLabel="QualificationName" bindValue="QualificationId"
+                [(ngModel)]="QualificationIds" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true"
+                [clearable]="true" name="Qualifications" class="custom-ng-select" placeholder="Select Qualifications"
+                required #Qualifications="ngModel"
+                [class.is-invalid]="Qualifications.invalid && (Qualifications.touched || doctorForm.submitted)">
+              </ng-select>
+              <div class="invalid-feedback">Select at least one qualification</div>
+            </div>
+
+            <!-- Rating -->
+            <div class="col-lg-6">
+              <input type="number" class="form-control" placeholder="Rating" name="Rating" [(ngModel)]="doctor.Rating"
+                min="0" max="5" step="0.1" #Rating="ngModel"
+                [class.is-invalid]="Rating.invalid && (Rating.touched || doctorForm.submitted)">
+              <div class="invalid-feedback" *ngIf="Rating.errors?.['min'] || Rating.errors?.['max']">Rating must be 0–5
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="col-lg-12">
+              <textarea class="form-control" placeholder="Description (Optional)" name="Description"
+                [(ngModel)]="doctor.Description"></textarea>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
         <!-- Section 3: Address Information -->
         <div class="p-3 mb-4 border rounded bg-light">
           <h6 class="mb-3 text-dark">Address Information</h6>
           <div class="row g-4">
             <div class="col-lg-3">
-              <select class="form-control" name="StateId" [(ngModel)]="doctor.StateId">
+              <select class="form-control" name="StateId" [(ngModel)]="doctor.StateId" (change)="onStateChange()"
+                required #StateId="ngModel"
+                [class.is-invalid]="StateId.invalid && (StateId.touched || doctorForm.submitted)">
                 <option value="">Select State</option>
                 <option *ngFor="let state of statesList" [value]="state.StateId">
                   {{ state.StateName }}
                 </option>
               </select>
-              
+              <div class="invalid-feedback">State is required</div>
             </div>
             <div class="col-lg-3">
-              <select class="form-control" name="DistrictId" [(ngModel)]="doctor.DistrictId">
+              <select class="form-control" name="DistrictId" [(ngModel)]="doctor.DistrictId"
+                (change)="onDistrictChange()" required #DistrictId="ngModel"
+                [class.is-invalid]="DistrictId.invalid && (DistrictId.touched || doctorForm.submitted)">
                 <option value="">Select District</option>
                 <option *ngFor="let district of districtsList" [value]="district.DistrictId">
                   {{ district.DistrictName }}
                 </option>
               </select>
+              <div class="invalid-feedback">District is required</div>
             </div>
-            
+
             <div class="col-lg-3">
-              <select class="form-control" name="TalukaId" [(ngModel)]="doctor.TalukaId">
+              <select class="form-control" name="TalukaId" [(ngModel)]="doctor.TalukaId" (change)="onTalukaChange()"
+                required #TalukaId="ngModel"
+                [class.is-invalid]="TalukaId.invalid && (TalukaId.touched || doctorForm.submitted)">
                 <option value="">Select Taluka</option>
                 <option *ngFor="let taluka of talukasList" [value]="taluka.TalukaId">
                   {{ taluka.TalukaName }}
                 </option>
               </select>
+              <div class="invalid-feedback">Taluka is required</div>
             </div>
-            
+
             <div class="col-lg-3">
-              <select class="form-control" name="CityId" [(ngModel)]="doctor.CityId">
+              <select class="form-control" name="CityId" [(ngModel)]="doctor.CityId" required #CityId="ngModel"
+                [class.is-invalid]="CityId.invalid && (CityId.touched || doctorForm.submitted)">
                 <option value="">Select City</option>
                 <option *ngFor="let city of citiesList" [value]="city.CityId">
                   {{ city.CityName }}
                 </option>
               </select>
+              <div class="invalid-feedback">City is required</div>
             </div>
-            
+
             <div class="col-lg-8">
-              <input type="text" class="form-control" placeholder="Address Line"
-                     name="AddressLine" [(ngModel)]="doctor.Address">
+              <input type="text" class="form-control" placeholder="Address Line" name="AddressLine"
+                [(ngModel)]="doctor.Address" required #Address="ngModel"
+                [class.is-invalid]="Address.invalid && (Address.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Address is required</div>
             </div>
             <div class="col-lg-4">
-              <input type="text" class="form-control" placeholder="Pincode"
-                     name="Pincode" [(ngModel)]="doctor.Pincode">
+              <input type="text" class="form-control" placeholder="Pincode" name="Pincode" [(ngModel)]="doctor.Pincode"
+                required #Pincode="ngModel"
+                [class.is-invalid]="Pincode.invalid && (Pincode.touched || doctorForm.submitted)">
+              <div class="invalid-feedback">Pincode is required</div>
             </div>
           </div>
         </div>
 
         <div class="mt-4 text-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Doctor</button>
         </div>
+
 
       </form>
 
     </div>
   </div>
 </div>
-
-
-
-

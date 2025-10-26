@@ -19,7 +19,7 @@
   
       <div class="date-slider">
         <button
-          *ngFor="let day of next7Days"
+          *ngFor="let day of next14Days"
           class="date-chip"
           [ngClass]="{ 'active': selectedDate === day.date }"
           (click)="selectDate(day.date)"

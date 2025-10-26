@@ -49,5 +49,41 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             return cityList;
         }
+
+        public List<CitiesModel> GetCitiesByTaluka(int talukaId)
+        {
+            List<CitiesModel> cityList = new List<CitiesModel>();
+
+            try
+            {
+                DbCommand com = db.GetStoredProcCommand("GetCitiesByTaluka");
+                db.AddInParameter(com, "@TalukaId", DbType.Int32, talukaId);
+
+                DataSet ds = db.ExecuteDataSet(com);
+
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        CitiesModel city = new CitiesModel()
+                        {
+                            CityId = Convert.ToInt32(row["CityId"]),
+                            CityName = Convert.ToString(row["CityName"]),
+                            TalukaId = Convert.ToInt32(row["TalukaId"])
+                        };
+
+                        cityList.Add(city);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetCitiesByTaluka: {ex.Message}");
+            }
+
+            return cityList;
+        }
+
     }
 }

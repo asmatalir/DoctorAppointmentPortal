@@ -55,6 +55,22 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 {
                     db.AddInParameter(com, "@SpecializationId", DbType.Int32, DBNull.Value);
                 }
+                if (model.StatusId > 0)
+                {
+                    db.AddInParameter(com, "@StatusId", DbType.Int32, model.StatusId);
+                }
+                else
+                {
+                    db.AddInParameter(com, "@StatusId", DbType.Int32, DBNull.Value);
+                }
+                if (!string.IsNullOrEmpty(model.AppointmentType))
+                {
+                    db.AddInParameter(com, "@AppointmentType", DbType.String, model.AppointmentType);
+                }
+                else
+                {
+                    db.AddInParameter(com, "@AppointmentType", DbType.String, DBNull.Value);
+                }
 
                 // Start Date
                 if (model.FromDate.HasValue)
@@ -262,6 +278,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
                 db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, model.AppointmentRequestId);
                 db.AddInParameter(com, "@StatusName", DbType.String, model.Action);
+                db.AddInParameter(com, "@LastModifiedBy", DbType.Int32, model.LastModifiedBy);
 
                 int rowsAffected = db.ExecuteNonQuery(com);
 
@@ -324,6 +341,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         DataTable dt = ds.Tables[0];
+                        model.PatientId = Convert.ToInt32(dt.Rows[0]["PatientId"]);
                         model.FirstName = Convert.ToString(dt.Rows[0]["FirstName"]);
                         model.LastName = Convert.ToString(dt.Rows[0]["LastName"]);
                         model.PatientEmail = Convert.ToString(dt.Rows[0]["Email"]);
@@ -486,11 +504,6 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(cmd, "@DocumentFilePath", DbType.String, DBNull.Value);
                 }
 
-
-                if (appointment.CreatedBy > 0)
-                    db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, appointment.CreatedBy);
-                else
-                    db.AddInParameter(cmd, "@CreatedBy", DbType.Int32, DBNull.Value);
 
                 // Output parameter for inserted appointment ID
                 db.AddOutParameter(cmd, "@AppointmentId", DbType.Int32, 4);

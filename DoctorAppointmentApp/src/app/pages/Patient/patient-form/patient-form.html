@@ -1,192 +1,183 @@
 <div class="container p-4 mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Patient Details</h4>
+  </div>
 
-    <!-- Appointment Summary -->
-    <div class="alert alert-info text-center fw-semibold mb-4">
-      Booking Appointment with 
-      <span class="text-primary">Dr .{{ appointment.DoctorName }}</span> on 
-      <span class="text-success">{{ appointment.PreferredDate| date: 'fullDate' }}</span> at 
-      <span class="text-success">{{ appointment.StartTime }} - {{ appointment.EndTime }}</span>
-    </div>
-  
-    <div class="card shadow-sm">
-      <div class="card-header text-dark">
-        <h5 class="mb-0">Patient Details</h5>
-      </div>
-  
-      <div class="card-body">
-        <form #patientForm="ngForm" (ngSubmit)="onSubmit(patientForm)">
-  
-            <!-- Section 1: Contact Info -->
-            <div class="p-3 mb-4 border rounded bg-light">
-              <h6 class="mb-3 text-dark">Contact Information</h6>
-              <div class="row g-4">
-                <!-- Contact Number -->
-                <div class="col-lg-6">
-                  <input type="text" class="form-control" placeholder="Contact Number"
-                         name="ContactNumber"
-                         [(ngModel)]="appointment.ContactNumber"
-                         (blur)="loadPatientDetails()"
-                         required>
-                </div>
-                <!-- Email -->
-                <div class="col-lg-6">
-                  <input type="email" class="form-control" placeholder="Email"
-                         name="Email"
-                         [(ngModel)]="appointment.PatientEmail">
-                </div>
-              </div>
-            </div>
-    
-            <!-- Section 2: Personal Information -->
-            <div class="p-3 mb-4 border rounded bg-light">
-              <h6 class="mb-3 text-dark">Personal Information</h6>
-              <div class="row g-4">
-                <div class="col-lg-6">
-                  <input type="text" class="form-control" placeholder="First Name"
-                         name="FirstName" [(ngModel)]="appointment.FirstName" required>
-                </div>
-                <div class="col-lg-6">
-                  <input type="text" class="form-control" placeholder="Last Name"
-                         name="LastName" [(ngModel)]="appointment.LastName" required>
-                </div>
-                <div class="col-lg-6">
-                  <input type="date" class="form-control" name="DateOfBirth"
-                         [(ngModel)]="appointment.DateOfBirth" required>
-                </div>
-                <div class="col-lg-6">
-                  <select class="form-control" name="Gender" [(ngModel)]="appointment.Gender" required>
-                    <option value="">Select Gender</option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                  </select>
-                </div>
-                <div class="col-lg-6">
-                  <input type="text" class="form-control" placeholder="Insurance ID"
-                         name="InsuranceId" [(ngModel)]="appointment.InsuranceInfo">
-                </div>
-              </div>
-            </div>
-    
-            <!-- Section 3: Medical Information -->
-            <div class="p-3 mb-4 border rounded bg-light">
-              <h6 class="mb-3 text-dark">Medical Information</h6>
-              <div class="row g-4">
-                <div class="col-lg-12">
-                  <textarea class="form-control" placeholder="Medical History"
-                            name="MedicalHistory" [(ngModel)]="appointment.MedicalHistory"></textarea>
-                </div>
-                <div class="col-lg-12">
-                  <textarea class="form-control" placeholder="Medical Concern"
-                            name="MedicalConcern" [(ngModel)]="appointment.MedicalConcern"></textarea>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Section 4: Address Information -->
-            <div class="p-3 mb-4 border rounded bg-light">
-              <h6 class="mb-3 text-dark">Address Information</h6>
-              <div class="row g-4">
-                <div class="col-lg-3">
-                  <select class="form-control" name="StateId" [(ngModel)]="appointment.StateId">
-                    <option value="">Select State</option>
-                    <option *ngFor="let state of statesList" [value]="state.StateId">{{ state.StateName }}</option>
-                  </select>
-                </div>
-                <div class="col-lg-3">
-                  <select class="form-control" name="DistrictId" [(ngModel)]="appointment.DistrictId">
-                    <option value="">Select District</option>
-                    <option *ngFor="let district of districtsList" [value]="district.DistrictId">{{ district.DistrictName }}</option>
-                  </select>
-                </div>
-                <div class="col-lg-3">
-                  <select class="form-control" name="TalukaId" [(ngModel)]="appointment.TalukaId">
-                    <option value="">Select Taluka</option>
-                    <option *ngFor="let taluka of talukasList" [value]="taluka.TalukaId">{{ taluka.TalukaName }}</option>
-                  </select>
-                </div>
-                <div class="col-lg-3">
-                  <select class="form-control" name="CityId" [(ngModel)]="appointment.CityId">
-                    <option value="">Select City</option>
-                    <option *ngFor="let city of citiesList" [value]="city.CityId">{{ city.CityName }}</option>
-                  </select>
-                </div>
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" placeholder="Address Line"
-                         name="Address" [(ngModel)]="appointment.AddressLine">
-                </div>
-                <div class="col-lg-4">
-                  <input type="text" class="form-control" placeholder="Pincode"
-                         name="Pincode" [(ngModel)]="appointment.Pincode">
-                </div>
-              </div>
-            </div>
-    
-            
+  <!-- Appointment Summary -->
+  <div class="alert alert-info text-center fw-semibold mb-4">
+    Booking Appointment with
+    <span class="text-primary">Dr. {{ appointment.DoctorName }}</span> on
+    <span class="text-success">{{ appointment.PreferredDate | date: 'fullDate' }}</span> at
+    <span class="text-success">{{ appointment.StartTime }} - {{ appointment.EndTime }}</span>
+  </div>
 
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form #patientForm="ngForm" (ngSubmit)="onSubmit(patientForm)">
 
-           <!-- Section: Optional Medical Document -->
-            <div class="p-3 mb-4 border rounded bg-light">
-              <h6 class="mb-3 text-dark">
-                Medical Document <span class="text-muted">(Optional)</span>
-              </h6>
-              <div class="row g-4">
-                <div class="col-lg-12">
-                  <input 
-                    type="file" 
-                    class="form-control" 
-                    (change)="onFileSelected($event)"
-                    accept=".pdf,.doc,.docx,.jpg,.png"
-                  >
-                  <small class="text-muted">Allowed formats: PDF, DOC, DOCX, JPG, PNG | Max size: {{ maxFileSizeMB }} MB</small>
-                </div>
+        <!-- Section 1: Contact Info -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Contact Information</h6>
+
+          <div class="alert alert-info">
+            If you have visited before, just enter your contact number and your details will be prefilled.
+            You can modify any information if needed.
+          </div>
+
+          <div class="row g-4">
+            <!-- Contact Number -->
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="Contact Number" name="ContactNumber"
+                [(ngModel)]="appointment.ContactNumber" #ContactNumber="ngModel" (blur)="loadPatientDetails()" required
+                minlength="10" maxlength="15"
+                [class.is-invalid]="ContactNumber.invalid && (ContactNumber.touched || patientForm.submitted)">
+              <div class="invalid-feedback" *ngIf="ContactNumber.errors?.['required']">Contact Number is required</div>
+              <div class="invalid-feedback" *ngIf="ContactNumber.errors?.['minlength']">Contact Number is too short
               </div>
+              <div class="invalid-feedback" *ngIf="ContactNumber.errors?.['maxlength']">Contact Number is too long</div>
             </div>
 
-            <div class="mt-4 text-end">
-              <button type="submit" class="btn btn-primary">Submit</button>
+            <!-- Email -->
+            <div class="col-lg-6">
+              <input type="email" class="form-control" placeholder="Email" name="Email"
+                [(ngModel)]="appointment.PatientEmail" required #PatientEmail="ngModel"
+                [class.is-invalid]="PatientEmail.invalid && (PatientEmail.touched || patientForm.submitted)">
+              <div class="invalid-feedback">Valid Email is required</div>
+              <div class="invalid-feedback" *ngIf="PatientEmail.errors?.['email']">Enter a valid email</div>
             </div>
+          </div>
+        </div>
 
-    
-          </form>
-      </div>
+        <!-- Section 2: Personal Information -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Personal Information</h6>
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="First Name" name="FirstName"
+                [(ngModel)]="appointment.FirstName" #FirstName="ngModel" required
+                [class.is-invalid]="FirstName.invalid && (FirstName.touched || patientForm.submitted)">
+              <div class="invalid-feedback">First Name is required</div>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="Last Name" name="LastName"
+                [(ngModel)]="appointment.LastName" #LastName="ngModel" required
+                [class.is-invalid]="LastName.invalid && (LastName.touched || patientForm.submitted)">
+              <div class="invalid-feedback">Last Name is required</div>
+            </div>
+            <div class="col-lg-6">
+              <input type="date" class="form-control" name="DateOfBirth" [(ngModel)]="appointment.DateOfBirth"
+                #DateOfBirth="ngModel" required [max]="today"
+                [class.is-invalid]="DateOfBirth.invalid && (DateOfBirth.touched || patientForm.submitted)">
+              <div class="invalid-feedback">Date of Birth is required</div>
+            </div>
+            <div class="col-lg-6">
+              <select class="form-control" name="Gender" [(ngModel)]="appointment.Gender" #Gender="ngModel" required
+                [class.is-invalid]="Gender.invalid && (Gender.touched || patientForm.submitted)">
+                <option value="">Select Gender</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+              <div class="invalid-feedback">Gender is required</div>
+            </div>
+            <div class="col-lg-6">
+              <input type="text" class="form-control" placeholder="Insurance ID" name="InsuranceId"
+                [(ngModel)]="appointment.InsuranceInfo" #InsuranceId="ngModel"
+                [class.is-invalid]="InsuranceId.invalid && (InsuranceId.touched || patientForm.submitted)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Medical Information -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Medical Information</h6>
+          <div class="row g-4">
+            <div class="col-lg-12">
+              <textarea class="form-control" placeholder="Medical History" name="MedicalHistory"
+                [(ngModel)]="appointment.MedicalHistory"></textarea>
+            </div>
+            <div class="col-lg-12">
+              <textarea class="form-control" placeholder="Medical Concern" name="MedicalConcern"
+                [(ngModel)]="appointment.MedicalConcern"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Address Information -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Address Information</h6>
+          <div class="row g-4">
+            <div class="col-lg-3">
+              <select class="form-control" name="StateId" [(ngModel)]="appointment.StateId" #StateId="ngModel" required
+                [class.is-invalid]="StateId.invalid && (StateId.touched || patientForm.submitted)"
+                (change)="onStateChange()">
+                <option value="">Select State</option>
+                <option *ngFor="let state of statesList" [value]="state.StateId">{{ state.StateName }}</option>
+              </select>
+              <div class="invalid-feedback">State is required</div>
+            </div>
+            <div class="col-lg-3">
+              <select class="form-control" name="DistrictId" [(ngModel)]="appointment.DistrictId" #DistrictId="ngModel"
+                required [class.is-invalid]="DistrictId.invalid && (DistrictId.touched || patientForm.submitted)"
+                (change)="onDistrictChange()">
+                <option value="">Select District</option>
+                <option *ngFor="let district of districtsList" [value]="district.DistrictId">{{ district.DistrictName }}
+                </option>
+              </select>
+              <div class="invalid-feedback">District is required</div>
+            </div>
+            <div class="col-lg-3">
+              <select class="form-control" name="TalukaId" [(ngModel)]="appointment.TalukaId" #TalukaId="ngModel"
+                required [class.is-invalid]="TalukaId.invalid && (TalukaId.touched || patientForm.submitted)"
+                (change)="onTalukaChange()">
+                <option value="">Select Taluka</option>
+                <option *ngFor="let taluka of talukasList" [value]="taluka.TalukaId">{{ taluka.TalukaName }}</option>
+              </select>
+              <div class="invalid-feedback">Taluka is required</div>
+            </div>
+            <div class="col-lg-3">
+              <select class="form-control" name="CityId" [(ngModel)]="appointment.CityId" #CityId="ngModel" required
+                [class.is-invalid]="CityId.invalid && (CityId.touched || patientForm.submitted)">
+                <option value="">Select City</option>
+                <option *ngFor="let city of citiesList" [value]="city.CityId">{{ city.CityName }}</option>
+              </select>
+              <div class="invalid-feedback">City is required</div>
+            </div>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Address Line" name="Address"
+                [(ngModel)]="appointment.AddressLine" #Address="ngModel" required
+                [class.is-invalid]="Address.invalid && (Address.touched || patientForm.submitted)">
+              <div class="invalid-feedback">Address is required</div>
+            </div>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" placeholder="Pincode" name="Pincode"
+                [(ngModel)]="appointment.Pincode" #Pincode="ngModel" required
+                [class.is-invalid]="Pincode.invalid && (Pincode.touched || patientForm.submitted)">
+              <div class="invalid-feedback">Pincode is required</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Optional Medical Document -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">
+            Medical Document <span class="text-muted">(Optional)</span>
+          </h6>
+          <div class="row g-4">
+            <div class="col-lg-12">
+              <input type="file" class="form-control" (change)="onFileSelected($event)"
+                accept=".pdf,.doc,.docx,.jpg,.png">
+              <small class="text-muted">Allowed formats: PDF, DOC, DOCX, JPG, PNG | Max size: {{ maxFileSizeMB }}
+                MB</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 text-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+      </form>
     </div>
   </div>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="container p-4 mt-4">
-    <div class="card shadow-sm">
-      <div class="card-header text-dark">
-        <h5 class="mb-0">Patient Details</h5>
-      </div>
-      <div class="card-body">
-
-      </div>
-    </div>
-  </div> -->
-  
+</div>

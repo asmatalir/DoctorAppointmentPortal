@@ -1,88 +1,145 @@
 <div class="container mt-4">
-
-  <!-- Row with heading -->
   <div class="row mb-3">
     <div class="col-12">
-      <h4 class="mb-0">Available Doctors</h4>
+      <h4 class="mb-0">Search Doctors</h4>
     </div>
   </div>
+  <!-- Filters Section -->
+  <div class="filter-block p-3 mb-4 rounded border bg-white shadow-sm">
+    <div class="row g-3 align-items-end">
+      <!-- Specialization Filter -->
+      <div class="col-md-3 mb-2 mb-md-0">
+        <label class="form-label fw-semibold">Specialization</label>
+        <ng-select [items]="specializationsList" bindLabel="SpecializationName" bindValue="SpecializationId"
+          placeholder="Select Specialization" [(ngModel)]="filters.SelectedSpecializationId" [clearable]="true"
+          (change)="loadDoctors()">
+        </ng-select>
+      </div>
 
-  <!-- Row with doctor cards -->
-  <div class="row">
-    <div class="col-12">
-      <div *ngFor="let doc of doctorsList; let i = index" class="card doctor-card mb-3">
-        <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
-          
-          <!-- Left: Doctor Info -->
-          <div class="d-flex align-items-center flex-grow-1 mb-2 mb-md-0">
-            
-            <!-- Profile Picture -->
-            <div class="avatar-lg me-3">
-              <img src="images/defaultprofilepicmale.jpg" alt="Doctor Photo" class="avatar-img">
-            </div>
-      
-            <!-- Doctor Details -->
-            <div>
-              <h5 class="doctor-name mb-1">{{ doc.FirstName }} {{ doc.LastName }}</h5>
-              
-              <!-- Specializations -->
-              <div *ngIf="doc.Specializations.length > 0" class="mb-1">
-                <span *ngFor="let spec of doc.Specializations" class="badge bg-primary me-1">
-                  {{ spec }}
-                </span>
-              </div>
+      <!-- Location Filter -->
+      <div class="col-md-3 mb-2 mb-md-0">
+        <label class="form-label fw-semibold">Location</label>
+        <ng-select [items]="CitiesList" bindLabel="CityName" bindValue="CityId" placeholder="Select City"
+          [(ngModel)]="filters.SelectedCityId" [clearable]="true" (change)="loadDoctors()">
+        </ng-select>
+      </div>
 
-              <!-- Qualifications -->
-              <p class="text-dark mb-1">
-                <i class="ri-medal-line me-1"></i> {{ doc.Qualifications.join(' • ') }}
-              </p>
-              
 
-              <!-- <div *ngIf="doc.Qualifications.length > 0" class="mb-1">
+      <!-- Gender Filter -->
+      <div class="col-md-2 mb-2 mb-md-0">
+        <label class="form-label fw-semibold">Gender</label>
+        <select class="form-select" [(ngModel)]="filters.Gender" name="Gender" (change)="loadDoctors()">
+          <option value="" disabled selected>Select Gender</option>
+          <option [ngValue]="'M'">Male</option>
+          <option [ngValue]="'F'">Female</option>
+          <option [ngValue]="'O'">Other</option>
+        </select>
+      </div>
+
+    <div class="col-md-2 d-flex align-items-end mb-2 mb-md-0">
+      <button type="button" class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+
+      <!-- Clear Button -->
+      <!-- <div class="col-md-1 text-md-end mt-3 mt-md-0">
+      <button class="btn btn-outline-secondary btn-sm w-100" (click)="clearFilters()">
+        Clear
+      </button>
+    </div> -->
+    </div>
+  </div>
+  <div class="filter-block p-3 mb-4 rounded border bg-white shadow-sm">
+    <!-- Row with heading -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <h5 class="mb-0">Available Doctors</h5>
+      </div>
+    </div>
+
+    <!-- Row with doctor cards -->
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="doctorsList && doctorsList.length > 0; else noResults">
+          <div *ngFor="let doc of doctorsList; let i = index" class="card doctor-card mb-3">
+            <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
+
+              <!-- Left: Doctor Info -->
+              <div class="d-flex align-items-center flex-grow-1 mb-2 mb-md-0">
+
+                <!-- Profile Picture -->
+                <div class="avatar-lg me-3">
+                  <img src="images/defaultprofilepicmale.jpg" alt="Doctor Photo" class="avatar-img">
+                </div>
+
+                <!-- Doctor Details -->
+                <div>
+                  <h5 class="doctor-name mb-1">{{ doc.FirstName }} {{ doc.LastName }}</h5>
+
+                  <!-- Specializations -->
+                  <div *ngIf="doc.Specializations.length > 0" class="mb-1">
+                    <span *ngFor="let spec of doc.Specializations" class="badge bg-primary me-1">
+                      {{ spec }}
+                    </span>
+                  </div>
+
+                  <!-- Qualifications -->
+                  <p class="text-dark mb-1">
+                    <i class="ri-medal-line me-1"></i> {{ doc.Qualifications.join(' • ') }}
+                  </p>
+
+
+                  <!-- <div *ngIf="doc.Qualifications.length > 0" class="mb-1">
                 <span *ngFor="let qual of doc.Qualifications" class="bg-primary me-1">
                   {{ qual }}
                 </span>
               </div> -->
-              
 
-              <!-- Hospital -->
-              <p class="hospital-name text-muted mb-1">{{ doc.HospitalName }}</p>
 
-              <!-- Experience -->
-              <p class="hospital-name text-muted mb-1">Experience: {{ doc.ExperienceYears }} yrs</p>
+                  <!-- Hospital -->
+                  <p class="hospital-name text-muted mb-1">{{ doc.HospitalName }}</p>
 
-              <!-- Address and Fees -->
-              <div class="doctor-stats text-muted">
-                <span class="me-3"><i class="ri-map-pin-2-line"></i> {{ doc.Address }}</span>
-                <span> {{ doc.ConsultationFees | currency:'INR':'symbol':'1.0-0' }}</span>
+                  <!-- Experience -->
+                  <p class="hospital-name text-muted mb-1">Experience: {{ doc.ExperienceYears }} yrs</p>
+
+                  <!-- Address and Fees -->
+                  <div class="doctor-stats text-muted">
+                    <span class="me-3"><i class="ri-map-pin-2-line"></i> {{ doc.Address }}</span>
+                    <span> {{ doc.ConsultationFees | currency:'INR':'symbol':'1.0-0' }}</span>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Right: Book Appointment Button -->
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-primary book-btn" (click)="openBookingModal(doc)">
+                  Book Appointment
+                </button>
               </div>
 
             </div>
           </div>
-      
-          <!-- Right: Book Appointment Button -->
-          <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-primary book-btn" (click)="openBookingModal(doc)">
-              Book Appointment
-            </button>
-          </div>
-      
         </div>
       </div>
+
+      <ng-template #noResults>
+        <div class="text-center py-5 text-muted">
+          <i class="ri-emotion-sad-line fs-2 d-block mb-2"></i>
+          <h6>No results found</h6>
+          <p class="mb-0">Try adjusting your filters or search criteria.</p>
+        </div>
+      </ng-template>
     </div>
-  </div>
 
-  <div class="d-flex justify-content-end mt-3">
-    <ngb-pagination *ngIf="TotalRecords > 0"
-      class="d-flex justify-content-center shadow-sm p-2 bg-white rounded" [collectionSize]="TotalRecords"
-      [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3" [boundaryLinks]="true"
-      (pageChange)="loadDoctors()">
-    </ngb-pagination>
-  </div>
+    <div class="d-flex justify-content-end mt-3">
+      <ngb-pagination *ngIf="TotalRecords > 0" class="d-flex justify-content-center shadow-sm p-2 bg-white rounded"
+        [collectionSize]="TotalRecords" [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3"
+        [boundaryLinks]="true" (pageChange)="loadDoctors()">
+      </ngb-pagination>
+    </div>
 
+  </div>
 </div>
 <!-- Doctor Card -->
-
-
-
-

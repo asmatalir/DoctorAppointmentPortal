@@ -26,7 +26,7 @@ export class DoctorsModel {
     Gender?: string = '';
     ExperienceYears: number | null = null;
     ConsultationFees: number | null = null;
-    DateOfBirth?: string = '';            
+    DateOfBirth: string = '';            
     ContactNumber?: string = '';          
     DoctorEmail?: string = '';                  
     UserName?: string = '';               
@@ -36,7 +36,7 @@ export class DoctorsModel {
     Description?: string = '';
     HospitalName?: string = '';
     Specialization : string = '';
-    SelectedSpecializationId : number;
+    SelectedSpecializationId : number | null = null;
     SpecializationId : number;
     SpecializationIds: string = '';  
     QualificationIds: string = ''; 
@@ -47,6 +47,7 @@ export class DoctorsModel {
      DistrictId?: number | null = null;
      TalukaId?: number | null = null;
      CityId?: number | null = null;
+     SelectedCityId?: number | null = null;
      AddressLine?: string = '';
      Pincode?: string = '';
  

@@ -68,7 +68,31 @@
     color: #fff;
     border-color: #0d6efd;
   }
-  
+  .filter-block {
+  border: 1px solid #dee2e6; /* light grey border */
+  background-color: #fafafa;
+  border-radius: 8px;
+}
+
+.filter-block .form-label {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+ng-select, .form-control {
+  width: 100%;
+}
+
+.btn-outline-secondary {
+  border-radius: 6px;
+}
+
+@media (max-width: 767px) {
+  .filter-block {
+    padding: 1rem;
+  }
+}
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .doctor-card {

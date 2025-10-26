@@ -20,8 +20,8 @@ export class AuthGuard implements CanActivate {
        debugger;
     // If no token or token is expired, redirect to login
     if (!token || this.authenticationService.isTokenExpired(token)) {
-      sessionStorage.removeItem('token');  
-      this.router.navigate(['/login']);
+      sessionStorage.clear(); 
+      this.router.navigate(['']);
       return false;
     }
 

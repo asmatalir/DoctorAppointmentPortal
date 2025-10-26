@@ -1,65 +1,71 @@
-
-.navbar-brand img {
-  height: 35px;
+.navbar {
+  height: 70px; /* fixed navbar height */
+  padding: 0 1rem !important; /* minimal vertical padding */
+  display: flex;
+  align-items: center; /* vertically center everything */
 }
 
-.nav-link {
-  font-weight: 500;
-  color: #2d2d2d !important;
-  margin-right: 20px;
+.navbar-logo {
+  max-height: 36px;  /* large enough but fits in navbar */
+  width: auto;       /* keep aspect ratio */
+  object-fit: contain;
+  display: block;
 }
 
-.nav-link:hover {
-  color: #199fd9 !important;
-}
-
-.btn-login {
-  border: 1px solid #199fd9;
-  color: #199fd9;
-  border-radius: 20px;
-  padding: 5px 15px;
-}
-
-.btn-login:hover {
-  background-color: #199fd9;
-  color: white;
-}
-
-.location-search {
-  border-radius: 25px;
-  border: 1px solid #ddd;
-  padding: 6px 15px;
-  width: 300px;
-}
-
-.user-info {
+.navbar-brand {
   display: flex;
   align-items: center;
-  cursor: pointer;
+  padding: 0; /* remove extra Bootstrap padding */
 }
 
-.profile-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
+  .nav-link {
+    font-weight: 500;
+    color: #2d2d2d !important;
+    margin-right: 10px; /* reduce gap between links */
+  }
 
-.user-details {
-  display: flex;
-  flex-direction: column;
-}
+  .btn-login {
+    border: 1px solid #199fd9;
+    color: #199fd9;
+    border-radius: 20px;
+    padding: 5px 15px;
+  }
 
-.username {
+  .btn-login:hover {
+    background-color: #199fd9;
+    color: white;
+  }
+
+  .user-info img.profile-img {
+    width: 45px;       /* larger image */
+    height: 45px;      /* larger image */
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 8px; /* space between image and name */
+  }
+
+  .user-details .username {
+    font-weight: 500;
+  }
+
+  .user-details .role {
+    font-size: 0.8rem;
+    color: gray;
+  }
+
+/* Custom active link style */
+.nav-link.active {
   font-weight: bold;
+  color: #7b99c5 !important;
 }
 
-.role {
-  font-size: 0.8rem;
-  color: gray;
-}
 
-/* Optional: adjust dropdown position */
-.dropdown-menu {
-  min-width: 120px;
+  @media (max-width: 768px) {
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar-logo {
+    max-height: 42px;
+  }
 }

@@ -61,8 +61,8 @@ namespace DoctorAppointmentPortal.Controllers
                 // Case-insensitive check
                 var doctorIdClaim = identity?.Claims
                     ?.FirstOrDefault(c => c.Type.Equals("DoctorId", StringComparison.OrdinalIgnoreCase));
-
-                if (doctorIdClaim != null && int.TryParse(doctorIdClaim.Value, out int id))
+                int id;
+                if (doctorIdClaim != null && int.TryParse(doctorIdClaim.Value, out id))
                     return id;
 
                 return 0;

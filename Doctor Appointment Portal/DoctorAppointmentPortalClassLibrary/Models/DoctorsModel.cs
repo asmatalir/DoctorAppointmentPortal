@@ -35,7 +35,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
 
         public string SearchedDoctorName { get; set; }
         public int SelectedSpecializationId { get; set; }
-        public int SelectedCity { get; set; }
+        public int SelectedCityId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
@@ -44,7 +44,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public string SpecializationNames { get; set; }
         public string SpecializationIds { get; set; }
         public bool IsActive { get; set; }
-        public string CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }

@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 using Doctor_Appointment_Portal.Helper;
+using DoctorAppointmentPortal.Controllers;
 
 namespace Doctor_Appointment_Portal.Controllers
 {
-    public class DoctorsController : ApiController
+    public class DoctorsController : BaseApiController
     {
         Doctors doctorsDAL = new Doctors();
         Specializations specializationsDAL = new Specializations();
@@ -21,7 +22,7 @@ namespace Doctor_Appointment_Portal.Controllers
         DoctorAvailabilityExceptions doctorAvailabilityExceptionsDAL = new DoctorAvailabilityExceptions();
         DoctorAvailableSlots doctorSlotsDAL = new DoctorAvailableSlots();
 
-        [JwtAuthorize]
+        
         [HttpPost]
         public IHttpActionResult GetLists(DoctorsModel model)
         {
@@ -31,6 +32,7 @@ namespace Doctor_Appointment_Portal.Controllers
                 var doctors = doctorsDAL.GetList(model);
                 var specializations = specializationsDAL.GetList();
                 var qualifications = qualificationsDAL.GetList();
+                var cities = citiesDAL.GetList();
 
                 // Map to response model
                 var response = new DoctorsModel
@@ -38,7 +40,8 @@ namespace Doctor_Appointment_Portal.Controllers
                     TotalRecords = doctorsDAL.TotalRecords,
                     DoctorsList = doctors,
                     SpecializationsList = specializations,
-                    QualificationsList = qualifications
+                    QualificationsList = qualifications,
+                    CitiesList = cities
                 };
 
                 return Ok(response);
@@ -50,7 +53,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
         }
 
-
+        [JwtAuthorize]
         [HttpGet]
         public IHttpActionResult GetDoctorDetails(int id)
         {
@@ -71,10 +74,6 @@ namespace Doctor_Appointment_Portal.Controllers
                 // Load dropdown lists
                 model.SpecializationsList = specializationsDAL.GetList();
                 model.QualificationsList = qualificationsDAL.GetList();
-                model.StatesList = statesDAL.GetList();
-                model.DistrictsList = districtsDAL.GetList();
-                model.TalukasList = talukasDAL.GetList();
-                model.CitiesList = citiesDAL.GetList();
                 model.DoctorAvailabilityList = doctorAvailabilitiesDAL.GetDetails(id);
                 model.DoctorAvailabilityExceptionsList = doctorAvailabilityExceptionsDAL.GetDetails(id);
 
@@ -87,6 +86,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
         }
 
+        [JwtAuthorize]
         [HttpGet]
         public IHttpActionResult GetDoctorAvailabilityDetails(int id)
         {
@@ -108,15 +108,23 @@ namespace Doctor_Appointment_Portal.Controllers
         }
 
 
-
+        [JwtAuthorize]
         [HttpPost]
         public IHttpActionResult SaveAddEditDoctor(DoctorsModel model)
         {
             try
             {
                 int doctorId = -1;
-
-                model.HashedPassword = PasswordHasher.HashPassword(model.HashedPassword);
+                model.CreatedBy = CurrentUserId;
+                if (!string.IsNullOrEmpty(model.HashedPassword))
+                {
+                    model.HashedPassword = PasswordHasher.HashPassword(model.HashedPassword);
+                }
+                else
+                {
+                    
+                    model.HashedPassword = null;
+                }
                 doctorId = doctorsDAL.SaveDoctorDetails(model);
                 return Ok(new { success = true, message = "Doctor created successfully.", doctorId });
 
@@ -128,6 +136,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
         }
 
+        [JwtAuthorize]
         [HttpPost]
         public IHttpActionResult SaveDoctorAvailability(DoctorsModel model)
         {
@@ -137,7 +146,7 @@ namespace Doctor_Appointment_Portal.Controllers
                 {
                     return BadRequest("DoctorId is missing or invalid.");
                 }
-
+                model.CreatedBy = CurrentUserId;
                 int result = doctorsDAL.SaveDoctorAvailability(model);
 
                 if (result > 0)
@@ -159,6 +168,7 @@ namespace Doctor_Appointment_Portal.Controllers
                 });
             }
         }
+
 
         [HttpGet]
         public IHttpActionResult GetDoctorSlots(int id)

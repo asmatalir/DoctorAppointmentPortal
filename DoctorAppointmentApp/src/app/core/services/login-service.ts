@@ -13,7 +13,9 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   login(model : UserProfilesModel): Observable<any> {
+    debugger;
     return this.http.post<any>(environment.apiBaseUrl + 'Accounts/login' , model);
+
   }
  
   ValidateToken(): Observable<any> {

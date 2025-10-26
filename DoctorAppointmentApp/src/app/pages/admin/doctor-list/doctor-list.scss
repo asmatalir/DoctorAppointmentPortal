@@ -1,0 +1,28 @@
+.action-icon {
+  font-size: 18px;
+  color: rgb(110, 124, 171);
+  cursor: pointer;
+  border: none !important;
+  background: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: color 0.2s ease;
+}
+.delete-icon {
+    color: rgb(172, 106, 106);
+}
+
+.action-icon:hover {
+  color: rgb(78, 78, 157);
+}
+
+.delete-icon:hover {
+  color: red;
+}
+
+.action-icon:focus,
+.action-icon:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}

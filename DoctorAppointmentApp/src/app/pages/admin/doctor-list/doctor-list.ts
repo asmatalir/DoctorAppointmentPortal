@@ -52,9 +52,9 @@ export class DoctorList {
 
   openAddEditDoctor(DoctorId : number = 0){
     if (DoctorId > 0) {
-      this.router.navigate(['/doctors/edit', DoctorId]);
+      this.router.navigate(['admin/edit-doctor', DoctorId]);
     } else {
-      this.router.navigate(['/doctors/add']);
+      this.router.navigate(['admin/add-doctor']);
     }
   }
   
@@ -62,7 +62,10 @@ export class DoctorList {
     this.filters = new DoctorsModel();
     this.loadDoctors();
    }
+openDoctorAvailability(doctorId: number) {
+  this.router.navigate(['admin/edit-availability', doctorId]);
 
+}
 
 
   

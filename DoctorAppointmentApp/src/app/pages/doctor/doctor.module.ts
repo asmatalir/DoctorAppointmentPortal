@@ -5,6 +5,7 @@ import { DoctorRoutingModule } from './doctor-routing.module';
 import { NgbDropdown, NgbDropdownModule, NgbModule, NgbPaginationModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FormsModule } from '@angular/forms';
     NgbToastModule,
     NgSelectModule,
     NgbPaginationModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    SharedModule
     
   ]
 })

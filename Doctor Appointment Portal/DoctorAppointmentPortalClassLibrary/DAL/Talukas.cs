@@ -49,5 +49,41 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             return talukaList;
         }
+
+        public List<TalukasModel> GetTalukasByDistrict(int districtId)
+        {
+            List<TalukasModel> talukaList = new List<TalukasModel>();
+
+            try
+            {
+                DbCommand com = db.GetStoredProcCommand("GetTalukasByDistrict");
+                db.AddInParameter(com, "@DistrictId", DbType.Int32, districtId);
+
+                DataSet ds = db.ExecuteDataSet(com);
+
+                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    DataTable dt = ds.Tables[0];
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        TalukasModel taluka = new TalukasModel()
+                        {
+                            TalukaId = Convert.ToInt32(row["TalukaId"]),
+                            TalukaName = Convert.ToString(row["TalukaName"]),
+                            DistrictId = Convert.ToInt32(row["DistrictId"])
+                        };
+
+                        talukaList.Add(taluka);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in GetTalukasByDistrict: {ex.Message}");
+            }
+
+            return talukaList;
+        }
+
     }
 }

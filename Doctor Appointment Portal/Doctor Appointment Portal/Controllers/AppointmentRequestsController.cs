@@ -5,6 +5,7 @@ using DoctorAppointmentPortalClassLibrary.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -24,6 +25,7 @@ namespace Doctor_Appointment_Portal.Controllers
         Talukas talukasDAL = new Talukas();
         Cities citiesDAL = new Cities();
 
+        [JwtAuthorize]
         [HttpPost]
         public IHttpActionResult AppointmentRequestsGetLists(AppointmentRequestsModel model)
         {
@@ -36,6 +38,7 @@ namespace Doctor_Appointment_Portal.Controllers
                 {
                     AppointmentRequestList = appointments,
                     SpecializationsList = specializationDAL.GetList(),
+                    StatusesList = statusesDAL.GetList(),
                     TotalRecords = appointmentRequestsDAL.TotalRecords,
                 };
 
@@ -74,7 +77,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
         }
 
-
+        [JwtAuthorize]
         [HttpPost]
         public IHttpActionResult DoctorAppointmentUpdateStatus(AppointmentRequestsModel model)
         {
@@ -83,7 +86,7 @@ namespace Doctor_Appointment_Portal.Controllers
 
 
                 bool isUpdated = false;
-
+                model.LastModifiedBy = CurrentUserId;
                 // 🩺 Handle RESCHEDULE specifically
                 if (model.Action == "Rescheduled")
                 {
@@ -97,7 +100,7 @@ namespace Doctor_Appointment_Portal.Controllers
 
                 if (!isUpdated)
                 {
-                    return BadRequest("Failed to update appointment status.");
+                    return Ok(new { success = false, message = "Action not allowed. Appointment already handled." });
                 }
 
 
@@ -109,66 +112,42 @@ namespace Doctor_Appointment_Portal.Controllers
                 // -----------------------
                 // 1️⃣  Email to Doctor
                 // -----------------------
+                // Path to templates
+                string templatesFolder = ConfigurationManager.AppSettings["EmailTemplatesFolder"];
+
+                // Combine with base directory
+                string doctorTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatesFolder, "DoctorAppointmentUpdate.html");
+                string patientTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatesFolder, "PatientAppointmentUpdate.html");
+
+                // Load templates
+                string doctorBody = File.ReadAllText(doctorTemplatePath);
+                string patientBody = File.ReadAllText(patientTemplatePath);
+
+                // Replace placeholders for doctor
+                doctorBody = doctorBody.Replace("{DoctorName}", model.DoctorName)
+                                       .Replace("{Action}", model.Action)
+                                       .Replace("{PatientName}", model.PatientName)
+                                       .Replace("{AppointmentDate}", appointmentDateStr)
+                                       .Replace("{StartTime}", startTimeStr)
+                                       .Replace("{EndTime}", endTimeStr);
+
                 string doctorSubject = $"Appointment {model.Action}";
-
-                string doctorBody = $@"
-                    <p>Dear Dr. {model.DoctorName},</p>
-
-                    <p>The following appointment has been <strong>{model.Action}</strong>. Please find the updated details below:</p>
-
-                    <table style='border-collapse: collapse;'>
-                        <tr>
-                            <td style='padding: 4px;'><strong>Patient Name:</strong></td>
-                            <td style='padding: 4px;'>{model.PatientName}</td>
-                        </tr>
-                        <tr>
-                            <td style='padding: 4px;'><strong>New Date:</strong></td>
-                            <td style='padding: 4px;'>{appointmentDateStr}</td>
-                        </tr>
-                        <tr>
-                            <td style='padding: 4px;'><strong>New Time:</strong></td>
-                            <td style='padding: 4px;'>{startTimeStr} to {endTimeStr}</td>
-                        </tr>
-                    </table>
-
-                    <p>Please review your updated schedule in your dashboard.</p>
-
-                    <p>Thank you,<br/>
-                    <strong>Doctor Appointment Portal Team</strong></p>";
-
                 EmailHelper.SendEmail(model.DoctorEmail, doctorSubject, doctorBody, isHtml: true);
 
+                // Replace placeholders for patient
+                patientBody = patientBody.Replace("{PatientName}", model.PatientName)
+                                         .Replace("{DoctorName}", model.DoctorName)
+                                         .Replace("{Action}", model.Action)
+                                         .Replace("{AppointmentDate}", appointmentDateStr)
+                                         .Replace("{StartTime}", startTimeStr)
+                                         .Replace("{EndTime}", endTimeStr);
 
-                // -----------------------
-                // 2️⃣  Email to Patient
-                // -----------------------
                 string patientSubject = $"Appointment {model.Action}";
-
-                string patientBody = $@"
-                    <p>Dear {model.PatientName},</p>
-
-                    <p>Your appointment with <strong>Dr. {model.DoctorName}</strong> has been <strong>{model.Action}</strong>. Please find the updated details below:</p>
-
-                    <table style='border-collapse: collapse;'>
-                        <tr>
-                            <td style='padding: 4px;'><strong>Date:</strong></td>
-                            <td style='padding: 4px;'>{appointmentDateStr}</td>
-                        </tr>
-                        <tr>
-                            <td style='padding: 4px;'><strong>Time:</strong></td>
-                            <td style='padding: 4px;'>{startTimeStr} to {endTimeStr}</td>
-                        </tr>
-                    </table>
-
-                    <p>Please check your portal for the latest appointment status.</p>
-
-                    <p>Thank you,<br/>
-                    <strong>Doctor Appointment Portal Team</strong></p>";
-
                 EmailHelper.SendEmail(model.PatientEmail, patientSubject, patientBody, isHtml: true);
 
 
-                return Ok(new { success = true });
+
+                return Ok(new { success = true, message = "Appointment updated successfully." });
             }
             catch (Exception ex)
             {
@@ -184,13 +163,6 @@ namespace Doctor_Appointment_Portal.Controllers
             {
 
                  model = appointmentRequestsDAL.LoadPatientDetails(contactNumber);
-
-                // Load dropdown lists
-
-                model.StatesList = statesDAL.GetList();
-                model.DistrictsList = districtsDAL.GetList();
-                model.TalukasList = talukasDAL.GetList();
-                model.CitiesList = citiesDAL.GetList();
 
 
                 return Ok(model);
@@ -279,7 +251,6 @@ namespace Doctor_Appointment_Portal.Controllers
                 var jsonModel = httpRequest["model"];
                 var model = JsonConvert.DeserializeObject<AppointmentRequestsModel>(jsonModel);
 
-                model.CreatedBy = model.DoctorId;
                 model.SelectedSpecializationId = 1;
 
                 string uploadRootFolder = System.Configuration.ConfigurationManager.AppSettings["UploadFolder"];
@@ -324,33 +295,47 @@ namespace Doctor_Appointment_Portal.Controllers
                 string startTimeStr = model.StartTime.ToString(@"hh\:mm");
                 string endTimeStr = model.EndTime.ToString(@"hh\:mm");
 
-                string doctorSubject = "New Appointment Request Received";
-                string doctorBody = $@"
-            <p>Dear Dr. {model.DoctorName},</p>
-            <p>You have received a new appointment request. Please find the details below:</p>
-            <ul>
-                <li><strong>Patient Name:</strong> {model.FirstName} {model.LastName}</li>
-                <li><strong>Preferred Date:</strong> {model.PreferredDate:yyyy-MM-dd}</li>
-                <li><strong>Time:</strong> {startTimeStr} to {endTimeStr}</li>
-                <li><strong>Medical Concern:</strong> {model.MedicalConcern}</li>
-            </ul>
-            <p>Please review and approve/reject the request in your dashboard.</p>
-            <p>Thank you,<br/>Doctor Appointment Portal Team</p>";
+                string templatesFolder = ConfigurationManager.AppSettings["EmailTemplatesFolder"];
 
+                // Combine with base directory
+                string doctorTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatesFolder, "DoctorAppointmentRequestEmail.html");
+                string patientTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatesFolder, "PatientAppointmentRequestEmail.html");
+
+                // Read the HTML template
+                string doctorBody = File.ReadAllText(doctorTemplatePath);
+
+                // Replace placeholders with actual values
+                doctorBody = doctorBody.Replace("{DoctorName}", model.DoctorName)
+                                       .Replace("{PatientName}", $"{model.FirstName} {model.LastName}")
+                                       .Replace("{PreferredDate}", model.PreferredDate.ToString("yyyy-MM-dd"))
+                                       .Replace("{StartTime}", startTimeStr)
+                                       .Replace("{EndTime}", endTimeStr)
+                                       .Replace("{MedicalConcern}", model.MedicalConcern);
+
+                // Email subject
+                string doctorSubject = "New Appointment Request Received";
+
+                // Send email
                 EmailHelper.SendEmail(model.DoctorEmail, doctorSubject, doctorBody, isHtml: true);
 
-                string patientSubject = "Appointment Request Received";
-                string patientBody =
-                    $"<p>Dear {model.FirstName},</p>" +
-                    $"<p>We have received your appointment request with Dr. {model.DoctorName}. Please find the details below:</p>" +
-                    $"<table style='border-collapse: collapse;'>" +
-                    $"  <tr><td style='padding: 4px;'><strong>Date:</strong></td><td style='padding: 4px;'>{model.PreferredDate:yyyy-MM-dd}</td></tr>" +
-                    $"  <tr><td style='padding: 4px;'><strong>Time:</strong></td><td style='padding: 4px;'>{startTimeStr} to {endTimeStr}</td></tr>" +
-                    $"</table>" +
-                    $"<p>You will be notified once the doctor approves or rejects the appointment.</p>" +
-                    $"<p>Thank you,<br/>Doctor Appointment Portal Team</p>";
 
-                EmailHelper.SendEmail(model.PatientEmail, patientSubject, patientBody, true);
+                
+                // Read the HTML template
+                string patientBody = File.ReadAllText(patientTemplatePath);
+
+                // Replace placeholders with actual values
+                patientBody = patientBody.Replace("{PatientName}", model.FirstName)
+                                         .Replace("{DoctorName}", model.DoctorName)
+                                         .Replace("{PreferredDate}", model.PreferredDate.ToString("yyyy-MM-dd"))
+                                         .Replace("{StartTime}", startTimeStr)
+                                         .Replace("{EndTime}", endTimeStr);
+
+                // Email subject
+                string patientSubject = "Appointment Request Received";
+
+                // Send email
+                EmailHelper.SendEmail(model.PatientEmail, patientSubject, patientBody, isHtml: true);
+
 
                 return Ok(new { message = "Appointment saved successfully." });
             }
