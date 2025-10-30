@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AppointmentRequestsModel } from '../../../core/models/AppointmentRequestsModel';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { AppointmentRequestService } from '../../../core/services/appointment-request-service';
+import { ToastService } from '../../../core/services/toast-service';
 
 @Component({
   selector: 'app-doctor-available-slots-modal',
@@ -39,7 +40,8 @@ export class DoctorAvailableSlotsModal implements OnInit {
     private doctorService: DoctorsService,
     private appointmentRequestService : AppointmentRequestService,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private toastService : ToastService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +74,6 @@ export class DoctorAvailableSlotsModal implements OnInit {
       next: (response) => {
         this.isLoading = false;
 
-        console.log('✅ API Response received:', response);
 
         if (Array.isArray(response)) {
           this.allSlots = response;
@@ -84,8 +85,8 @@ export class DoctorAvailableSlotsModal implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMsg = 'Error fetching slots.';
-        console.error(err);
+        this.toastService.show("Error loading slots", { classname: 'bg-danger text-white', delay: 1500 });
+
       }
     });
   }
@@ -100,8 +101,6 @@ export class DoctorAvailableSlotsModal implements OnInit {
       return slotDate === selectedDateOnly && s.StatusName === 'Available';
     });
   
-    console.log('📅 Selected Date:', selectedDateOnly);
-    console.log('🎯 Filtered Slots:', this.filteredSlots);
   
     this.selectedSlotId = undefined;
   }
@@ -119,33 +118,11 @@ export class DoctorAvailableSlotsModal implements OnInit {
     this.selectedSlotId = slotId;
   }
 
-  // confirmAppointment() {
-  //   const selectedSlot = this.filteredSlots.find(s => s.SlotId === this.selectedSlotId);
-  //   if (!selectedSlot) {
-  //     alert('Please select a slot before confirming.');
-  //     return;
-  //   }
-  
-  //   this.activeModal.close();
-  //   debugger;
-  //   this.router.navigate(['patient/patientdetails'], {
-  //     queryParams: {
-  //       doctorId: this.doctorId,
-  //       doctorName: this.doctorName,
-  //       doctorEmail : this.doctorEmail,
-  //       slotId: selectedSlot.SlotId,
-  //       startTime: selectedSlot.StartTime,
-  //       endTime: selectedSlot.EndTime,
-  //       slotDate: selectedSlot.SlotDate,
-  //       specializationId : this.SpecializationId
-  //     }
-  //   });
-  // }
-
   confirmAppointment() {
   const selectedSlot = this.filteredSlots.find(s => s.SlotId === this.selectedSlotId);
   if (!selectedSlot) {
-    alert('Please select a slot before confirming.');
+    this.toastService.show("Please select a slot before confirming", { classname: 'bg-warning text-white', delay: 1500 });
+
     return;
   }
   debugger;
@@ -170,12 +147,13 @@ export class DoctorAvailableSlotsModal implements OnInit {
 
     this.appointmentRequestService.RescheduleAppointment(appointmentModel).subscribe({
       next: (response) => {
-        alert('Appointment rescheduled successfully.');        
+        this.toastService.show("Appointment rescheduled successfully", { classname: 'bg-success text-white', delay: 1500 });      
         this.activeModal.close('rescheduled');
       },
       error: (err) => {
-        console.error(err);
-        alert('Failed to reschedule appointment.');
+
+        this.toastService.show("Failed to reschedule appointment", { classname: 'bg-danger text-white', delay: 1500 });      
+
       }
     });
   } else {

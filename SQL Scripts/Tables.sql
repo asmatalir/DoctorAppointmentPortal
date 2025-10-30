@@ -6,7 +6,7 @@ CREATE TABLE UserProfiles(
    Email NVARCHAR(100) NOT NULL UNIQUE,
    ContactNumber NVARCHAR(15) NOT NULL UNIQUE,
    UserName NVARCHAR(100) NOT NULL UNIQUE,
-   HashedPassword NVARCHAR(255),
+   HashedPassword NVARCHAR(255) NOT NULL,
    UserRoleId INT FOREIGN KEY REFERENCES UserRoles(UserRoleId),
    Gender CHAR(1) CONSTRAINT CHK_UserProfiles_Gender CHECK (Gender IN ('M','F','O')),
    DateOfBirth DATE,
@@ -53,10 +53,11 @@ CREATE TABLE PatientProfiles (
     PatientId INT IDENTITY(1,1) PRIMARY KEY,
     FirstName NVARCHAR(50) NOT NULL,
     LastName NVARCHAR(50) NOT NULL,
-    Email NVARCHAR(100) UNIQUE NULL,
-    PhoneNumber NVARCHAR(15) UNIQUE NOT NULL,
-    DateOfBirth DATE,
-    Gender CHAR(1) CONSTRAINT CHK_PatientProfiles_Gender CHECK (Gender IN ('M','F','O')),
+    Email NVARCHAR(100) NOT NULL,
+    PhoneNumber NVARCHAR(15) NOT NULL,
+	AadhaarNumber NVARCHAR(12) UNIQUE NOT NULL,
+    DateOfBirth DATE NOT NULL,
+    Gender CHAR(1) NOT NULL CHECK (Gender IN ('M','F','O')),
     InsuranceInfo NVARCHAR(100) NULL,
     MedicalHistory NVARCHAR(300) NULL,
 	AddressId INT NOT NULL FOREIGN KEY REFERENCES Addresses(AddressId),
@@ -81,11 +82,9 @@ CREATE TABLE DoctorSpecializations (
     DoctorSpecializationId INT IDENTITY(1,1) PRIMARY KEY,
     DoctorId INT NOT NULL FOREIGN KEY REFERENCES DoctorProfiles(DoctorId),
     SpecializationId INT NOT NULL FOREIGN KEY REFERENCES Specializations(SpecializationId),
-	IsActive BIT NOT NULL DEFAULT 1,
 	CreatedBy INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(UserId),
 	CreatedOn DATETIME NOT NULL,
-	LastModifiedBy INT FOREIGN KEY REFERENCES UserProfiles(UserId),
-	LastModifiedOn DATETIME
+
 );
 
 
@@ -106,11 +105,8 @@ CREATE TABLE DoctorQualifications (
     DoctorQualificationId INT IDENTITY(1,1) PRIMARY KEY,
     DoctorId INT NOT NULL FOREIGN KEY REFERENCES DoctorProfiles(DoctorId),
     QualificationId INT NOT NULL FOREIGN KEY REFERENCES Qualifications(QualificationId),
-	IsActive BIT NOT NULL DEFAULT 1,
     CreatedBy INT NOT NULL FOREIGN KEY REFERENCES UserProfiles(UserId),
 	CreatedOn DATETIME NOT NULL,
-	LastModifiedBy INT FOREIGN KEY REFERENCES UserProfiles(UserId),
-	LastModifiedOn DATETIME
 );
 
 CREATE TABLE States (
@@ -216,8 +212,8 @@ CREATE TABLE AppointmentRequests (
     SpecializationId INT NOT NULL FOREIGN KEY REFERENCES Specializations(SpecializationId),
     MedicalConcern NVARCHAR(300) NOT NULL,
     PreferredDate DATE NOT NULL,
-	StartTime TIME,
-	EndTime TIME,
+	StartTime TIME NOT NULL,
+	EndTime TIME NOT NULL,
 	FinalStartTime TIME,
 	FinalEndTime TIME,
 	FinalDate DATE,
@@ -257,7 +253,14 @@ CREATE TABLE DoctorAvailabilityExceptions (
     LastModifiedOn DATETIME       
 );
 
-
+/*Table created for ErrorLogs*/
+CREATE TABLE DoctorAppointmentErrorLogs (
+    LogId INT IDENTITY(1,1) PRIMARY KEY,
+    ErrorMessage NVARCHAR(MAX),
+    StackTrace NVARCHAR(MAX),
+	CreatedBy INT NULL  FOREIGN KEY REFERENCES UserInfo(UserId),
+    CreatedOn DATETIME
+)
 
 
 

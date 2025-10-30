@@ -14,6 +14,7 @@ namespace Doctor_Appointment_Portal.Controllers
     public class AccountsController : BaseApiController
     {
         Users usersDAL = new Users();
+        ErrorLogs errorLogsDAL = new ErrorLogs();
         [HttpPost]
         public IHttpActionResult Login(UserProfilesModel model)
         {
@@ -34,38 +35,12 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while login." });
             }
         }
 
-        [HttpGet]
-        public IHttpActionResult Hash(string password)
-        {
-            if (string.IsNullOrEmpty(password))
-                return BadRequest("Password is required.");
 
-            string hashedPassword = PasswordHasher.HashPassword(password);
-
-            return Ok(new { HashedPassword = hashedPassword });
-        }
-
-        [JwtAuthorize]
-        [HttpGet]
-        public IHttpActionResult TestClaims()
-        {
-            var userId = CurrentUserId;
-            var username = CurrentUsername;
-            var email = CurrentEmail;
-            var role = CurrentRole;
-
-            return Ok(new
-            {
-                userId,
-                username,
-                email,
-                role
-            });
-        }
     }
 }
 

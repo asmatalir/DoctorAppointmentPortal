@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientDetailsModel } from '../../../core/models/PatientDetailsModel';
 import { NgForm } from '@angular/forms';
@@ -6,6 +6,7 @@ import { AppointmentRequestService } from '../../../core/services/appointment-re
 import { AppointmentRequestsModel } from '../../../core/models/AppointmentRequestsModel';
 import { LocationService } from '../../../core/services/location-service';
 import { ToastService } from '../../../core/services/toast-service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class PatientForm {
   selectedFile: File | null = null;
   maxFileSizeMB = 5;
   today: string;
+  isExistingPatient: boolean = false;
 
 
   statesList: any[] = [];
@@ -36,24 +38,31 @@ export class PatientForm {
 
   appointment: AppointmentRequestsModel = new AppointmentRequestsModel();
 
+  @ViewChild('patientForm') form?: NgForm;
+  @ViewChild('unsavedChangesModal') unsavedChangesModal!: TemplateRef<any>;
+
+  private formSaved = false;
+  private modalRef: NgbModalRef;
+
   constructor(private route: ActivatedRoute,
     private appointmentRequestService: AppointmentRequestService,
     private locationService: LocationService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
     debugger;
 
-      const now = new Date();
-      this.today = now.toISOString().split('T')[0];
+    const now = new Date();
+    this.today = now.toISOString().split('T')[0];
 
     this.route.queryParams.subscribe(params => {
       this.appointment.DoctorId = +params['doctorId'];
       this.appointment.DoctorName = params['doctorName'];
       this.appointment.DoctorEmail = params['doctorEmail'],
-      this.appointment.SlotId = +params['slotId'];
+        this.appointment.SlotId = +params['slotId'];
       this.appointment.StartTime = params['startTime'];
       this.appointment.EndTime = params['endTime'];
       this.appointment.PreferredDate = params['slotDate'];
@@ -65,7 +74,8 @@ export class PatientForm {
   loadStates() {
     this.locationService.getStates().subscribe({
       next: data => this.statesList = data,
-      error: err => console.error('Error loading states', err)
+      error: err => this.toastService.show("Error loading states", { classname: 'bg-danger text-white', delay: 1500 })
+
     });
   }
 
@@ -80,7 +90,7 @@ export class PatientForm {
           this.loadTalukas(this.appointment.DistrictId, this.appointment.TalukaId as number);
         }
       },
-      error: err => console.error('Error loading districts', err)
+      error: err => this.toastService.show("Error loading districts", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
@@ -95,7 +105,7 @@ export class PatientForm {
           this.loadCities(this.appointment.TalukaId, this.appointment.CityId as number);
         }
       },
-      error: err => console.error('Error loading talukas', err)
+      error: err => this.toastService.show("Error loading talukas", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
@@ -109,16 +119,16 @@ export class PatientForm {
           this.appointment.CityId = selectedCityId;
         }
       },
-      error: err => console.error('Error loading cities', err)
+      error: err => this.toastService.show("Error loading cities", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
   // User changes state
   onStateChange() {
 
-    this.appointment.DistrictId = 0;
-    this.appointment.TalukaId = 0;
-    this.appointment.CityId = 0;
+    this.appointment.DistrictId = null;
+    this.appointment.TalukaId = null;
+    this.appointment.CityId = null;
     this.districtsList = [];
     this.talukasList = [];
     this.citiesList = [];
@@ -134,11 +144,11 @@ export class PatientForm {
     if (!this.appointment.StateId) {
       // this.toastr.warning('Please select a state first.');
       this.toastService.show("Please select a state first.", { classname: 'bg-warning text-white', delay: 1500 });
-      this.appointment.DistrictId = 0; // reset selection
+      this.appointment.DistrictId = null; // reset selection
       return;
     }
-    this.appointment.TalukaId = 0;
-    this.appointment.CityId = 0;
+    this.appointment.TalukaId = null;
+    this.appointment.CityId = null;
     this.talukasList = [];
     this.citiesList = [];
 
@@ -151,10 +161,10 @@ export class PatientForm {
 
     if (!this.appointment.TalukaId) {
       this.toastService.show("Please select a District first.", { classname: 'bg-warning text-white', delay: 1500 });
-      this.appointment.TalukaId = 0;
+      this.appointment.TalukaId = null;
       return;
     }
-    this.appointment.CityId = 0;
+    this.appointment.CityId = null;
     this.citiesList = [];
 
     if (this.appointment.TalukaId) {
@@ -164,11 +174,11 @@ export class PatientForm {
 
 
   loadPatientDetails() {
-    if (!this.appointment.ContactNumber) {
-      return; // Exit if contact number is empty
+    if (!this.appointment.AadhaarNumber) {
+      return;
     }
 
-    const enteredContact = this.appointment.ContactNumber;
+    const enteredAadhaarNumber = this.appointment.AadhaarNumber;
     const doctorContext = {
       DoctorId: this.appointment.DoctorId,
       DoctorName: this.appointment.DoctorName,
@@ -177,28 +187,39 @@ export class PatientForm {
       StartTime: this.appointment.StartTime,
       EndTime: this.appointment.EndTime,
       PreferredDate: this.appointment.PreferredDate,
-      SpecializationId: this.appointment.SelectedSpecializationId
+      SelectedSpecializationId: this.appointment.SelectedSpecializationId
     };
 
-    this.appointmentRequestService.GetPatientDetails(this.appointment.ContactNumber)
+    this.appointmentRequestService.GetPatientDetails(this.appointment.AadhaarNumber)
       .subscribe({
         next: (response: AppointmentRequestsModel) => {
-          // Assign the entire response to the patient model
-          Object.assign(this.appointment, response);
-          Object.assign(this.appointment, doctorContext);
-          this.appointment.ContactNumber = response.ContactNumber || enteredContact;
+          console.log(response);
+          debugger;
+          if (response && response.PatientId > 0) {
+            this.isExistingPatient = true;
+            Object.assign(this.appointment, response);
+            this.appointment.AadhaarNumber = response.AadhaarNumber || enteredAadhaarNumber;
 
-          if (this.appointment.DateOfBirth) {
-            const dob = new Date(this.appointment.DateOfBirth);
-            this.appointment.DateOfBirth = dob.toISOString().substring(0, 10);
-          } else {
-            this.appointment.DateOfBirth = ''; // empty if null
+            if (this.appointment.DateOfBirth) {
+              const dob = new Date(this.appointment.DateOfBirth);
+              this.appointment.DateOfBirth = dob.toISOString().substring(0, 10);
+            } else {
+              this.appointment.DateOfBirth = '';
+            }
+            this.loadDistricts(this.appointment.StateId as number, this.appointment.DistrictId as number);
           }
-          this.loadDistricts(this.appointment.StateId as number, this.appointment.DistrictId as number);
+          else {
+            this.isExistingPatient = false;
+            this.appointment = new AppointmentRequestsModel();
+            console.log("appointments: " , this.appointment)
+            this.appointment.AadhaarNumber = enteredAadhaarNumber;
+          }
+          Object.assign(this.appointment, doctorContext);
+
 
         },
         error: (err) => {
-          console.error("Error loading patient details:", err);
+          this.toastService.show("Error loading patient details", { classname: 'bg-danger text-white', delay: 1500 })
         }
       });
   }
@@ -209,7 +230,7 @@ export class PatientForm {
       const maxSizeBytes = this.maxFileSizeMB * 1024 * 1024;
 
       if (file.size > maxSizeBytes) {
-        alert(`File size should not exceed ${this.maxFileSizeMB} MB.`);
+        this.toastService.show(`File size should not exceed ${this.maxFileSizeMB} MB.`, { classname: 'bg-warning text-white', delay: 1500 });
         event.target.value = '';
         this.selectedFile = null;
         return;
@@ -221,17 +242,62 @@ export class PatientForm {
     }
   }
 
+  // canDeactivate(): boolean {
+  //   debugger;
+  //   if (this.form?.dirty) {
+  //     return confirm('Are you sure you want to discard your changes?');
+  //   }
+  //   return true;
+  // }
+
+  canDeactivate(): Promise<boolean> | boolean {
+    if (this.form?.dirty && !this.formSaved) {
+      return new Promise((resolve) => {
+        this.modalRef = this.modalService.open(this.unsavedChangesModal, { centered: true });
+        this.modalRef.result.then(
+          (result) => resolve(result === 'discard'),
+          () => resolve(false) // closed without confirming
+        );
+      });
+    }
+    return true;
+  }
+  confirmDiscard() {
+    this.modalRef?.close('discard');
+  }
+
+  stayHere() {
+    this.modalRef?.dismiss();
+  }
+
+  calculateAge(dob: string): number {
+    const birth = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
-      alert('Please fill all required fields before submitting.');
+      this.toastService.show("Please fill all required fields before submitting", { classname: 'bg-warning text-white', delay: 1500 })
+
       form.control.markAllAsTouched();
+      return;
+    }
+
+    const age = this.calculateAge(this.appointment.DateOfBirth);
+    if (age < 0 || age > 125) {
+      this.toastService.show("Invalid Date of Birth. Patient age exceeds the allowed limit.", { classname: 'bg-warning text-white', delay: 1500 });
       return;
     }
     const formData = new FormData();
     const appointmentJson = JSON.stringify(this.appointment);
     formData.append('model', appointmentJson);
 
-    // Append optional file if selected
     if (this.selectedFile) {
       formData.append('file', this.selectedFile, this.selectedFile.name);
     }
@@ -239,23 +305,27 @@ export class PatientForm {
 
     this.appointmentRequestService.SavePatientAppointment(formData).subscribe({
       next: (response) => {
-        console.log('Appointment saved:', response);
-        alert('Appointment saved successfully!');
+        this.toastService.show("Appointment saved successfully", { classname: 'bg-success text-white', delay: 1500 })
+
+
 
         form.resetForm();
+        this.formSaved = true;
+        form.form.markAsPristine();
         this.appointment = {} as AppointmentRequestsModel;
         this.selectedFile = null;
+        this.router.navigate(['']);
       },
       error: (error) => {
-        console.error('Error while saving appointment:', error);
-        alert('Failed to save appointment. Please try again later.');
+        this.toastService.show("Failed to save appointment. Please try again later", { classname: 'bg-danger text-white', delay: 1500 })
+
       }
     });
   }
 
-onCancel(){
-  this.router.navigate(['']); 
-}
+  onCancel() {
+    this.router.navigate(['']);
+  }
 
 
 }

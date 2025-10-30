@@ -1,40 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { AppointmentRequestsModel } from '../models/AppointmentRequestsModel';
-import { PatientDetailsModel } from '../models/PatientDetailsModel';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentRequestService {
-    constructor(private http: HttpClient) { }
+    constructor(private apiService : ApiService) { }
   
-    AppointmentRequestGetList(model: AppointmentRequestsModel): Observable<AppointmentRequestsModel[]> {
-      return this.http.post<AppointmentRequestsModel[]>(environment.apiBaseUrl + 'AppointmentRequests/AppointmentRequestsGetLists',model);
-    }
+  AppointmentRequestGetList(model: AppointmentRequestsModel): Observable<AppointmentRequestsModel[]> {
+    return this.apiService.post<AppointmentRequestsModel[]>('AppointmentRequests/AppointmentRequestsGetLists', model);
+  }
 
-    DoctorAppointmentRequestGetList(model: AppointmentRequestsModel): Observable<AppointmentRequestsModel[]> {
-      return this.http.post<AppointmentRequestsModel[]>(environment.apiBaseUrl + 'AppointmentRequests/DoctorApppointmentGetLists',model);
-    }
+  DoctorAppointmentRequestGetList(model: AppointmentRequestsModel): Observable<AppointmentRequestsModel[]> {
+    return this.apiService.post<AppointmentRequestsModel[]>('AppointmentRequests/DoctorApppointmentGetLists', model);
+  }
 
-    UpdateStatus(model : AppointmentRequestsModel): Observable<any> {
-      return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/DoctorAppointmentUpdateStatus',model);
-    }
+  UpdateStatus(model: AppointmentRequestsModel): Observable<any> {
+    return this.apiService.post<any>('AppointmentRequests/DoctorAppointmentUpdateStatus', model);
+  }
 
-    GetPatientDetails(contactNumber: string): Observable<AppointmentRequestsModel> {
-      debugger;
-      return this.http.get<AppointmentRequestsModel>(environment.apiBaseUrl + 'AppointmentRequests/GetPatientDetails' ,{params: { contactNumber: contactNumber }});
-    }
+  GetPatientDetails(aadhaarNumber: string): Observable<AppointmentRequestsModel> {
+    return this.apiService.get<AppointmentRequestsModel>('AppointmentRequests/GetPatientDetails', {
+      aadhaarNumber: aadhaarNumber
+    });
+  }
     
 
-    SavePatientAppointment(formData: FormData): Observable<any> {
-      return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/SavePatientAppointment', formData);
-    }
+  SavePatientAppointment(formData: FormData): Observable<any> {
+    return this.apiService.post<any>('AppointmentRequests/SavePatientAppointment', formData);
+  }
     
-    RescheduleAppointment(model: AppointmentRequestsModel): Observable<any> {
-     return this.http.post<any>( environment.apiBaseUrl + 'AppointmentRequests/DoctorAppointmentUpdateStatus', model);   
-    }
+  RescheduleAppointment(model: AppointmentRequestsModel): Observable<any> {
+    return this.apiService.post<any>('AppointmentRequests/DoctorAppointmentUpdateStatus', model);
+  }
     
 }

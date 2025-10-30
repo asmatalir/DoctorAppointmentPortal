@@ -1,4 +1,4 @@
-import { Component,ViewChild,TemplateRef } from '@angular/core';
+import { Component, ViewChild, TemplateRef } from '@angular/core';
 import { AppointmentRequestsModel } from '../../../core/models/AppointmentRequestsModel';
 import { SpecializationsModel } from '../../../core/models/SpecializationsModel';
 import { AppointmentRequestService } from '../../../core/services/appointment-request-service';
@@ -6,6 +6,7 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { StatusesModel } from '../../../core/models/StatusesModel';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorAvailableSlotsModal } from '../../Patient/doctor-available-slots-modal/doctor-available-slots-modal';
+import { ToastService } from '../../../core/services/toast-service';
 
 @Component({
   selector: 'app-doctor-appointment-requests',
@@ -14,19 +15,20 @@ import { DoctorAvailableSlotsModal } from '../../Patient/doctor-available-slots-
   styleUrl: './doctor-appointment-requests.scss'
 })
 export class DoctorAppointmentRequests {
-  loading : boolean = false;
-  filters : AppointmentRequestsModel = new AppointmentRequestsModel();
-  model : AppointmentRequestsModel = new AppointmentRequestsModel();
-  AppointmentRequestList : AppointmentRequestsModel[]=[];
-  specializationsList : SpecializationsModel[] = [];
-  statusesList : StatusesModel[] = [];
-  TotalRecords : number = 0;
-  
+  loading: boolean = false;
+  filters: AppointmentRequestsModel = new AppointmentRequestsModel();
+  model: AppointmentRequestsModel = new AppointmentRequestsModel();
+  AppointmentRequestList: AppointmentRequestsModel[] = [];
+  specializationsList: SpecializationsModel[] = [];
+  statusesList: StatusesModel[] = [];
+  TotalRecords: number = 0;
+
   @ViewChild('filterOffcanvas') offcanvasRef: any;
 
-  constructor(private appointmentRequestService : AppointmentRequestService,
+  constructor(private appointmentRequestService: AppointmentRequestService,
     private offcanvas: NgbOffcanvas,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private toastService: ToastService
   ) { }
 
 
@@ -34,57 +36,70 @@ export class DoctorAppointmentRequests {
   ngOnInit(): void {
     this.loadAppointmentRequests();
 
-    
+
   }
 
   loadAppointmentRequests() {
     this.loading = true;
+
+    if (this.filters.FromDate && this.filters.ToDate) {
+      if (new Date(this.filters.ToDate) < new Date(this.filters.FromDate)) {
+        this.toastService.show("To Date cannot be earlier than From Date", { classname: 'bg-warning text-white', delay: 1500 });
+        this.filters.FromDate='';
+        this.filters.ToDate='';
+        this.loadAppointmentRequests();
+        return;
+      }
+    }
+
     this.appointmentRequestService.DoctorAppointmentRequestGetList(this.filters).subscribe({
       next: (data: any) => {
         // Extract the actual doctors array from the response
         this.AppointmentRequestList = data.AppointmentRequestList || [];
         this.specializationsList = data.SpecializationsList || [];
         this.statusesList = data.StatusesList || [];
-        this.TotalRecords = data.TotalRecords;       
+        this.TotalRecords = data.TotalRecords;
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error loading appointment requests:', err);
+        if ((err as any).isAuthError) return;
+        this.toastService.show("Error loading appointment requests", { classname: 'bg-danger text-white', delay: 1500 })
         this.loading = false;
       }
     });
   }
 
-   openBookingModal(appointment: any,action : string) {
+  openBookingModal(appointment: any, action: string) {
     debugger;
-      const modalRef = this.modalService.open(DoctorAvailableSlotsModal, { size: 'lg', centered: true });
-      debugger;
-      // ✅ Set inputs correctly
-      appointment.SelectedSpecializationId=1;
-      modalRef.componentInstance.doctorId = appointment.DoctorId;
-      modalRef.componentInstance.doctorName = appointment.DoctorName;
-      modalRef.componentInstance.doctorEmail = appointment.DoctorEmail;
-      modalRef.componentInstance.patientName = appointment.PatientName;
-      modalRef.componentInstance.patientEmail = appointment.PatientEmail;
-      modalRef.componentInstance.appointmentRequestId = appointment.AppointmentRequestId;
-      modalRef.componentInstance.oldSlotId = appointment.SlotId;
-      modalRef.componentInstance.action = action;
-      modalRef.componentInstance.SpecializationId = appointment.SelectedSpecializationId;
-  
-      debugger;
-      modalRef.result.then(
-        (result) => {
-          if (result === 'rescheduled') {  
-            console.log('Appointment rescheduled, reloading list...');
-            this.loadAppointmentRequests(); 
-          }
-          else {
-            console.log('Modal closed with result:', result);
-          }
-        },
-        () => {} 
-      );
-    }
+    const modalRef = this.modalService.open(DoctorAvailableSlotsModal, { size: 'lg', centered: true });
+    debugger;
+    // ✅ Set inputs correctly
+    appointment.SelectedSpecializationId = 1;
+    modalRef.componentInstance.doctorId = appointment.DoctorId;
+    modalRef.componentInstance.doctorName = appointment.DoctorName;
+    modalRef.componentInstance.doctorEmail = appointment.DoctorEmail;
+    modalRef.componentInstance.patientName = appointment.PatientName;
+    modalRef.componentInstance.patientEmail = appointment.PatientEmail;
+    modalRef.componentInstance.appointmentRequestId = appointment.AppointmentRequestId;
+    modalRef.componentInstance.oldSlotId = appointment.SlotId;
+    modalRef.componentInstance.action = action;
+    modalRef.componentInstance.SpecializationId = appointment.SelectedSpecializationId;
+
+    debugger;
+    modalRef.result.then(
+      (result) => {
+        if (result === 'rescheduled') {
+          this.toastService.show("Appointment rescheduled", { classname: 'bg-success text-white', delay: 1500 })
+          this.loadAppointmentRequests();
+        }
+        else {
+          this.toastService.show(`${{ result }}`, { classname: 'bg-success text-white', delay: 1500 })
+
+        }
+      },
+      () => { }
+    );
+  }
 
   openEnd(content: TemplateRef<any>) {
     this.offcanvas.open(content, { position: 'end' });
@@ -97,46 +112,36 @@ export class DoctorAppointmentRequests {
   }
 
   clearFilters(offcanvas: any) {
-    this.filters=new AppointmentRequestsModel();
+    this.filters = new AppointmentRequestsModel();
     this.loadAppointmentRequests();
     offcanvas.dismiss();
   }
   updateAppointmentStatus(appointment: any, status: string) {
-    if(status == 'Accepted')
-    {
+    if (status == 'Accepted') {
       appointment.Action = 'Approved';
     }
-    else
-    {
+    else {
       appointment.Action = 'Rejected';
     }
-    // this.model.PatientEmail = appointment.PatientEmail;
-    // this.model.AppointmentRequestId= appointment.AppointmentRequestId;
-    // this.model.FinalDate = appointment.FinalDate;
-    // this.model.DoctorName = appointment.DoctorName;
-    // this.model.DoctorEmail = appointment.DoctorEmail;
-    // this.model.PatientName = appointment.PatientName;
-    // this.model.FinalStartTime = appointment.FinalStartTime;
-    // this.model.FinalEndTime = appointment.FinalEndTime;
-    // this.model = appointment;
     appointment.StartTime = appointment.FinalStartTime;
     appointment.EndTime = appointment.FinalEndTime;
     appointment.PreferredDate = appointment.FinalDate;
-    debugger;
-    console.log("Appointment Id  " + appointment.startTime)
-    console.log("Patient Email " + appointment.startTime)
+
     this.appointmentRequestService.UpdateStatus(appointment)
-        .subscribe({
-            next: () => {
-                alert(`Appointment ${status.toLowerCase()} and emails sent!`);
-                this.loadAppointmentRequests(); 
-            },
-            error: (err) => console.error(err)
-        });
+      .subscribe({
+        next: () => {
+          this.toastService.show(`Appointment ${status.toLowerCase()} successfully`, { classname: 'bg-success text-white', delay: 1500 });
+          this.loadAppointmentRequests();
+        },
+        error: (err) => {
+          if ((err as any).isAuthError) return;
+          this.toastService.show("Error Updating Status", { classname: 'bg-danger text-white', delay: 1500 })
+        }
+
+      });
   }
-  
-  rescheduleAppointment(){}
-  onFilterChange(){
+
+  onFilterChange() {
     this.loadAppointmentRequests();
   }
 }

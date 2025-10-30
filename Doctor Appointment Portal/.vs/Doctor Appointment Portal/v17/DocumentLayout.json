@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\doctor appointment portal\\controllers\\doctorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|solutionrelative:doctor appointment portal\\controllers\\doctorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\doctor appointment portal\\controllers\\appointmentrequestscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|solutionrelative:doctor appointment portal\\controllers\\appointmentrequestscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|d:\\doctor appointment portal\\doctorappointmentportal\\doctor appointment portal\\doctorappointmentportalclasslibrary\\models\\doctorsmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|solutionrelative:doctorappointmentportalclasslibrary\\models\\doctorsmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\doctorappointmentportalclasslibrary\\dal\\doctors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|solutionrelative:doctorappointmentportalclasslibrary\\dal\\doctors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\doctor appointment portal\\helper\\jwtauthorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|d:\\doctor appointment portal\\doctorappointmentportal\\doctor appointment portal\\doctor appointment portal\\helper\\jwtauthorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|solutionrelative:doctor appointment portal\\helper\\jwtauthorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|d:\\doctor appointment portal\\doctorappointmentportal\\doctor appointment portal\\doctor appointment portal\\helper\\emailtemplates\\doctorappointmentrequestemail.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|solutionrelative:doctor appointment portal\\helper\\emailtemplates\\doctorappointmentrequestemail.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|d:\\doctor appointment portal\\doctorappointmentportal\\doctor appointment portal\\doctorappointmentportalclasslibrary\\dal\\appointmentrequests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|solutionrelative:doctorappointmentportalclasslibrary\\dal\\appointmentrequests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|d:\\doctor appointment portal\\doctorappointmentportal\\doctor appointment portal\\doctorappointmentportalclasslibrary\\models\\appointmentrequestsmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D2280A7F-CA6D-4FD5-8F4B-6D11360FA334}|DoctorAppointmentPortalClassLibrary\\DoctorAppointmentPortalClassLibrary.csproj|solutionrelative:doctorappointmentportalclasslibrary\\models\\appointmentrequestsmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|d:\\doctor appointment portal\\doctorappointmentportal\\doctor appointment portal\\doctor appointment portal\\controllers\\doctorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97A11EA7-3AA2-47D9-9922-ED02819A1AD0}|Doctor Appointment Portal\\Doctor Appointment Portal.csproj|solutionrelative:doctor appointment portal\\controllers\\doctorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,71 +34,85 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "DoctorsModel.cs",
-              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\Models\\DoctorsModel.cs",
-              "RelativeDocumentMoniker": "DoctorAppointmentPortalClassLibrary\\Models\\DoctorsModel.cs",
-              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\Models\\DoctorsModel.cs",
-              "RelativeToolTip": "DoctorAppointmentPortalClassLibrary\\Models\\DoctorsModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-26T03:57:39.958Z",
+              "Title": "DoctorAppointmentRequestEmail.html",
+              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Helper\\EmailTemplates\\DoctorAppointmentRequestEmail.html",
+              "RelativeDocumentMoniker": "Doctor Appointment Portal\\Helper\\EmailTemplates\\DoctorAppointmentRequestEmail.html",
+              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Helper\\EmailTemplates\\DoctorAppointmentRequestEmail.html",
+              "RelativeToolTip": "Doctor Appointment Portal\\Helper\\EmailTemplates\\DoctorAppointmentRequestEmail.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-10-29T11:47:54.454Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Doctors.cs",
-              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\DAL\\Doctors.cs",
-              "RelativeDocumentMoniker": "DoctorAppointmentPortalClassLibrary\\DAL\\Doctors.cs",
-              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\DAL\\Doctors.cs",
-              "RelativeToolTip": "DoctorAppointmentPortalClassLibrary\\DAL\\Doctors.cs",
-              "ViewState": "AgIAAE4AAAAAAAAAAAD4v1oAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T17:17:46.834Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "DoctorsController.cs",
               "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Controllers\\DoctorsController.cs",
               "RelativeDocumentMoniker": "Doctor Appointment Portal\\Controllers\\DoctorsController.cs",
               "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Controllers\\DoctorsController.cs",
               "RelativeToolTip": "Doctor Appointment Portal\\Controllers\\DoctorsController.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAIAwwB8AAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAWwBsAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T12:44:03.668Z",
+              "WhenOpened": "2025-10-29T06:43:51.877Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AppointmentRequestsController.cs",
-              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
-              "RelativeDocumentMoniker": "Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
-              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
-              "RelativeToolTip": "Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAAwKUAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "AppointmentRequests.cs",
+              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\DAL\\AppointmentRequests.cs",
+              "RelativeDocumentMoniker": "DoctorAppointmentPortalClassLibrary\\DAL\\AppointmentRequests.cs",
+              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\DAL\\AppointmentRequests.cs",
+              "RelativeToolTip": "DoctorAppointmentPortalClassLibrary\\DAL\\AppointmentRequests.cs",
+              "ViewState": "AgIAAO0AAAAAAAAAAAD4v/gAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-24T11:11:05.306Z",
+              "WhenOpened": "2025-10-29T05:59:17.134Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "AppointmentRequestsModel.cs",
+              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\Models\\AppointmentRequestsModel.cs",
+              "RelativeDocumentMoniker": "DoctorAppointmentPortalClassLibrary\\Models\\AppointmentRequestsModel.cs",
+              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\DoctorAppointmentPortalClassLibrary\\Models\\AppointmentRequestsModel.cs",
+              "RelativeToolTip": "DoctorAppointmentPortalClassLibrary\\Models\\AppointmentRequestsModel.cs",
+              "ViewState": "AgIAAHEAAAAAAAAAAAA3wHcAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T05:53:53.65Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppointmentRequestsController.cs",
+              "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
+              "RelativeDocumentMoniker": "Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
+              "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
+              "RelativeToolTip": "Doctor Appointment Portal\\Controllers\\AppointmentRequestsController.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAIA/wLIAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T09:47:35.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "JwtAuthorizeAttribute.cs",
               "DocumentMoniker": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Helper\\JwtAuthorizeAttribute.cs",
               "RelativeDocumentMoniker": "Doctor Appointment Portal\\Helper\\JwtAuthorizeAttribute.cs",
               "ToolTip": "D:\\Doctor Appointment Portal\\DoctorAppointmentPortal\\Doctor Appointment Portal\\Doctor Appointment Portal\\Helper\\JwtAuthorizeAttribute.cs",
               "RelativeToolTip": "Doctor Appointment Portal\\Helper\\JwtAuthorizeAttribute.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAMwBgAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-24T09:32:38.09Z"
+              "WhenOpened": "2025-10-29T11:48:07.908Z",
+              "EditorCaption": ""
             }
           ]
         }

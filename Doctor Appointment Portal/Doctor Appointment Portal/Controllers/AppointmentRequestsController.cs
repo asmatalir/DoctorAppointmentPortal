@@ -24,19 +24,18 @@ namespace Doctor_Appointment_Portal.Controllers
         Districts districtsDAL = new Districts();
         Talukas talukasDAL = new Talukas();
         Cities citiesDAL = new Cities();
+        ErrorLogs errorLogsDAL = new ErrorLogs();
 
-        [JwtAuthorize]
+        [JwtAuthorize(Roles = "Admin")]
         [HttpPost]
         public IHttpActionResult AppointmentRequestsGetLists(AppointmentRequestsModel model)
         {
             try
             {
-                var appointments = appointmentRequestsDAL.GetList(model);
-
-                // Map to response model
+              
                 var response = new AppointmentRequestsModel()
                 {
-                    AppointmentRequestList = appointments,
+                    AppointmentRequestList = appointmentRequestsDAL.GetList(model),
                     SpecializationsList = specializationDAL.GetList(),
                     StatusesList = statusesDAL.GetList(),
                     TotalRecords = appointmentRequestsDAL.TotalRecords,
@@ -46,11 +45,12 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                // Return Internal Server Error with message
+                errorLogsDAL.CurrentUserId = CurrentUserId;
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading appointment requests." });
             }
         }
-        [JwtAuthorize]
+        [JwtAuthorize(Roles = "Doctor")]
         [HttpPost]
         public IHttpActionResult DoctorApppointmentGetLists(AppointmentRequestsModel model)
         {
@@ -58,11 +58,9 @@ namespace Doctor_Appointment_Portal.Controllers
             {
 
                 model.DoctorId = CurrentDoctorId;
-                var appointments = appointmentRequestsDAL.GetDoctorAppointmentRequests(model);
-                // Map to response model
                 var response = new AppointmentRequestsModel()
                 {
-                    AppointmentRequestList = appointments,
+                    AppointmentRequestList = appointmentRequestsDAL.GetDoctorAppointmentRequests(model),
                     SpecializationsList = specializationDAL.GetList(),
                     StatusesList = statusesDAL.GetList(),
                     TotalRecords = appointmentRequestsDAL.TotalRecords,
@@ -72,29 +70,30 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                // Return Internal Server Error with message
+                errorLogsDAL.CurrentUserId = CurrentUserId;
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading appointment requests." });
             }
         }
 
-        [JwtAuthorize]
+        [JwtAuthorize(Roles = "Doctor")]
         [HttpPost]
         public IHttpActionResult DoctorAppointmentUpdateStatus(AppointmentRequestsModel model)
         {
             try
             {
 
-
+                errorLogsDAL.CurrentUserId = CurrentUserId;
                 bool isUpdated = false;
                 model.LastModifiedBy = CurrentUserId;
-                // 🩺 Handle RESCHEDULE specifically
+                // Reschedult appointment
                 if (model.Action == "Rescheduled")
                 {
                     isUpdated = appointmentRequestsDAL.RescheduleAppointment(model);
                 }
                 else
                 {
-                    // Existing logic for Approved/Rejected/Cancelled etc.
+                    // logic for Approved/Rejected etc.
                     isUpdated = appointmentRequestsDAL.UpdateAppointmentStatus(model);
                 }
 
@@ -104,18 +103,17 @@ namespace Doctor_Appointment_Portal.Controllers
                 }
 
 
-                // Format times for readability
+                
                 string startTimeStr = model.StartTime.ToString(@"hh\:mm");
                 string endTimeStr = model.EndTime.ToString(@"hh\:mm");
                 string appointmentDateStr = model.PreferredDate.ToString("yyyy-MM-dd");
 
-                // -----------------------
-                // 1️⃣  Email to Doctor
-                // -----------------------
-                // Path to templates
+                //   Email to Doctor
+
+                
                 string templatesFolder = ConfigurationManager.AppSettings["EmailTemplatesFolder"];
 
-                // Combine with base directory
+                
                 string doctorTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatesFolder, "DoctorAppointmentUpdate.html");
                 string patientTemplatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templatesFolder, "PatientAppointmentUpdate.html");
 
@@ -151,93 +149,30 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while updating appointment status.", error = ex.Message });
             }
         }
 
         [HttpGet]
-        public IHttpActionResult GetPatientDetails(string contactNumber)
+        public IHttpActionResult GetPatientDetails(string aadhaarNumber)
         {
             AppointmentRequestsModel model = new AppointmentRequestsModel();
             try
             {
 
-                 model = appointmentRequestsDAL.LoadPatientDetails(contactNumber);
+                 model = appointmentRequestsDAL.LoadPatientDetails(aadhaarNumber);
 
 
                 return Ok(model);
             }
             catch (Exception ex)
             {
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor details." });
             }
         }
 
-        //[HttpPost]
-        //public IHttpActionResult SavePatientAppointment(AppointmentRequestsModel model)
-        //{
-        //    try
-        //    {
-        //        model.CreatedBy = model.DoctorId;
-        //        model.SelectedSpecializationId = 1;
-        //        int isSaved = appointmentRequestsDAL.SavePatientAppointment(model);
-
-        //        if (isSaved > 0)
-        //        {
-        //            string startTimeStr = model.StartTime.ToString(@"hh\:mm");
-        //            string endTimeStr = model.EndTime.ToString(@"hh\:mm");
-        //            string doctorSubject = "New Appointment Request Received";
-
-        //            string doctorBody = $@"
-        //                <p>Dear Dr. {model.DoctorName},</p>
-
-        //                <p>You have received a new appointment request. Please find the details below:</p>
-
-        //                <ul>
-        //                    <li><strong>Patient Name:</strong> {model.FirstName} {model.LastName}</li>
-        //                    <li><strong>Preferred Date:</strong> {model.PreferredDate:yyyy-MM-dd}</li>
-        //                    <li><strong>Time:</strong> {startTimeStr} to {endTimeStr}</li>
-        //                    <li><strong>Medical Concern:</strong> {model.MedicalConcern}</li>
-        //                </ul>
-
-        //                <p>Please review and approve/reject the request in your dashboard.</p>
-
-        //                <p>Thank you,<br/>
-        //                Doctor Appointment Portal Team</p>";
-
-        //            EmailHelper.SendEmail(model.DoctorEmail, doctorSubject, doctorBody, isHtml: true);
-
-
-
-
-        //            string patientSubject = "Appointment Request Received";
-
-        //            // Build HTML email body systematically
-        //            string patientBody =
-        //            $"<p>Dear {model.FirstName},</p>" +
-        //            $"<p>We have received your appointment request with Dr. {model.DoctorName}. Please find the details below:</p>" +
-        //            $"<table style='border-collapse: collapse;'>" +
-        //            $"  <tr><td style='padding: 4px;'><strong>Date:</strong></td><td style='padding: 4px;'>{model.PreferredDate:yyyy-MM-dd}</td></tr>" +
-        //            $"  <tr><td style='padding: 4px;'><strong>Time:</strong></td><td style='padding: 4px;'>{startTimeStr} to {endTimeStr}</td></tr>" +
-        //            $"</table>" +
-        //            $"<p>You will be notified once the doctor approves or rejects the appointment.</p>" +
-        //            $"<p>Thank you,<br/>Doctor Appointment Portal Team</p>";
-
-
-        //            // Send email as HTML
-        //            EmailHelper.SendEmail(model.PatientEmail, patientSubject, patientBody, true);
-
-        //            return Ok(new { message = "Appointment saved successfully." });
-        //        }
-
-        //        else
-        //            return Content(HttpStatusCode.BadRequest, new { message = "Failed to save appointment. Please try again." });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Content(HttpStatusCode.InternalServerError, new { message = "Server error while saving appointment.", error = ex.Message });
-        //    }
-        //}
+       
 
 
         [HttpPost]
@@ -245,22 +180,28 @@ namespace Doctor_Appointment_Portal.Controllers
         {
             try
             {
+
                 var httpRequest = HttpContext.Current.Request;
 
-                // Read the JSON model
+                
                 var jsonModel = httpRequest["model"];
                 var model = JsonConvert.DeserializeObject<AppointmentRequestsModel>(jsonModel);
 
-                model.SelectedSpecializationId = 1;
+                // Validate the model
+                ModelState.Clear();
+                Validate(model);
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
                 string uploadRootFolder = System.Configuration.ConfigurationManager.AppSettings["UploadFolder"];
                 string patientFolderName = $"Patient_{model.FirstName}_{model.ContactNumber}";
                 string folderPath = HttpContext.Current.Server.MapPath(Path.Combine(uploadRootFolder, patientFolderName));
 
-                // Handle single file (optional)
+                
                 if (httpRequest.Files.Count > 0)
                 {
-                    var file = httpRequest.Files[0]; // Only the first file
+                    var file = httpRequest.Files[0]; 
                     if (file != null && file.ContentLength > 0)
                     {
                         if (!Directory.Exists(folderPath))
@@ -291,7 +232,7 @@ namespace Doctor_Appointment_Portal.Controllers
                     return Content(HttpStatusCode.BadRequest, new { message = "Failed to save appointment. Please try again." });
                 }
 
-                // Send emails (your existing code)
+                
                 string startTimeStr = model.StartTime.ToString(@"hh\:mm");
                 string endTimeStr = model.EndTime.ToString(@"hh\:mm");
 

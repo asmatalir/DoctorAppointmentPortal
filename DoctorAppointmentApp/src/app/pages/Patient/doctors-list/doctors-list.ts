@@ -1,12 +1,12 @@
-import { Component, OnInit,ViewChild,TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { DoctorsModel } from '../../../core/models/DoctorsModel';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { SpecializationsModel } from '../../../core/models/SpecializationsModel';
 import { QualificationsModel } from '../../../core/models/QualificationsModel';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { DoctorAvailabileSlotsModel } from '../../../core/models/DoctorAvailableSlotsModel';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DoctorAvailableSlotsModal } from '../doctor-available-slots-modal/doctor-available-slots-modal';
 import { CitiesModel } from '../../../core/models/CitiesModel';
+import { ToastService } from '../../../core/services/toast-service';
 
 
 @Component({
@@ -15,31 +15,41 @@ import { CitiesModel } from '../../../core/models/CitiesModel';
   templateUrl: './doctors-list.html',
   styleUrl: './doctors-list.scss'
 })
+
 export class DoctorsList implements OnInit {
+
   doctorsList: DoctorsModel[] = [];
-  specializationsList : SpecializationsModel[] = [];
-  qualificationsList : QualificationsModel[] = [];
-  CitiesList : CitiesModel[] = [];
-  filters : DoctorsModel = new DoctorsModel();
-  TotalRecords : number = 0;
+  specializationsList: SpecializationsModel[] = [];
+  qualificationsList: QualificationsModel[] = [];
+  CitiesList: CitiesModel[] = [];
+  filters: DoctorsModel = new DoctorsModel();
+  TotalRecords: number = 0;
 
 
-  constructor(private doctorsService: DoctorsService , private modalService: NgbModal) {
-     
-    }
+  constructor(
+    private doctorsService: DoctorsService,
+    private modalService: NgbModal,
+    private toastService: ToastService) { }
 
   ngOnInit(): void {
+    const savedFilters = sessionStorage.getItem('DoctorFilters');
+    if (savedFilters) {
+      this.filters = JSON.parse(savedFilters);
+    } else {
+      this.filters = new DoctorsModel();
+    }
     this.loadDoctors();
-
-    
   }
 
+  getProfileImage(doctor: any): string {
+    return doctor.Gender === 'M' ? '/images/defaultprofilepicmale.jpg' : '/images/defaultprofilepicfemale.jpg';
+  }
+
+
   loadDoctors() {
-    debugger;
+    sessionStorage.setItem("DoctorFilters", JSON.stringify(this.filters));
     this.doctorsService.DoctorsGetList(this.filters).subscribe({
       next: (data: any) => {
-        debugger;
-        // Extract the actual doctors array from the response
         this.doctorsList = data.DoctorsList || [];
         this.specializationsList = data.SpecializationsList || [];
         this.qualificationsList = data.QualificationsList || [];
@@ -47,74 +57,47 @@ export class DoctorsList implements OnInit {
         this.TotalRecords = data.TotalRecords;
 
         this.doctorsList = this.doctorsList.map(doc => {
-
           return {
-            ...doc,
-            Specializations: doc.SpecializationNames
-              ? doc.SpecializationNames.split(',').map(s => s.trim()).filter(s => s)
-              : [],
-            Qualifications: doc.QualificationNames
-              ? doc.QualificationNames.split(',').map(s => s.trim()).filter(s => s)
-              : []
+            ...doc, Specializations: doc.SpecializationNames ? doc.SpecializationNames.split(',').map(s => s.trim()).filter(s => s) : [], Qualifications: doc.QualificationNames ? doc.QualificationNames.split(',').map(s => s.trim()).filter(s => s) : []
           };
         });
-        
-                
-
       },
       error: (err) => {
-        console.error('Error loading doctors:', err);
+        if ((err as any).isAuthError) return;
+        this.toastService.show("Error loading doctors", { classname: 'bg-danger text-white', delay: 1500 });
       }
     });
   }
 
-  
+
   openBookingModal(doctor: any) {
     const modalRef = this.modalService.open(DoctorAvailableSlotsModal, { size: 'lg', centered: true });
-  
-    // ✅ Set inputs correctly
-    doctor.SelectedSpecializationId=1;
+
+    //Setting the modal paramaters values
     modalRef.componentInstance.doctorId = doctor.DoctorId;
     modalRef.componentInstance.doctorName = `${doctor.FirstName} ${doctor.LastName}`;
     modalRef.componentInstance.doctorEmail = doctor.DoctorEmail;
-    modalRef.componentInstance.SpecializationId = doctor.SelectedSpecializationId;
+    modalRef.componentInstance.SpecializationId = this.filters.SelectedSpecializationId;
 
-     
+
     debugger;
     modalRef.result.then(
       (result) => {
         if (result) {
-          console.log('Appointment confirmed:', result);
-          // Optional: Call an API to save appointment
+          this.toastService.show("Appointment confirmed.Please check your mail.", { classname: 'bg-danger text-white', delay: 1500 });
         }
       },
-      () => {} // modal dismissed
+      () => { }
     );
   }
-  
-  groupSlotsByDay(slots: any[]) {
-    const grouped: any = {};
-    slots.forEach((slot: any) => {
-      const dateKey = new Date(slot.SlotDate).toISOString().split('T')[0];
-      if (!grouped[dateKey]) grouped[dateKey] = { Morning: [], Afternoon: [], Evening: [] };
-  
-      const hour = parseInt(slot.StartTime.split(':')[0], 10);
-      const isPM = slot.StartTime.includes('PM');
-      let period: 'Morning' | 'Afternoon' | 'Evening';
-      if (!isPM && hour < 12) period = 'Morning';
-      else if (isPM && hour < 5) period = 'Afternoon';
-      else period = 'Evening';
-  
-      grouped[dateKey][period].push(slot);
-    });
-    return grouped;
+
+  clearFilters() {
+    this.filters.SelectedSpecializationId = null;
+    this.filters.SelectedCityId = null;
+    this.filters.Gender = '';
+    sessionStorage.removeItem("DoctorFilters");
+    this.loadDoctors();
   }
-clearFilters() {
-  this.filters.SelectedSpecializationId = null;
-  this.filters.SelectedCityId = null;
-  this.filters.Gender = '';
-  this.loadDoctors(); // reload list
-}
-  
+
 
 }

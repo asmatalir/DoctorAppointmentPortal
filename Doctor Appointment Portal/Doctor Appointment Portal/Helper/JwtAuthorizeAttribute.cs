@@ -17,6 +17,7 @@ public class JwtAuthorizeAttribute : AuthorizeAttribute
 
     protected override bool IsAuthorized(HttpActionContext actionContext)
     {
+        
         var authHeader = actionContext.Request.Headers.Authorization;
         string token = null;
 

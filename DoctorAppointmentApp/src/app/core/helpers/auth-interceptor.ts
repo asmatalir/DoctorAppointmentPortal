@@ -4,11 +4,15 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { ToastService } from '../services/toast-service';
 
 @Injectable()
 
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private toastService : ToastService
+  ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = sessionStorage.getItem('token');
@@ -18,9 +22,9 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err.status === 401) {
-
-          sessionStorage.clear();
-          this.router.navigate(['/auth/login']);
+          this.toastService.show("Unauthorized access", { classname: 'bg-danger text-white', delay: 1500 });
+          this.router.navigate(['']);
+          (err as any).isAuthError = true;
         }
         return throwError(() => err);
       })

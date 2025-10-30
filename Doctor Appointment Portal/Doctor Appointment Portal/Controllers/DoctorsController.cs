@@ -21,6 +21,7 @@ namespace Doctor_Appointment_Portal.Controllers
         DoctorAvailabilities doctorAvailabilitiesDAL = new DoctorAvailabilities();
         DoctorAvailabilityExceptions doctorAvailabilityExceptionsDAL = new DoctorAvailabilityExceptions();
         DoctorAvailableSlots doctorSlotsDAL = new DoctorAvailableSlots();
+        ErrorLogs errorLogsDAL = new ErrorLogs();
 
         
         [HttpPost]
@@ -28,32 +29,27 @@ namespace Doctor_Appointment_Portal.Controllers
         {
             try
             {
-                // Call DAL to get list of doctors
-                var doctors = doctorsDAL.GetList(model);
-                var specializations = specializationsDAL.GetList();
-                var qualifications = qualificationsDAL.GetList();
-                var cities = citiesDAL.GetList();
-
-                // Map to response model
+                
                 var response = new DoctorsModel
-                {
+                {                   
+                    DoctorsList = doctorsDAL.GetList(model),
+                    SpecializationsList = specializationsDAL.GetList(),
+                    QualificationsList = qualificationsDAL.GetList(),
+                    CitiesList = citiesDAL.GetList(),
                     TotalRecords = doctorsDAL.TotalRecords,
-                    DoctorsList = doctors,
-                    SpecializationsList = specializations,
-                    QualificationsList = qualifications,
-                    CitiesList = cities
                 };
 
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                // Return Internal Server Error with message
+                errorLogsDAL.CurrentUserId = CurrentUserId;
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctors list." });
             }
         }
 
-        [JwtAuthorize]
+        [JwtAuthorize(Roles = "Admin")]
         [HttpGet]
         public IHttpActionResult GetDoctorDetails(int id)
         {
@@ -67,7 +63,7 @@ namespace Doctor_Appointment_Portal.Controllers
                 }
                 else
                 {
-                    // Initialize new doctor model
+                    
                     model = new DoctorsModel();
                 }
 
@@ -82,6 +78,8 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
+                errorLogsDAL.CurrentUserId = CurrentUserId;
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor details." });
             }
         }
@@ -103,18 +101,25 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
+                errorLogsDAL.CurrentUserId = CurrentUserId;
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading doctor availability details." });
             }
         }
 
 
-        [JwtAuthorize]
+        [JwtAuthorize(Roles = "Admin")]
         [HttpPost]
         public IHttpActionResult SaveAddEditDoctor(DoctorsModel model)
         {
             try
             {
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
                 int doctorId = -1;
+                errorLogsDAL.CurrentUserId = CurrentUserId;
                 model.CreatedBy = CurrentUserId;
                 if (!string.IsNullOrEmpty(model.HashedPassword))
                 {
@@ -126,12 +131,19 @@ namespace Doctor_Appointment_Portal.Controllers
                     model.HashedPassword = null;
                 }
                 doctorId = doctorsDAL.SaveDoctorDetails(model);
-                return Ok(new { success = true, message = "Doctor created successfully.", doctorId });
+                if (doctorId > 0)
+                {
+                    return Ok(new { success = true, message = "Doctor created successfully." });
+                }
+                else
+                {
+                    return Ok(new { success = false, message = "Failed to save doctor details. Please try again." });
+                }
 
             }
             catch (Exception ex)
             {
-                // Log exception if needed
+                
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while saving doctor details." });
             }
         }
@@ -142,16 +154,17 @@ namespace Doctor_Appointment_Portal.Controllers
         {
             try
             {
-                if (model == null || model.DoctorId == 0)
+                if (model.DoctorId == 0)
                 {
-                    return BadRequest("DoctorId is missing or invalid.");
+                    return BadRequest("Doctor details not found.");
                 }
                 model.CreatedBy = CurrentUserId;
+                errorLogsDAL.CurrentUserId = CurrentUserId;
                 int result = doctorsDAL.SaveDoctorAvailability(model);
 
                 if (result > 0)
                 {
-                    return Ok(new { success = true, message = "Doctor availability saved successfully.", doctorId = model.DoctorId });
+                    return Ok(new { success = true, message = "Doctor availability saved successfully." });
                 }
                 else
                 {
@@ -160,12 +173,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.InternalServerError, new
-                {
-                    success = false,
-                    message = "Server error while saving doctor availability.",
-                    details = ex.Message
-                });
+                return Content(HttpStatusCode.InternalServerError, new{ success = false, message = "Server error while saving doctor availability.", details = ex.Message });
             }
         }
 
@@ -181,11 +189,9 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return Content(HttpStatusCode.InternalServerError, new
-                {
-                    message = "Server error while fetching doctor slots.",
-                    details = ex.Message
-                });
+                errorLogsDAL.CurrentUserId = CurrentUserId;
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while fetching doctor slots.", details = ex.Message });
             }
 
 

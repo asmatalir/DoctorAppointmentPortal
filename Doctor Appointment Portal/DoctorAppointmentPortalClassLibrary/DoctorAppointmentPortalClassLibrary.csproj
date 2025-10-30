@@ -47,6 +47,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -88,6 +89,7 @@
     <Compile Include="DAL\DoctorAvailabilityExceptions.cs" />
     <Compile Include="DAL\DoctorAvailableSlots.cs" />
     <Compile Include="DAL\Doctors.cs" />
+    <Compile Include="DAL\ErrorLogs.cs" />
     <Compile Include="DAL\Qualifications.cs" />
     <Compile Include="DAL\Specializations.cs" />
     <Compile Include="DAL\States.cs" />

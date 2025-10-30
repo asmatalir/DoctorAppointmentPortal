@@ -1,251 +1,25 @@
-﻿CREATE OR ALTER   PROCEDURE DoctorsGetList  
-@TotalCount INT OUTPUT
-/*  
-***********************************************************************************************  
- Date      Modified By     Purpose of Modification  
-1 10Oct2025  Asmatali         Get List of Doctors with Full Address  
-***********************************************************************************************  
-DoctorsGetList  
-*/  
-AS  
-BEGIN  
-  
- SELECT   
-  D.DoctorId,  
-  ISNULL(U.FirstName, '') AS FirstName,  
-  ISNULL(U.LastName, '') AS LastName,  
-  ISNULL(U.Gender, '') AS Gender,  
-  ISNULL(D.ExperienceYears, 0) AS ExperienceYears,  
-  ISNULL(D.ConsultationFees, 0) AS ConsultationFees,  
-  ISNULL(D.Description, '') AS Description,  
-  ISNULL(D.HospitalName, '') AS HospitalName,  
-  
-  -- Construct full address using related tables  
-  ISNULL(CONCAT(  
-   ISNULL(A.AddressLine, ''), ', ',  
-   ISNULL(C.CityName, ''), ', ',  
-   ISNULL(T.TalukaName, ''), ', ',  
-   ISNULL(DI.DistrictName, ''), ', ',  
-   ISNULL(S.StateName, ''), ' - ',  
-   ISNULL(A.Pincode, '')  
-  ), '') AS Address,  
-  
-  ISNULL(D.Rating, 0) AS Rating,  
-  ISNULL(D.IsActive, 0) AS IsActive  
-  
- FROM   
-  dbo.DoctorProfiles D  
- INNER JOIN   
-  dbo.UserProfiles U ON D.UserId = U.UserId  
- LEFT JOIN   
-  dbo.Addresses A ON D.AddressId = A.AddressId  
- LEFT JOIN   
-  dbo.States S ON A.StateId = S.StateId  
- LEFT JOIN   
-  dbo.Districts DI ON A.DistrictId = DI.DistrictId  
- LEFT JOIN   
-  dbo.Talukas T ON A.TalukaId = T.TalukaId  
- LEFT JOIN   
-  dbo.Cities C ON A.CityId = C.CityId  
- WHERE   
-  D.IsActive = 1  
- ORDER BY   
-  U.FirstName, U.LastName;  
+﻿
 
-  SELECT @TotalCount = COUNT(*) FROM DoctorProfiles;
-END  
-
-
-CREATE OR ALTER PROCEDURE DoctorsGetList  
-    @DoctorName NVARCHAR(100) = NULL,
-    @SpecializationId INT = NULL,
-    @CityId INT = NULL,
-    @PageNumber INT = 1,
-    @PageSize INT = 10,
-    @TotalCount INT OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Create a temp table to hold filtered results
-    CREATE TABLE #FilteredDoctors
-    (
-        DoctorId INT,
-        FirstName NVARCHAR(50),
-        LastName NVARCHAR(50),
-        Gender CHAR(1),
-        ExperienceYears INT,
-        ConsultationFees DECIMAL(10,2),
-        Description NVARCHAR(300),
-        HospitalName NVARCHAR(200),
-        Address NVARCHAR(500),
-        Rating DECIMAL(3,2),
-        IsActive BIT
-    );
-
-    -- Insert filtered data into temp table
-    INSERT INTO #FilteredDoctors
-    SELECT
-        D.DoctorId,
-        ISNULL(U.FirstName, '') AS FirstName,
-        ISNULL(U.LastName, '') AS LastName,
-        ISNULL(U.Gender, '') AS Gender,
-        ISNULL(D.ExperienceYears, 0) AS ExperienceYears,
-        ISNULL(D.ConsultationFees, 0) AS ConsultationFees,
-        ISNULL(D.Description, '') AS Description,
-        ISNULL(D.HospitalName, '') AS HospitalName,
-        ISNULL(CONCAT(
-            ISNULL(A.AddressLine, ''), ', ',
-            ISNULL(C.CityName, ''), ', ',
-            ISNULL(T.TalukaName, ''), ', ',
-            ISNULL(DI.DistrictName, ''), ', ',
-            ISNULL(S.StateName, ''), ' - ',
-            ISNULL(A.Pincode, '')
-        ), '') AS Address,
-        ISNULL(D.Rating, 0) AS Rating,
-        ISNULL(D.IsActive, 0) AS IsActive
-    FROM dbo.DoctorProfiles D
-    INNER JOIN dbo.UserProfiles U ON D.UserId = U.UserId
-    LEFT JOIN dbo.Addresses A ON D.AddressId = A.AddressId
-    LEFT JOIN dbo.States S ON A.StateId = S.StateId
-    LEFT JOIN dbo.Districts DI ON A.DistrictId = DI.DistrictId
-    LEFT JOIN dbo.Talukas T ON A.TalukaId = T.TalukaId
-    LEFT JOIN dbo.Cities C ON A.CityId = C.CityId
-    LEFT JOIN dbo.DoctorSpecializations DS ON D.DoctorId = DS.DoctorId
-    WHERE D.IsActive = 1
-      AND (@DoctorName IS NULL OR U.FirstName LIKE '%' + @DoctorName + '%' OR U.LastName LIKE '%' + @DoctorName + '%')
-      AND (@SpecializationId IS NULL OR DS.SpecializationId = @SpecializationId)
-      AND (@CityId IS NULL OR A.CityId = @CityId);
-
-    -- Get total count for pagination
-    SELECT @TotalCount = COUNT(*) FROM #FilteredDoctors;
-
-    -- Return paginated results
-    SELECT *
-    FROM #FilteredDoctors
-    ORDER BY FirstName, LastName
-    OFFSET (@PageNumber - 1) * @PageSize ROWS
-    FETCH NEXT @PageSize ROWS ONLY;
-
-    -- Drop temp table
-    DROP TABLE #FilteredDoctors;
-END
 
 GO
---Final Version
-CREATE OR ALTER PROCEDURE DoctorsGetList  
-    @DoctorName NVARCHAR(100) = NULL,
-    @SpecializationId INT = NULL,
-    @CityId INT = NULL,
-    @PageNumber INT = 1,
-    @PageSize INT = 10,
-    @TotalCount INT OUTPUT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Create temp table for filtered results
-    CREATE TABLE #FilteredDoctors
-    (
-        DoctorId INT,
-        FirstName NVARCHAR(50),
-        LastName NVARCHAR(50),
-        Gender CHAR(1),
-		Email NVARCHAR(100),
-        ExperienceYears INT,
-        ConsultationFees DECIMAL(10,2),
-        Description NVARCHAR(300),
-        HospitalName NVARCHAR(200),
-        Address NVARCHAR(500),
-        Rating DECIMAL(3,2),
-        IsActive BIT,
-        SpecializationNames NVARCHAR(MAX),
-		QualificationNames NVARCHAR(MAX)
-    );
-
-    -- Insert filtered data
-    INSERT INTO #FilteredDoctors
-    SELECT
-        D.DoctorId,
-        ISNULL(U.FirstName, '') AS FirstName,
-        ISNULL(U.LastName, '') AS LastName,
-        ISNULL(U.Gender, '') AS Gender,
-		ISNULL(U.Email, '') AS Email,
-        ISNULL(D.ExperienceYears, 0) AS ExperienceYears,
-        ISNULL(D.ConsultationFees, 0) AS ConsultationFees,
-        ISNULL(D.Description, '') AS Description,
-        ISNULL(D.HospitalName, '') AS HospitalName,
-        ISNULL(CONCAT(
-            ISNULL(A.AddressLine, ''), ', ',
-            ISNULL(C.CityName, ''), ', ',
-            ISNULL(T.TalukaName, ''), ', ',
-            ISNULL(DI.DistrictName, ''), ', ',
-            ISNULL(S.StateName, ''), ' - ',
-            ISNULL(A.Pincode, '')
-        ), '') AS Address,
-        ISNULL(D.Rating, 0) AS Rating,
-        ISNULL(D.IsActive, 0) AS IsActive,
-        STUFF((
-            SELECT ', ' + SP.SpecializationName
-            FROM DoctorSpecializations DS2
-            INNER JOIN Specializations SP ON DS2.SpecializationId = SP.SpecializationId
-            WHERE DS2.DoctorId = D.DoctorId AND DS2.IsActive = 1
-            FOR XML PATH(''), TYPE
-        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS SpecializationNames,
-		 STUFF((
-            SELECT ', ' + Q.QualificationName
-            FROM DoctorQualifications DQ
-			INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
-            WHERE DQ.DoctorId = D.DoctorId AND Q.IsActive = 1
-            FOR XML PATH(''), TYPE
-        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS QualificationNames
-    FROM DoctorProfiles D
-    INNER JOIN UserProfiles U ON D.UserId = U.UserId
-    LEFT JOIN Addresses A ON D.AddressId = A.AddressId
-    LEFT JOIN States S ON A.StateId = S.StateId
-    LEFT JOIN Districts DI ON A.DistrictId = DI.DistrictId
-    LEFT JOIN Talukas T ON A.TalukaId = T.TalukaId
-    LEFT JOIN Cities C ON A.CityId = C.CityId
-    WHERE D.IsActive = 1
-      AND (@DoctorName IS NULL OR U.FirstName LIKE '%' + @DoctorName + '%' OR U.LastName LIKE '%' + @DoctorName + '%')
-      AND (@CityId IS NULL OR A.CityId = @CityId)
-      AND (
-            @SpecializationId IS NULL
-            OR EXISTS (
-                SELECT 1
-                FROM DoctorSpecializations DS
-                WHERE DS.DoctorId = D.DoctorId
-                  AND DS.SpecializationId = @SpecializationId
-                  AND DS.IsActive = 1
-            )
-          );
-
-    -- Total count
-    SELECT @TotalCount = COUNT(*) FROM #FilteredDoctors;
-
-    -- Paginated result
-    SELECT *
-    FROM #FilteredDoctors
-    ORDER BY FirstName, LastName
-    OFFSET (@PageNumber - 1) * @PageSize ROWS
-    FETCH NEXT @PageSize ROWS ONLY;
-
-    DROP TABLE #FilteredDoctors;
-END;
-GO
-
---FFinal Version
 CREATE OR ALTER PROCEDURE DoctorsGetList  
     @DoctorName NVARCHAR(100) = NULL,
     @SpecializationId INT = NULL,
     @CityId INT = NULL,
     @Gender CHAR(1) = NULL,
-    @PageNumber INT = 1,
-    @PageSize INT = 10,
+    @PageNumber INT,
+    @PageSize INT,
     @TotalCount INT OUTPUT
+
+/*  
+***********************************************************************************************  
+ Date      Modified By     Purpose of Modification  
+1 10Oct2025  Asmatali         Get List of Doctors  
+***********************************************************************************************  
+DoctorsGetList  
+*/
 AS
 BEGIN
-    SET NOCOUNT ON;
 
     -- Create temp table for filtered results
     CREATE TABLE #FilteredDoctors
@@ -288,20 +62,18 @@ BEGIN
         ), '') AS Address,
         ISNULL(D.Rating, 0) AS Rating,
         ISNULL(D.IsActive, 0) AS IsActive,
-        STUFF((
-            SELECT ', ' + SP.SpecializationName
-            FROM DoctorSpecializations DS2
-            INNER JOIN Specializations SP ON DS2.SpecializationId = SP.SpecializationId
-            WHERE DS2.DoctorId = D.DoctorId AND DS2.IsActive = 1
-            FOR XML PATH(''), TYPE
-        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS SpecializationNames,
-        STUFF((
-            SELECT ', ' + Q.QualificationName
-            FROM DoctorQualifications DQ
-            INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
-            WHERE DQ.DoctorId = D.DoctorId AND Q.IsActive = 1
-            FOR XML PATH(''), TYPE
-        ).value('.', 'NVARCHAR(MAX)'), 1, 2, '') AS QualificationNames
+		(
+			SELECT STRING_AGG(SP.SpecializationName, ', ')
+			FROM DoctorSpecializations DS2
+			INNER JOIN Specializations SP ON DS2.SpecializationId = SP.SpecializationId
+			WHERE DS2.DoctorId = D.DoctorId
+		) AS SpecializationNames,
+		(
+			SELECT STRING_AGG(Q.QualificationName, ', ')
+			FROM DoctorQualifications DQ
+			INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
+			WHERE DQ.DoctorId = D.DoctorId AND Q.IsActive = 1
+		) AS QualificationNames
     FROM DoctorProfiles D
     INNER JOIN UserProfiles U ON D.UserId = U.UserId
     LEFT JOIN Addresses A ON D.AddressId = A.AddressId
@@ -320,7 +92,6 @@ BEGIN
                 FROM DoctorSpecializations DS
                 WHERE DS.DoctorId = D.DoctorId
                   AND DS.SpecializationId = @SpecializationId
-                  AND DS.IsActive = 1
             )
           );
 
@@ -340,12 +111,12 @@ GO
 
 
 GO
-CREATE   PROCEDURE DoctorSpecializationGetList  
+CREATE OR ALTER   PROCEDURE DoctorSpecializationGetList  
   
 /*  
 ***********************************************************************************************  
  Date      Modified By     Purpose of Modification  
-1 10Oct2025  Asmatali         Get List for Doctor Specializations  
+10Oct2025  Asmatali         Get List for Doctor Specializations  
 ***********************************************************************************************  
 DoctorSpecializationGetList  
   
@@ -376,7 +147,7 @@ CREATE OR ALTER PROCEDURE DoctorQualificationsGetList
 /*
 ***********************************************************************************************
  Date      Modified By     Purpose of Modification
-11Oct2025 Asmatali        Get List for Doctor Qualifications
+10Oct2025 Asmatali        Get List for Doctor Qualifications
 ***********************************************************************************************
 DoctorQualificationsGetList
 */
@@ -402,6 +173,13 @@ GO
 
 GO
 CREATE OR ALTER PROCEDURE StatesGetList
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+10Oct2025 Asmatali        Get List for States
+***********************************************************************************************
+StatesGetList
+*/
 AS
 BEGIN
     SELECT
@@ -421,6 +199,13 @@ GO
 
 GO
 CREATE OR ALTER PROCEDURE DistrictsGetList
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+10Oct2025 Asmatali        Get List for Districts
+***********************************************************************************************
+DistrictsGetList
+*/
 AS
 BEGIN
     SELECT
@@ -442,6 +227,13 @@ GO
 
 GO
 CREATE OR ALTER PROCEDURE TalukasGetList
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+10Oct2025 Asmatali        Get List for Talukas
+***********************************************************************************************
+TalukasGetList
+*/
 AS
 BEGIN
     SELECT
@@ -463,6 +255,13 @@ GO
 
 GO
 CREATE OR ALTER PROCEDURE CitiesGetList
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+10Oct2025 Asmatali        Get List for Cities
+***********************************************************************************************
+CitiesGetList
+*/
 AS
 BEGIN
     SELECT
@@ -484,6 +283,13 @@ GO
 
 GO
 CREATE OR ALTER PROCEDURE StatusesGetList
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+13Oct2025 Asmatali        Get List for Statuses
+***********************************************************************************************
+StatusesGetList
+*/
 AS
 BEGIN
     SELECT
@@ -501,49 +307,20 @@ BEGIN
 END
 GO
 
-GO
-CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
-AS
-BEGIN
-    SELECT
-        ISNULL(AR.AppointmentRequestId, '') AS AppointmentRequestId,
-        ISNULL(AR.PatientId, '') AS PatientId,
-        ISNULL(PP.FirstName, '') + ' ' + ISNULL(PP.LastName, '') AS PatientName,
-        ISNULL(AR.DoctorId, '') AS DoctorId,
-        ISNULL(U.FirstName, '') + ' ' + ISNULL(U.LastName, '') AS DoctorName,
-        ISNULL(AR.MedicalConcern, '') AS MedicalConcern,
-        ISNULL(AR.PreferredDate, '') AS PreferredDate,
-		ISNULL(AR.SpecializationId, '') AS SpecializationId,
-	    ISNULL(SP.SpecializationName, '') AS SpecializationName,
-        ISNULL(AR.StartTime, '') AS StartTime,
-        ISNULL(AR.EndTime, '') AS EndTime,
-        ISNULL(AR.FinalStartTime, '') AS FinalStartTime,
-        ISNULL(AR.FinalEndTime, '') AS FinalEndTime,
-        ISNULL(AR.FinalDate, '') AS FinalDate,
-        ISNULL(AR.StatusId, '') AS StatusId,
-        ISNULL(S.StatusName, '') AS StatusName,
-        ISNULL(AR.CreatedOn, '') AS CreatedOn,
-        ISNULL(AR.LastModifiedBy, '') AS LastModifiedBy,
-        ISNULL(U.FirstName + ' ' + U.LastName, '') AS ModifiedBy,
-        ISNULL(AR.LastModifiedOn, '') AS ModifiedOn
-    FROM
-        AppointmentRequests AR
-        LEFT JOIN PatientProfiles PP ON AR.PatientId = PP.PatientId
-        LEFT JOIN DoctorProfiles DP ON AR.DoctorId = DP.DoctorId
-        LEFT JOIN Statuses S ON AR.StatusId = S.StatusId
-        LEFT JOIN UserProfiles U ON DP.UserId = U.UserId
-		LEFT JOIN Specializations  SP ON AR.SpecializationId = SP.SpecializationId
-    ORDER BY
-        AR.AppointmentRequestId DESC
-END
-GO
-
 
 
 
 GO
 CREATE OR ALTER PROCEDURE DoctorAvailabilityGetList
     @DoctorId INT
+
+	/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+13Oct2025 Asmatali        Get List for Doctor Availability
+***********************************************************************************************
+DoctorAvailabilityGetList
+*/
 AS
 BEGIN
     SELECT
@@ -569,6 +346,14 @@ GO
 GO
 CREATE OR ALTER PROCEDURE DoctorAvailabilityExceptionsGetList
  @DoctorId INT
+
+ 	/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+13Oct2025 Asmatali        Get List for Doctor Availability Exceptions
+***********************************************************************************************
+DoctorAvailabilityExceptionsGetList
+*/
 AS
 BEGIN
     SELECT
@@ -593,122 +378,7 @@ GO
 
 
 GO
-CREATE OR ALTER PROCEDURE InsertDoctorDetails
-(
-    -- Personal Info
-    @FirstName NVARCHAR(50),
-    @LastName NVARCHAR(50),
-    @Email NVARCHAR(100),
-    @ContactNumber NVARCHAR(15),
-    @UserName NVARCHAR(100),
-    @HashedPassword NVARCHAR(255),
-    @Gender CHAR(1),
-    @DateOfBirth DATE,
-    @CreatedBy INT,
-
-    -- Professional Info
-    @ExperienceYears INT,
-    @ConsultationFees DECIMAL(10,2),
-    @Description NVARCHAR(300),
-    @HospitalName NVARCHAR(200),
-    @Rating DECIMAL(3,2),
-
-    -- Address Info
-    @AddressLine NVARCHAR(200),
-    @StateId INT,
-    @DistrictId INT,
-    @TalukaId INT,
-    @CityId INT,
-    @Pincode NVARCHAR(10),
-
-    -- Multi-selects (comma-separated IDs)
-    @Qualifications NVARCHAR(MAX),
-    @Specializations NVARCHAR(MAX),
-
-	@CurrentDoctorId INT OUTPUT
-)
-AS
-BEGIN
-
-    DECLARE @UserId INT;
-    DECLARE @AddressId INT;
-    DECLARE @DoctorId INT;
-    DECLARE @CurrentDate DATETIME = GETDATE();
-
-    BEGIN TRY
-        BEGIN TRANSACTION;
-
-		DECLARE @DoctorRoleId INT;
-
-		SELECT @DoctorRoleId = UserRoleId
-		FROM UserRoles
-		WHERE RoleName = 'Doctor';
-
-        -- 1. Insert into UserProfiles
-        INSERT INTO UserProfiles
-        (FirstName, LastName, Email, ContactNumber, UserName, HashedPassword,UserRoleId, Gender, DateOfBirth, IsActive, CreatedBy, CreatedOn)
-        VALUES
-        (@FirstName, @LastName, @Email, @ContactNumber, @UserName, @HashedPassword,@DoctorRoleId, @Gender, @DateOfBirth, 1, @CreatedBy, @CurrentDate);
-
-        SET @UserId = SCOPE_IDENTITY();
-
-        -- 2. Insert into Addresses
-        INSERT INTO Addresses
-        (AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive, CreatedBy, CreatedOn)
-        VALUES
-        (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, 6, @CurrentDate);      -----Handle CreatedBy here----------
-
-        SET @AddressId = SCOPE_IDENTITY();
-
-        -- 3. Insert into DoctorProfiles
-        INSERT INTO DoctorProfiles
-        (UserId, ExperienceYears, ConsultationFees, Description, HospitalName, AddressId, Rating, IsActive, CreatedBy, CreatedOn)
-        VALUES
-        (@UserId, @ExperienceYears, @ConsultationFees, @Description, @HospitalName, @AddressId, @Rating, 1, 6, @CurrentDate);  -----Handle CreatedBy here----------
-
-        SET @DoctorId = SCOPE_IDENTITY();
-
-        
-
-					-- 5. Insert into DoctorSpecializations (split comma-separated string)
-				 -- Assuming @Specializations = '2,6,7' and @Qualifications = '1,3'
-			-- And @DoctorId and @UserId are already set
-
-			-- Insert DoctorSpecializations
-			INSERT INTO DoctorSpecializations (DoctorId, SpecializationId, IsActive, CreatedBy, CreatedOn)
-			SELECT 
-				@DoctorId, 
-				TRY_CAST(value AS INT),  -- convert string to int
-				1, 
-				6,                                  -----Handle CreatedBy here----------
-				GETDATE()
-			FROM STRING_SPLIT(@Specializations, ',');
-
-			-- Insert DoctorQualifications
-			INSERT INTO DoctorQualifications (DoctorId, QualificationId, IsActive, CreatedBy, CreatedOn)
-			SELECT 
-				@DoctorId, 
-				TRY_CAST(value AS INT),
-				1, 
-				6,                          -----Handle CreatedBy here----------
-				GETDATE()
-			FROM STRING_SPLIT(@Qualifications, ',');
-
-
-		SET @CurrentDoctorId = @DoctorId;
-        COMMIT TRANSACTION;
-
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END
-GO
-
-GO
 CREATE OR ALTER PROCEDURE InsertOrUpdateDoctorDetails
-(
     -- Personal Info
     @DoctorId INT = NULL,  -- Pass NULL for insert, DoctorId for update
     @FirstName NVARCHAR(50),
@@ -741,7 +411,14 @@ CREATE OR ALTER PROCEDURE InsertOrUpdateDoctorDetails
     @Specializations NVARCHAR(MAX),
 
     @CurrentDoctorId INT OUTPUT
-)
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+14Oct2025 Asmatali        Insert Or Update Doctor Details
+***********************************************************************************************
+InsertOrUpdateDoctorDetails
+*/
 AS
 BEGIN
     DECLARE @UserId INT;
@@ -757,40 +434,109 @@ BEGIN
         -- If DoctorId is NULL, insert; otherwise, update
         IF @DoctorId IS NULL
         BEGIN
-            -- 1. Insert UserProfiles
+            --  Insert UserProfiles
             INSERT INTO UserProfiles
-            (FirstName, LastName, Email, ContactNumber, UserName, HashedPassword, UserRoleId, Gender, DateOfBirth, IsActive, CreatedBy, CreatedOn)
+            (
+				FirstName,
+				LastName,
+				Email,
+				ContactNumber,
+				UserName,
+				HashedPassword,
+				UserRoleId,
+				Gender,
+				DateOfBirth,
+				IsActive,
+				CreatedBy,
+				CreatedOn
+			)
             VALUES
-            (@FirstName, @LastName, @Email, @ContactNumber, @UserName, @HashedPassword, @DoctorRoleId, @Gender, @DateOfBirth, 1, @CreatedBy, @CurrentDate);
+            (
+				@FirstName,
+				@LastName,
+				@Email,
+				@ContactNumber,
+				@UserName,
+				@HashedPassword,
+				@DoctorRoleId,
+				@Gender,
+				@DateOfBirth,
+				1,
+				@CreatedBy,
+				@CurrentDate
+			);
 
             SET @UserId = SCOPE_IDENTITY();
 
-            -- 2. Insert Addresses
+            --  Insert Addresses
             INSERT INTO Addresses
-            (AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive,CreatedOn)
+            (
+				AddressLine,
+				StateId,
+				DistrictId,
+				TalukaId,
+				CityId,
+				Pincode,
+				IsActive,
+				CreatedOn
+			)
             VALUES
-            (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, @CurrentDate);
+            (
+				@AddressLine,
+				@StateId,
+				@DistrictId,
+				@TalukaId,
+				@CityId,
+				@Pincode,
+				1,
+				@CurrentDate
+			);
 
             SET @AddressId = SCOPE_IDENTITY();
 
-            -- 3. Insert DoctorProfiles
-            INSERT INTO DoctorProfiles
-            (UserId, ExperienceYears, ConsultationFees, Description, HospitalName, AddressId, Rating, IsActive, CreatedBy, CreatedOn)
+            --  Insert DoctorProfiles
+            INSERT INTO
+				DoctorProfiles
+            (
+				UserId,
+				ExperienceYears,
+				ConsultationFees,
+				Description,
+				HospitalName,
+				AddressId,
+				Rating,
+				IsActive,
+				CreatedBy,
+				CreatedOn
+			)
             VALUES
-            (@UserId, @ExperienceYears, @ConsultationFees, @Description, @HospitalName, @AddressId, @Rating, 1, @CreatedBy, @CurrentDate);
+            (
+				@UserId,
+				@ExperienceYears,
+				@ConsultationFees,
+				@Description,
+				@HospitalName,
+				@AddressId,
+				@Rating,
+				1,
+				@CreatedBy,
+				@CurrentDate
+			);
 
             SET @DoctorId = SCOPE_IDENTITY();
         END
         ELSE
         BEGIN
-            -- 1. Get UserId and AddressId
+            -- Get UserId and AddressId
             SELECT @UserId = UserId, @AddressId = AddressId
             FROM DoctorProfiles
             WHERE DoctorId = @DoctorId;
 
-            -- 2. Update UserProfiles
-            UPDATE UserProfiles
-            SET FirstName = @FirstName,
+            --  Update UserProfiles
+            UPDATE
+				UserProfiles
+            SET
+			    FirstName = @FirstName,
                 LastName = @LastName,
                 Email = @Email,
                 ContactNumber = @ContactNumber,
@@ -799,11 +545,14 @@ BEGIN
                 DateOfBirth = @DateOfBirth,
                 LastModifiedBy = @CreatedBy,
                 LastModifiedOn = @CurrentDate
-            WHERE UserId = @UserId;
+            WHERE
+				UserId = @UserId;
 
-            -- 3. Update Addresses
-            UPDATE Addresses
-            SET AddressLine = @AddressLine,
+            --  Update Addresses
+            UPDATE
+				Addresses
+            SET 
+				AddressLine = @AddressLine,
                 StateId = @StateId,
                 DistrictId = @DistrictId,
                 TalukaId = @TalukaId,
@@ -811,75 +560,95 @@ BEGIN
                 Pincode = @Pincode,
                 LastModifiedBy = @CreatedBy,
                 LastModifiedOn = @CurrentDate
-            WHERE AddressId = @AddressId;
+            WHERE
+				AddressId = @AddressId;
 
-            -- 4. Update DoctorProfiles
-            UPDATE DoctorProfiles
-            SET ExperienceYears = @ExperienceYears,
+            --  Update DoctorProfiles
+            UPDATE
+				DoctorProfiles
+            SET
+				ExperienceYears = @ExperienceYears,
                 ConsultationFees = @ConsultationFees,
                 Description = @Description,
                 HospitalName = @HospitalName,
                 Rating = @Rating,
                 LastModifiedBy = @CreatedBy,
                 LastModifiedOn = @CurrentDate
-            WHERE DoctorId = @DoctorId;
+            WHERE 
+				DoctorId = @DoctorId;
         END
 
-        -- --------------------------
         -- Handle Specializations
-        -- --------------------------
+
         DECLARE @TempSpecializations TABLE (SpecializationId INT);
+
         INSERT INTO @TempSpecializations(SpecializationId)
         SELECT TRY_CAST(value AS INT) FROM STRING_SPLIT(@Specializations, ',');
 
         -- Delete removed specializations (hard delete)
         DELETE ds
-        FROM DoctorSpecializations ds
-        LEFT JOIN @TempSpecializations ts ON ds.SpecializationId = ts.SpecializationId
-        WHERE ds.DoctorId = @DoctorId AND ts.SpecializationId IS NULL;
-
-        -- Update existing specializations timestamps
-        UPDATE ds
-        SET LastModifiedBy = @CreatedBy,
-            LastModifiedOn = @CurrentDate
-        FROM DoctorSpecializations ds
-        INNER JOIN @TempSpecializations ts ON ds.SpecializationId = ts.SpecializationId
-        WHERE ds.DoctorId = @DoctorId;
+        FROM
+			DoctorSpecializations ds
+        LEFT JOIN
+			@TempSpecializations ts ON ds.SpecializationId = ts.SpecializationId
+        WHERE
+			ds.DoctorId = @DoctorId AND ts.SpecializationId IS NULL;
 
         -- Insert new specializations
-        INSERT INTO DoctorSpecializations (DoctorId, SpecializationId, IsActive, CreatedBy, CreatedOn)
-        SELECT @DoctorId, ts.SpecializationId, 1, @CreatedBy, @CurrentDate
-        FROM @TempSpecializations ts
+        INSERT INTO
+			DoctorSpecializations
+			(
+			DoctorId,
+			SpecializationId,
+			CreatedBy,
+			CreatedOn
+			)
+        SELECT 
+			@DoctorId,
+			ts.SpecializationId,
+			@CreatedBy,
+			@CurrentDate
+        FROM 
+			@TempSpecializations ts
         WHERE NOT EXISTS (
             SELECT 1 FROM DoctorSpecializations ds
             WHERE ds.DoctorId = @DoctorId AND ds.SpecializationId = ts.SpecializationId
         );
 
-        -- --------------------------
         -- Handle Qualifications
-        -- --------------------------
+
         DECLARE @TempQualifications TABLE (QualificationId INT);
+
         INSERT INTO @TempQualifications(QualificationId)
         SELECT TRY_CAST(value AS INT) FROM STRING_SPLIT(@Qualifications, ',');
 
         -- Delete removed qualifications (hard delete)
-        DELETE dq
-        FROM DoctorQualifications dq
-        LEFT JOIN @TempQualifications tq ON dq.QualificationId = tq.QualificationId
-        WHERE dq.DoctorId = @DoctorId AND tq.QualificationId IS NULL;
+        DELETE
+			dq
+        FROM
+			DoctorQualifications dq
+        LEFT JOIN
+			@TempQualifications tq ON dq.QualificationId = tq.QualificationId
+        WHERE
+			dq.DoctorId = @DoctorId AND tq.QualificationId IS NULL;
 
-        -- Update existing qualifications timestamps
-        UPDATE dq
-        SET LastModifiedBy = @CreatedBy,
-            LastModifiedOn = @CurrentDate
-        FROM DoctorQualifications dq
-        INNER JOIN @TempQualifications tq ON dq.QualificationId = tq.QualificationId
-        WHERE dq.DoctorId = @DoctorId;
 
         -- Insert new qualifications
-        INSERT INTO DoctorQualifications (DoctorId, QualificationId, IsActive, CreatedBy, CreatedOn)
-        SELECT @DoctorId, tq.QualificationId, 1, @CreatedBy, @CurrentDate
-        FROM @TempQualifications tq
+        INSERT INTO
+			DoctorQualifications
+			(
+			DoctorId,
+			QualificationId,
+			CreatedBy,
+			CreatedOn
+			)
+        SELECT
+			@DoctorId,
+			tq.QualificationId,
+			@CreatedBy,
+			@CurrentDate
+        FROM
+			@TempQualifications tq
         WHERE NOT EXISTS (
             SELECT 1 FROM DoctorQualifications dq
             WHERE dq.DoctorId = @DoctorId AND dq.QualificationId = tq.QualificationId
@@ -891,8 +660,9 @@ BEGIN
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+		THROW;
     END CATCH
 END
 GO
@@ -904,6 +674,14 @@ GO
 GO
 CREATE OR ALTER PROCEDURE GetDoctorDetailsById
     @DoctorId INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+14Oct2025 Asmatali        Get Doctor Details By DoctorId
+***********************************************************************************************
+GetDoctorDetailsById
+*/
 AS
 BEGIN
 
@@ -937,7 +715,7 @@ BEGIN
             (
                 SELECT STRING_AGG(CAST(DS.SpecializationId AS NVARCHAR), ',')
                 FROM DoctorSpecializations DS
-                WHERE DS.DoctorId = D.DoctorId AND DS.IsActive = 1
+                WHERE DS.DoctorId = D.DoctorId
             ), ''
         ) AS SpecializationIds,
 
@@ -946,7 +724,7 @@ BEGIN
                 SELECT STRING_AGG(SP.SpecializationName, ',')
                 FROM DoctorSpecializations DS
                 INNER JOIN Specializations SP ON DS.SpecializationId = SP.SpecializationId
-                WHERE DS.DoctorId = D.DoctorId AND DS.IsActive = 1
+                WHERE DS.DoctorId = D.DoctorId
             ), ''
         ) AS SpecializationNames,
 
@@ -955,18 +733,16 @@ BEGIN
             (
                 SELECT STRING_AGG(CAST(DQ.QualificationId AS NVARCHAR), ',')
                 FROM DoctorQualifications DQ
-                WHERE DQ.DoctorId = D.DoctorId AND DQ.IsActive = 1
-            ), ''
-        ) AS QualificationIds,
+                WHERE DQ.DoctorId = D.DoctorId
+            ), '') AS QualificationIds,
 
         ISNULL(
             (
                 SELECT STRING_AGG(Q.QualificationName, ',')
                 FROM DoctorQualifications DQ
                 INNER JOIN Qualifications Q ON DQ.QualificationId = Q.QualificationId
-                WHERE DQ.DoctorId = D.DoctorId AND DQ.IsActive = 1
-            ), ''
-        ) AS QualificationNames
+                WHERE DQ.DoctorId = D.DoctorId
+            ), '') AS QualificationNames
 
     FROM DoctorProfiles D
     INNER JOIN UserProfiles U ON D.UserId = U.UserId
@@ -977,134 +753,28 @@ GO
 
 
 
-
-
-GO
-CREATE OR ALTER PROCEDURE InsertOrUpdateDoctorAvailability
-    @DoctorId INT,
-    @CreatedBy INT,
-    @AvailabilitiesXml XML,
-	@ExceptionsListXml XML, 
-    @ResultCode INT OUTPUT
-AS
-BEGIN
-
-    BEGIN TRY
-        -- Begin a transaction
-        BEGIN TRANSACTION;
-
-        -- If DoctorId is not null or 0, optionally delete existing availabilities to replace with new ones
-        IF @DoctorId IS NOT NULL
-        BEGIN
-            DELETE FROM DoctorAvailability
-            WHERE DoctorId = @DoctorId;
-        END
-
-        -- Insert from XML
-        IF @AvailabilitiesXml IS NOT NULL
-        BEGIN
-            INSERT INTO DoctorAvailability
-            (
-                DoctorId,
-                DayOfWeek,
-                StartTime,
-                EndTime,
-                SlotDuration,
-                IsActive,
-                CreatedBy,
-                CreatedOn
-            )
-            SELECT
-                @DoctorId AS DoctorId,
-                T.c.value('(DayOfWeek)[1]', 'INT') AS DayOfWeek,
-                T.c.value('(StartTime)[1]', 'TIME') AS StartTime,
-                T.c.value('(EndTime)[1]', 'TIME') AS EndTime,
-                T.c.value('(SlotDuration)[1]', 'INT') AS SlotDuration,
-                1 AS IsActive,
-                @CreatedBy AS CreatedBy,
-                GETDATE() AS CreatedOn
-            FROM @AvailabilitiesXml.nodes('/Availabilities/Availability') AS T(c);
-        END
-
-		 -- Delete existing exceptions for this doctor
-        IF @DoctorId IS NOT NULL
-        BEGIN
-            DELETE FROM DoctorAvailabilityExceptions
-            WHERE DoctorId = @DoctorId;
-        END
-
-        -- Insert from Exceptions XML
-        IF @ExceptionsListXml IS NOT NULL
-        BEGIN
-            INSERT INTO DoctorAvailabilityExceptions
-            (
-                DoctorId,
-                ExceptionDate,
-                StartTime,
-                EndTime,
-                IsAvailable,
-                Reason,
-                IsActive,
-                CreatedBy,
-                CreatedOn
-            )
-            SELECT
-                @DoctorId AS DoctorId,
-                T.c.value('(ExceptionDate)[1]', 'DATE') AS ExceptionDate,
-                T.c.value('(StartTime)[1]', 'TIME') AS StartTime,
-                T.c.value('(EndTime)[1]', 'TIME') AS EndTime,
-                T.c.value('(IsAvailable)[1]', 'INT') AS IsAvailable,
-                T.c.value('(Reason)[1]', 'NVARCHAR(255)') AS Reason,
-                1 AS IsActive,
-                @CreatedBy AS CreatedBy,
-                GETDATE() AS CreatedOn
-            FROM @ExceptionsListXml.nodes('/Exceptions/Exception') AS T(c);
-        END
-
-        -- Set result code to success
-        SET @ResultCode = 1;
-
-        COMMIT TRANSACTION;
-    END TRY
-    --BEGIN CATCH
-    --    -- Rollback on error
-    --    IF @@TRANCOUNT > 0
-    --        ROLLBACK TRANSACTION;
-
-    --    -- Set result code to -1 for error
-    --    SET @ResultCode = -1;
-    --END CATCH
-
-	BEGIN CATCH
-    DECLARE @ErrMsg NVARCHAR(4000), @ErrSeverity INT;
-    SELECT @ErrMsg = ERROR_MESSAGE(), @ErrSeverity = ERROR_SEVERITY();
-    IF @@TRANCOUNT > 0
-        ROLLBACK TRANSACTION;
-    RAISERROR('Error in InsertOrUpdateDoctorAvailability: %s', @ErrSeverity, 1, @ErrMsg);
-    SET @ResultCode = -1;
-END CATCH
-END
-GO
-
-
 ---Final Version
 GO
 CREATE OR ALTER PROCEDURE InsertOrUpdateDoctorAvailability
-(
+
     @DoctorId INT,
     @CreatedBy INT,
     @AvailabilitiesXml XML,
     @ExceptionsListXml XML,
     @ResultCode INT OUTPUT
-)
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+14Oct2025 Asmatali        Insert Or Update Doctor Availability
+***********************************************************************************************
+InsertOrUpdateDoctorAvailability
+*/
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -------------------------
         -- Doctor Availability
-        -------------------------
         DECLARE @TempAvailabilities TABLE
         (
             DayOfWeek INT,
@@ -1126,23 +796,29 @@ BEGIN
         END
 
         -- Soft delete removed availabilities
-        UPDATE DA
-        SET DA.IsActive = 0,
+        UPDATE
+			DA
+        SET
+			DA.IsActive = 0,
 		    DA.LastModifiedBy = @CreatedBy,
             DA.LastModifiedOn = GETDATE()
-        FROM DoctorAvailability DA
-        LEFT JOIN @TempAvailabilities T
-            ON DA.DayOfWeek = T.DayOfWeek
-            AND DA.StartTime = T.StartTime
-            AND DA.EndTime = T.EndTime
-            AND DA.SlotDuration = T.SlotDuration
-        WHERE DA.DoctorId = @DoctorId
-          AND T.DayOfWeek IS NULL
-          AND DA.IsActive = 1;
+        FROM
+			DoctorAvailability DA
+        LEFT JOIN
+			@TempAvailabilities T ON DA.DayOfWeek = T.DayOfWeek
+			AND DA.StartTime = T.StartTime AND
+			DA.EndTime = T.EndTime AND
+			DA.SlotDuration = T.SlotDuration
+        WHERE
+			DA.DoctorId = @DoctorId
+            AND T.DayOfWeek IS NULL
+            AND DA.IsActive = 1;
 
         -- Reactivate existing availabilities if present in XML
-        UPDATE DA
-        SET DA.IsActive = 1,
+        UPDATE
+			DA
+        SET 
+			DA.IsActive = 1,
 		    DA.LastModifiedBy = @CreatedBy,
             DA.LastModifiedOn = GETDATE()
         FROM DoctorAvailability DA
@@ -1152,7 +828,8 @@ BEGIN
             AND DA.StartTime = T.StartTime
             AND DA.EndTime = T.EndTime
             AND DA.SlotDuration = T.SlotDuration
-        WHERE DA.IsActive = 0;
+        WHERE
+			DA.IsActive = 0;
 
         -- Insert new availabilities
         INSERT INTO DoctorAvailability
@@ -1185,9 +862,7 @@ BEGIN
               AND DA.SlotDuration = T.SlotDuration
         );
 
-        -------------------------
         -- Doctor Availability Exceptions
-        -------------------------
         DECLARE @TempExceptions TABLE
         (
             ExceptionDate DATE,
@@ -1211,11 +886,14 @@ BEGIN
         END
 
         -- Soft delete removed exceptions
-        UPDATE DAE
-        SET DAE.IsActive = 0,
+        UPDATE
+			DAE
+        SET
+			DAE.IsActive = 0,
 		    DAE.LastModifiedBy = @CreatedBy,
             DAE.LastModifiedOn = GETDATE()
-        FROM DoctorAvailabilityExceptions DAE
+        FROM
+			DoctorAvailabilityExceptions DAE
         LEFT JOIN @TempExceptions T
             ON DAE.ExceptionDate = T.ExceptionDate
             AND ((DAE.StartTime = T.StartTime) OR (DAE.StartTime IS NULL AND T.StartTime IS NULL))
@@ -1225,13 +903,15 @@ BEGIN
           AND DAE.IsActive = 1;
 
         -- Reactivate existing exceptions if present in XML
-        UPDATE DAE
+        UPDATE
+			DAE
         SET DAE.IsActive = 1,
             DAE.IsAvailable = T.IsAvailable,
             DAE.Reason = T.Reason,
 			DAE.LastModifiedBy = @CreatedBy,
             DAE.LastModifiedOn = GETDATE()
-        FROM DoctorAvailabilityExceptions DAE
+        FROM 
+			DoctorAvailabilityExceptions DAE
         JOIN @TempExceptions T
             ON DAE.DoctorId = @DoctorId
             AND DAE.ExceptionDate = T.ExceptionDate
@@ -1285,7 +965,6 @@ END
 GO
 
 
----Final Version
 GO
 CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
     @PatientName NVARCHAR(100) = NULL,
@@ -1298,6 +977,14 @@ CREATE OR ALTER PROCEDURE AppointmentRequestsGetList
     @PageNumber INT = 1,
     @PageSize INT = 10,
     @TotalCount INT OUTPUT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+13Oct2025 Asmatali        Get List for Appointment Requests
+***********************************************************************************************
+AppointmentRequestsGetList
+*/
 AS
 BEGIN
 
@@ -1329,26 +1016,26 @@ BEGIN
     -- Insert filtered data
     INSERT INTO #FilteredAppointments
     SELECT
-        AR.AppointmentRequestId,
-        AR.PatientId,
-        ISNULL(PP.FirstName,'') + ' ' + ISNULL(PP.LastName,'') AS PatientName,
-        AR.DoctorId,
-        ISNULL(U.FirstName,'') + ' ' + ISNULL(U.LastName,'') AS DoctorName,
-        AR.SpecializationId,
-        ISNULL(SP.SpecializationName,'') AS SpecializationName,
-        AR.MedicalConcern,
-        AR.PreferredDate,
-        AR.StartTime,
-        AR.EndTime,
-        AR.FinalStartTime,
-        AR.FinalEndTime,
-        AR.FinalDate,
-        AR.StatusId,
-        ISNULL(S.StatusName,'') AS StatusName,
-        AR.CreatedOn,
-        AR.LastModifiedBy,
-        ISNULL(UM.FirstName,'') + ' ' + ISNULL(UM.LastName,'') AS ModifiedBy,
-        AR.LastModifiedOn
+        ISNULL(AR.AppointmentRequestId, '') AS AppointmentRequestId,
+		ISNULL(AR.PatientId, '') AS PatientId,
+		ISNULL(PP.FirstName, '') + ' ' + ISNULL(PP.LastName, '') AS PatientName,
+		ISNULL(AR.DoctorId, '') AS DoctorId,
+		ISNULL(U.FirstName, '') + ' ' + ISNULL(U.LastName, '') AS DoctorName,
+		ISNULL(AR.SpecializationId, '') AS SpecializationId,
+		ISNULL(SP.SpecializationName, '') AS SpecializationName,
+		ISNULL(AR.MedicalConcern, '') AS MedicalConcern,
+		ISNULL(AR.PreferredDate, '') AS PreferredDate,
+		ISNULL(AR.StartTime, '') AS StartTime,
+		ISNULL(AR.EndTime, '') AS EndTime,
+		ISNULL(AR.FinalStartTime, '') AS FinalStartTime,
+		ISNULL(AR.FinalEndTime, '') AS FinalEndTime,
+		ISNULL(AR.FinalDate, '') AS FinalDate,
+		ISNULL(AR.StatusId, '') AS StatusId,
+		ISNULL(S.StatusName, '') AS StatusName,
+		ISNULL(AR.CreatedOn, '') AS CreatedOn,
+		ISNULL(AR.LastModifiedBy, '') AS LastModifiedBy,
+		ISNULL(UM.FirstName, '') + ' ' + ISNULL(UM.LastName, '') AS ModifiedBy,
+		ISNULL(AR.LastModifiedOn, '') AS LastModifiedOn
     FROM AppointmentRequests AR
     LEFT JOIN PatientProfiles PP ON AR.PatientId = PP.PatientId
     LEFT JOIN DoctorProfiles DP ON AR.DoctorId = DP.DoctorId
@@ -1395,7 +1082,6 @@ GO
 CREATE OR ALTER PROCEDURE DoctorAppointmentRequestsGetList
     @DoctorId INT,                         
     @PatientName NVARCHAR(100) = NULL,
-    @SpecializationId INT = NULL,
 	@StatusId INT = NULL,
 	@AppointmentType NVARCHAR(20) = 'Upcoming',
     @FromDate DATE = NULL,
@@ -1403,6 +1089,14 @@ CREATE OR ALTER PROCEDURE DoctorAppointmentRequestsGetList
     @PageNumber INT = 1,
     @PageSize INT = 10,
     @TotalCount INT OUTPUT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+14Oct2025 Asmatali        Get List for Appointment Requests By DoctorId
+***********************************************************************************************
+DoctorAppointmentRequestsGetList
+*/
 AS
 BEGIN
 
@@ -1434,26 +1128,26 @@ BEGIN
     -- Insert filtered data
     INSERT INTO #FilteredAppointments
     SELECT
-        AR.AppointmentRequestId,
-        AR.PatientId,
-        ISNULL(PP.FirstName,'') + ' ' + ISNULL(PP.LastName,'') AS PatientName,		
-        AR.DoctorId,
-        ISNULL(U.FirstName,'') + ' ' + ISNULL(U.LastName,'') AS DoctorName,
-		ISNULL(U.Email,'') AS DoctorEmail,
-		ISNULL(PP.Email,'') AS PatientEmail,
-        AR.SpecializationId,
-        ISNULL(SP.SpecializationName,'') AS SpecializationName,
-        AR.MedicalConcern,
-		 DS.SlotId, 
-        AR.FinalStartTime,
-        AR.FinalEndTime,
-        AR.FinalDate,
-        AR.StatusId,
-        ISNULL(S.StatusName,'') AS StatusName,
-        AR.CreatedOn,
-        AR.LastModifiedBy,
-        ISNULL(UM.FirstName,'') + ' ' + ISNULL(UM.LastName,'') AS ModifiedBy,
-        AR.LastModifiedOn
+         ISNULL(AR.AppointmentRequestId, ' ') AS AppointmentRequestId,
+		ISNULL(AR.PatientId, ' ') AS PatientId,
+		ISNULL(PP.FirstName, ' ') + ' ' + ISNULL(PP.LastName, ' ') AS PatientName,		
+		ISNULL(AR.DoctorId, ' ') AS DoctorId,
+		ISNULL(U.FirstName, ' ') + ' ' + ISNULL(U.LastName, ' ') AS DoctorName,
+		ISNULL(U.Email, ' ') AS DoctorEmail,
+		ISNULL(PP.Email, ' ') AS PatientEmail,
+		ISNULL(AR.SpecializationId, ' ') AS SpecializationId,
+		ISNULL(SP.SpecializationName, ' ') AS SpecializationName,
+		ISNULL(AR.MedicalConcern, ' ') AS MedicalConcern,
+		ISNULL(DS.SlotId, ' ') AS SlotId, 
+		ISNULL(AR.FinalStartTime, ' ') AS FinalStartTime,
+		ISNULL(AR.FinalEndTime, ' ') AS FinalEndTime,
+		ISNULL(AR.FinalDate, ' ') AS FinalDate,
+		ISNULL(AR.StatusId, ' ') AS StatusId,
+		ISNULL(S.StatusName, ' ') AS StatusName,
+		ISNULL(AR.CreatedOn, ' ') AS CreatedOn,
+		ISNULL(AR.LastModifiedBy, ' ') AS LastModifiedBy,
+		ISNULL(UM.FirstName, ' ') + ' ' + ISNULL(UM.LastName, ' ') AS ModifiedBy,
+		ISNULL(AR.LastModifiedOn, ' ') AS LastModifiedOn
     FROM AppointmentRequests AR
     LEFT JOIN PatientProfiles PP ON AR.PatientId = PP.PatientId
     LEFT JOIN DoctorProfiles DP ON AR.DoctorId = DP.DoctorId
@@ -1466,9 +1160,8 @@ BEGIN
         AND AR.FinalDate = DS.SlotDate
         AND AR.FinalStartTime = DS.StartTime
         AND AR.FinalEndTime = DS.EndTime
-    WHERE AR.DoctorId = @DoctorId                       -- Filter for this doctor
+    WHERE AR.DoctorId = @DoctorId                      
         AND (@PatientName IS NULL OR PP.FirstName + ' ' + PP.LastName LIKE '%' + @PatientName + '%')
-        AND (@SpecializationId IS NULL OR AR.SpecializationId = @SpecializationId)
 		AND (@StatusId IS NULL OR AR.StatusId = @StatusId)
 		AND (
 			@AppointmentType = 'All'
@@ -1503,38 +1196,64 @@ CREATE OR ALTER PROCEDURE UpdateAppointmentStatus
     @AppointmentRequestId INT,
     @StatusName NVARCHAR(50),
 	@LastModifiedBy INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+15Oct2025 Asmatali        Update Appointment Request Status
+***********************************************************************************************
+UpdateAppointmentStatus
+*/
 AS
 BEGIN
 
    
     DECLARE @StatusId INT;
-    SELECT @StatusId = StatusId
-    FROM Statuses
-    WHERE StatusName = @StatusName;
 
-    UPDATE AppointmentRequests
-    SET StatusId = @StatusId,
+	-- StatusId For the Status Change
+    SELECT
+		@StatusId = StatusId
+    FROM
+		Statuses
+    WHERE
+		StatusName = @StatusName;
+
+
+    -- Update the appointment Status
+    UPDATE
+		AppointmentRequests
+    SET 
+		StatusId = @StatusId,
 	    LastModifiedBy = @LastModifiedBy,
         LastModifiedOn = GETDATE()
-    WHERE AppointmentRequestId = @AppointmentRequestId
-	AND StatusId = (SELECT StatusId FROM Statuses WHERE StatusName = 'Pending');
+    WHERE
+		AppointmentRequestId = @AppointmentRequestId
+		AND StatusId = (SELECT StatusId FROM Statuses WHERE StatusName = 'Pending');
 END
 GO
 
 GO
 CREATE OR ALTER PROCEDURE GetUserPasswordByUsername
     @UserName NVARCHAR(100)
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+15Oct2025 Asmatali        Get User Details By Username
+***********************************************************************************************
+GetUserPasswordByUsername
+*/
 AS
 BEGIN
 
     SELECT 
-	    up.UserId,
-        up.HashedPassword,
-        up.UserRoleId,
-        ur.RoleName,
-		up.Email,
-		up.UserName,
-		dp.DoctorId
+	    ISNULL(up.UserId, ' ') AS UserId,
+		ISNULL(up.HashedPassword, ' ') AS HashedPassword,
+		ISNULL(up.UserRoleId, ' ') AS UserRoleId,
+		ISNULL(ur.RoleName, ' ') AS RoleName,
+		ISNULL(up.Email, ' ') AS Email,
+		ISNULL(up.UserName, ' ') AS UserName,
+		ISNULL(dp.DoctorId, ' ') AS DoctorId
     FROM 
         UserProfiles up
     INNER JOIN 
@@ -1553,54 +1272,72 @@ GO
 GO
 CREATE OR ALTER PROCEDURE GetDoctorAvailableSlots
     @DoctorId INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+15Oct2025 Asmatali        Get Doctor Slots By DoctorId
+***********************************************************************************************
+GetDoctorAvailableSlots
+*/
 AS
 BEGIN
 
     SELECT 
-        DS.SlotId,
-        DS.DoctorId,
-        DS.SlotDate,
-        DS.StartTime,
-        DS.EndTime,
-        DS.StatusId,
-        S.StatusName
+        ISNULL(DS.SlotId, ' ') AS SlotId,
+		ISNULL(DS.DoctorId, ' ') AS DoctorId,
+		ISNULL(DS.SlotDate, ' ') AS SlotDate,
+		ISNULL(DS.StartTime, ' ') AS StartTime,
+		ISNULL(DS.EndTime, ' ') AS EndTime,
+		ISNULL(DS.StatusId, ' ') AS StatusId,
+		ISNULL(S.StatusName, ' ') AS StatusName
     FROM DoctorSlots DS
-    INNER JOIN Statuses S ON DS.StatusId = S.StatusId
+		INNER JOIN Statuses S ON DS.StatusId = S.StatusId
     WHERE DS.DoctorId = @DoctorId
-      AND S.StatusName = 'Available' 
-    ORDER BY DS.SlotDate, DS.StartTime;
+		AND S.StatusName = 'Available' 
+    ORDER BY
+		DS.SlotDate, DS.StartTime;
 END
 GO
 
 GO
-CREATE OR ALTER PROCEDURE GetPatientPersonalInfoByPhone
-    @PhoneNumber NVARCHAR(15)
+CREATE OR ALTER PROCEDURE GetPatientPersonalInfoByAadhaar
+    @AadhaarNumber NVARCHAR(12)
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+15Oct2025 Asmatali        Get Patient Info By Aadhaar Number
+***********************************************************************************************
+GetPatientPersonalInfoByAadhaar
+*/
 AS
 BEGIN
 
     SELECT
-        p.PatientId,
-        p.FirstName,
-        p.LastName,
-        p.Email,
-        p.PhoneNumber AS ContactNumber,
-        p.DateOfBirth,
-        p.Gender,
-        a.AddressLine AS AddressLine,
-        a.StateId,
-        a.DistrictId,
-        a.TalukaId,
-        a.CityId,
-        a.Pincode
+        ISNULL(p.PatientId, ' ') AS PatientId,
+		ISNULL(p.FirstName, ' ') AS FirstName,
+		ISNULL(p.LastName, ' ') AS LastName,
+		ISNULL(p.Email, ' ') AS Email,
+		ISNULL(p.PhoneNumber, ' ') AS ContactNumber,
+		ISNULL(p.AadhaarNumber, ' ') AS AadhaarNumber,
+		ISNULL(p.DateOfBirth, ' ') AS DateOfBirth,
+		ISNULL(p.Gender, ' ') AS Gender,
+		ISNULL(a.AddressLine, ' ') AS AddressLine,
+		ISNULL(a.StateId, ' ') AS StateId,
+		ISNULL(a.DistrictId, ' ') AS DistrictId,
+		ISNULL(a.TalukaId, ' ') AS TalukaId,
+		ISNULL(a.CityId, ' ') AS CityId,
+		ISNULL(a.Pincode, ' ') AS Pincode
     FROM
         PatientProfiles p
-    INNER JOIN
-        Addresses a ON p.AddressId = a.AddressId
+    LEFT JOIN
+		Addresses a ON p.AddressId = a.AddressId AND a.IsActive = 1
     WHERE
-        p.PhoneNumber = @PhoneNumber
+        p.AadhaarNumber = @AadhaarNumber
         AND p.IsActive = 1
-        AND a.IsActive = 1;
 END
+GO
 
 GO
 CREATE OR ALTER PROCEDURE SavePatientAppointment
@@ -1609,6 +1346,7 @@ CREATE OR ALTER PROCEDURE SavePatientAppointment
     @LastName NVARCHAR(50),
     @Email NVARCHAR(100),
     @PhoneNumber NVARCHAR(15),
+	@AadhaarNumber NVARCHAR(12),
     @DateOfBirth DATE,
     @Gender CHAR(1),
     @InsuranceInfo NVARCHAR(100),
@@ -1629,6 +1367,14 @@ CREATE OR ALTER PROCEDURE SavePatientAppointment
 	@DocumentFileName NVARCHAR(255) = NULL,
     @DocumentFilePath NVARCHAR(500) = NULL,
 	@AppointmentId INT OUTPUT 
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+15Oct2025 Asmatali        Save Appointment Requests
+***********************************************************************************************
+GetPatientPersonalInfoByPhone
+*/
 AS
 BEGIN
 
@@ -1648,51 +1394,114 @@ BEGIN
     IF @PatientId IS NOT NULL
     BEGIN
         -- Patient exists, update Address
-        SELECT @AddressId = AddressId
-        FROM PatientProfiles
-        WHERE PatientId = @PatientId;
+        SELECT
+			@AddressId = AddressId
+        FROM
+			PatientProfiles
+        WHERE
+			PatientId = @PatientId
 
-        UPDATE Addresses
-        SET AddressLine = @AddressLine,
+        UPDATE
+			Addresses
+        SET
+			AddressLine = @AddressLine,
             StateId = @StateId,
             DistrictId = @DistrictId,
             TalukaId = @TalukaId,
             CityId = @CityId,
             Pincode = @Pincode,
             LastModifiedOn = GETDATE()
-        WHERE AddressId = @AddressId;
+        WHERE
+			AddressId = @AddressId;
 
         -- Update PatientProfiles
-        UPDATE PatientProfiles
-        SET FirstName = @FirstName,
+        UPDATE
+			PatientProfiles
+        SET
+			FirstName = @FirstName,
             LastName = @LastName,
+			PhoneNumber = @PhoneNumber,
             Email = @Email,
             DateOfBirth = @DateOfBirth,
             Gender = @Gender,
             InsuranceInfo = @InsuranceInfo,
             MedicalHistory = @MedicalHistory,
             LastModifiedOn = GETDATE()
-        WHERE PatientId = @PatientId;
+        WHERE
+			PatientId = @PatientId;
     END
     ELSE
     BEGIN
         -- Patient does not exist, insert into Address
-        INSERT INTO Addresses(AddressLine, StateId, DistrictId, TalukaId, CityId, Pincode, IsActive,CreatedOn)
-        VALUES (@AddressLine, @StateId, @DistrictId, @TalukaId, @CityId, @Pincode, 1, GETDATE());
+        INSERT INTO
+			Addresses
+			(
+				AddressLine,
+				StateId,
+				DistrictId,
+				TalukaId,
+				CityId,
+				Pincode,
+				IsActive,
+				CreatedOn
+			)
+			VALUES
+			(
+				@AddressLine,
+				@StateId,
+				@DistrictId,
+				@TalukaId,
+				@CityId,
+				@Pincode,
+				1,
+				GETDATE()
+			);
 
         SET @AddressId = SCOPE_IDENTITY();
 
         -- Insert into PatientProfiles
-        INSERT INTO PatientProfiles(FirstName, LastName, Email, PhoneNumber, DateOfBirth, Gender, InsuranceInfo, MedicalHistory, AddressId, IsActive, CreatedOn)
-        VALUES (@FirstName, @LastName, @Email, @PhoneNumber, @DateOfBirth, @Gender, @InsuranceInfo, @MedicalHistory, @AddressId, 1, GETDATE());
+        INSERT INTO
+			PatientProfiles
+			(
+				FirstName,
+				LastName,
+				Email,
+				PhoneNumber,
+				AadhaarNumber,
+				DateOfBirth,
+				Gender,
+				InsuranceInfo,
+				MedicalHistory,
+				AddressId,
+				IsActive,
+				CreatedOn
+			)
+        VALUES
+		(
+			@FirstName,
+			@LastName,
+			@Email,
+			@PhoneNumber,
+			@AadhaarNumber,
+			@DateOfBirth,
+			@Gender,
+			@InsuranceInfo,
+			@MedicalHistory,
+			@AddressId,
+			1,
+			GETDATE()
+		);
 
         SET @PatientId = SCOPE_IDENTITY();
     END
 
 
-	SELECT TOP 1 @PendingStatusId = StatusId
-	FROM Statuses
-	WHERE StatusName = 'Pending';
+	SELECT 
+		@PendingStatusId = StatusId
+	FROM
+		Statuses
+	WHERE
+		StatusName = 'Pending';
 
 	-- Insert into AppointmentRequests with fetched StatusId
 	INSERT INTO AppointmentRequests
@@ -1741,21 +1550,27 @@ BEGIN
     VALUES
     (
         @AppointmentId,
-        @DocumentFileName,   -- Original name or description
-        @DocumentFilePath,   -- Saved file path on server
+        @DocumentFileName,  
+        @DocumentFilePath,   
         1,
         GETDATE()
     )
 END
 
-	SELECT TOP 1 @BookedStatusId = StatusId
-	FROM Statuses
-	WHERE StatusName = 'Booked';
+	SELECT 
+		@BookedStatusId = StatusId
+	FROM 
+		Statuses
+	WHERE 
+		StatusName = 'Booked';
 
 	-- Update the Doctor Slot as Booked
-	UPDATE DoctorSlots
-	SET StatusId = @BookedStatusId
-	WHERE SlotId = @SlotId;
+	UPDATE
+		DoctorSlots
+	SET
+		StatusId = @BookedStatusId
+	WHERE
+		SlotId = @SlotId;
 
 	    COMMIT TRANSACTION;
     END TRY
@@ -1764,6 +1579,7 @@ END
             ROLLBACK TRANSACTION;
 
 	SET @AppointmentId=0;
+	THROW;
 	END CATCH
 
 END
@@ -1778,6 +1594,14 @@ CREATE OR ALTER PROCEDURE RescheduleAppointment
     @NewEndTime TIME,
     @NewDate DATE,
     @DoctorId INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+15Oct2025 Asmatali        Reschedule Appointment Status
+***********************************************************************************************
+RescheduleAppointment
+*/
 AS
 BEGIN
 
@@ -1789,24 +1613,30 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- 🔹 Get status IDs dynamically
         SELECT @BookedStatusId = StatusId FROM Statuses WHERE StatusName = 'Booked';
         SELECT @AvailableStatusId = StatusId FROM Statuses WHERE StatusName = 'Available';
 		SELECT @RescheduledStatusId = StatusId FROM Statuses WHERE StatusName = 'Rescheduled';
 
 
         -- 🔹 Mark old slot as Rescheduled
-        UPDATE DoctorSlots
-        SET StatusId = @AvailableStatusId
-        WHERE SlotId = @OldSlotId;
+        UPDATE
+			DoctorSlots
+        SET
+			StatusId = @AvailableStatusId
+        WHERE
+			SlotId = @OldSlotId;
 
         -- 🔹 Mark new slot as Booked
-        UPDATE DoctorSlots
-        SET StatusId = @BookedStatusId
-        WHERE SlotId = @NewSlotId;
+        UPDATE
+			DoctorSlots
+        SET
+			StatusId = @BookedStatusId
+        WHERE
+			SlotId = @NewSlotId;
 
         -- 🔹 Update final slot info in AppointmentRequests
-        UPDATE AppointmentRequests
+        UPDATE
+			AppointmentRequests
         SET 
             FinalStartTime = @NewStartTime,
             FinalEndTime = @NewEndTime,
@@ -1814,23 +1644,34 @@ BEGIN
 			StatusId = @RescheduledStatusId, 
             LastModifiedOn = GETDATE(),
             LastModifiedBy = @DoctorId
-        WHERE AppointmentRequestId = @AppointmentRequestId
+        WHERE
+			AppointmentRequestId = @AppointmentRequestId
 		AND StatusId = (SELECT StatusId FROM Statuses WHERE StatusName = 'Pending');
 
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
+         IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+		THROW;
     END CATCH
 END
 GO
 
-
+GO
 CREATE OR ALTER PROCEDURE GenerateDoctorSlots
     @FromDate DATE,
     @ToDate DATE,
     @CreatedBy INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+16Oct2025 Asmatali        Generate Doctor Slots
+***********************************************************************************************
+GenerateDoctorSlots
+*/
 AS
 BEGIN
 
@@ -1839,10 +1680,18 @@ BEGIN
     FROM Statuses
     WHERE StatusName = 'Available';
 
-    ---------------------------------------
-    -- 1️⃣ Generate regular availability slots
-    ---------------------------------------
-    INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+    --  Generate regular availability slots
+    INSERT INTO
+		DoctorSlots
+		(	
+			DoctorId,
+			SlotDate,
+			StartTime,
+			EndTime,
+			StatusId,
+			CreatedBy,
+			CreatedOn
+		)
     SELECT 
         DA.DoctorId,
         DATEADD(DAY, v.number, @FromDate) AS SlotDate,
@@ -1851,10 +1700,14 @@ BEGIN
         @AvailableStatusId AS StatusId,
         @CreatedBy,
         GETDATE()
-    FROM DoctorAvailability DA
-    CROSS JOIN master.dbo.spt_values v
-    CROSS JOIN master.dbo.spt_values n
-    LEFT JOIN DoctorSlots S
+    FROM
+		DoctorAvailability DA
+    CROSS JOIN
+		master.dbo.spt_values v
+    CROSS JOIN
+		master.dbo.spt_values n
+    LEFT JOIN
+		DoctorSlots S
         ON S.DoctorId = DA.DoctorId
         AND S.SlotDate = DATEADD(DAY, v.number, @FromDate)
         AND S.StartTime = DATEADD(MINUTE, n.number * DA.SlotDuration, DA.StartTime)
@@ -1874,10 +1727,18 @@ BEGIN
               AND DATEADD(MINUTE, (n.number + 1) * DA.SlotDuration, DA.StartTime) > E.StartTime
         );
 
-    ---------------------------------------
-    -- 2️⃣ Generate slots for special working days
-    ---------------------------------------
-    INSERT INTO DoctorSlots (DoctorId, SlotDate, StartTime, EndTime, StatusId, CreatedBy, CreatedOn)
+    --  Generate slots for special working days
+    INSERT INTO
+		DoctorSlots
+		(
+			DoctorId,
+			SlotDate,
+			StartTime,
+			EndTime,
+			StatusId,
+			CreatedBy,
+			CreatedOn
+		)
     SELECT 
         E.DoctorId,
         E.ExceptionDate AS SlotDate,
@@ -1899,7 +1760,6 @@ BEGIN
       AND E.StartTime IS NOT NULL
       AND n.number < DATEDIFF(MINUTE, E.StartTime, E.EndTime) / DA.SlotDuration
       AND S.SlotId IS NULL
-      -- Avoid generating slots overlapping absent periods
       AND NOT EXISTS (
             SELECT 1
             FROM DoctorAvailabilityExceptions EX
@@ -1913,13 +1773,20 @@ END;
 GO
 
 
--- Get all active states
+GO
 CREATE OR ALTER PROCEDURE GetStates
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+16Oct2025 Asmatali        Get States List
+***********************************************************************************************
+GetStates
+*/
 AS
 BEGIN
     SELECT
-		StateId,
-		StateName
+		ISNULL(StateId, ' ') AS StateId,
+		ISNULL(StateName, ' ') AS StateName
 	FROM
 		States
 	WHERE
@@ -1929,15 +1796,23 @@ BEGIN
 END
 GO
 
--- Get districts by state
+GO
 CREATE OR ALTER PROCEDURE GetDistrictsByState
     @StateId INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+16Oct2025 Asmatali        Get Districts By State
+***********************************************************************************************
+GetDistrictsByState
+*/
 AS
 BEGIN
     SELECT
-		DistrictId,
-		DistrictName,
-		StateId
+		ISNULL(DistrictId, ' ') AS DistrictId,
+		ISNULL(DistrictName, ' ') AS DistrictName,
+		ISNULL(StateId, ' ') AS StateId
 	FROM
 		Districts 
     WHERE
@@ -1948,15 +1823,23 @@ BEGIN
 END
 GO
 
--- Get talukas by district
+GO
 CREATE OR ALTER PROCEDURE GetTalukasByDistrict
     @DistrictId INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+16Oct2025 Asmatali        Get Taluka By District
+***********************************************************************************************
+GetTalukasByDistrict
+*/
 AS
 BEGIN
     SELECT
-		TalukaId,
-		TalukaName,
-		DistrictId
+		ISNULL(TalukaId, ' ') AS TalukaId,
+		ISNULL(TalukaName, ' ') AS TalukaName,
+		ISNULL(DistrictId, ' ') AS DistrictId
 	FROM
 		Talukas 
     WHERE
@@ -1967,15 +1850,23 @@ BEGIN
 END
 GO
 
--- Get cities by taluka
+GO
 CREATE OR ALTER PROCEDURE GetCitiesByTaluka
     @TalukaId INT
+
+/*
+***********************************************************************************************
+ Date      Modified By     Purpose of Modification
+16Oct2025 Asmatali        Get Cities By Taluka
+***********************************************************************************************
+GetCitiesByTaluka
+*/
 AS
 BEGIN
     SELECT
-		CityId,
-		CityName,
-		TalukaId
+		ISNULL(CityId, ' ') AS CityId,
+		ISNULL(CityName, ' ') AS CityName,
+		ISNULL(TalukaId, ' ') AS TalukaId
 	FROM
 		Cities 
     WHERE
@@ -1983,6 +1874,42 @@ BEGIN
 		AND IsActive = 1 
     ORDER BY
 		CityName;
+END
+GO
+
+
+Go
+CREATE OR ALTER PROCEDURE DoctorAppointmentErrorLogsInsert
+@ErrorMessage VARCHAR(MAX),
+@StackTrace VARCHAR(MAX),
+@CreatedBy INT
+
+/*
+***********************************************************************************************
+	Date   			Modified By   		Purpose of Modification
+1	16Oct2025		Asmatali		       Insert ErrorLogs
+***********************************************************************************************
+DoctorAppointmentErrorLogsInsert
+
+*/
+
+AS
+BEGIN
+
+	INSERT INTO PurchaseOrderErrorLogs
+	(
+	   ErrorMessage,
+	   StackTrace,
+	   CreatedBy,
+	   CreatedOn
+	)
+	VALUES
+	(
+	   @ErrorMessage,
+	   @StackTrace,
+	   @CreatedBy,
+	   GETDATE()
+	)	
 END
 GO
 

@@ -26,7 +26,13 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             try
             {
                 DbCommand com = db.GetStoredProcCommand("DoctorAvailabilityGetList");
-                db.AddInParameter(com, "@DoctorId", DbType.String, DoctorId);
+                if (DoctorId > 0)
+                    db.AddInParameter(com, "@DoctorId", DbType.Int32, DoctorId);
+                else
+                    db.AddInParameter(com, "@DoctorId", DbType.Int32, DBNull.Value);
+
+
+                
                 DataSet ds = db.ExecuteDataSet(com);
 
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -51,7 +57,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetList: {ex.Message}");
+                throw;
             }
 
             return AvailabilityList;

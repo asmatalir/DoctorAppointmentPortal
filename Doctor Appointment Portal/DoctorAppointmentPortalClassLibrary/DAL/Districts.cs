@@ -44,7 +44,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetList: {ex.Message}");
+                throw;
             }
 
             return districtList;
@@ -57,7 +57,10 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             try
             {
                 DbCommand com = db.GetStoredProcCommand("GetDistrictsByState");
-                db.AddInParameter(com, "@StateId", DbType.Int32, stateId);
+                if (stateId > 0)
+                    db.AddInParameter(com, "@StateId", DbType.Int32, stateId);
+                else
+                    db.AddInParameter(com, "@StateId", DbType.Int32, DBNull.Value);
 
                 DataSet ds = db.ExecuteDataSet(com);
 
@@ -79,7 +82,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetDistrictsByState: {ex.Message}");
+                throw;
             }
 
             return districtList;

@@ -1,20 +1,68 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
-      <h2 class="text-center mb-4">Login</h2>
-      <form #Loginform = "ngForm" (ngSubmit)="onClick(Loginform)">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username*</label>
-          <input id="username" type="text" class="form-control" [(ngModel)]="model.UserName" name="username" required [class.is-invalid]="username.invalid && (username.touched || Loginform.submitted)"  placeholder="Enter your username" #username="ngModel" />
-          <div class="invalid-feedback">User name is required</div>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password*</label>
-          <input id="password" type="password" class="form-control" [(ngModel)]="model.EnteredPassword" name="password"  required [class.is-invalid]="password.invalid && (password.touched || Loginform.submitted)" placeholder="Enter your password" #password="ngModel" minlength="6" />
-          <div class="invalid-feedback">Password is required</div>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Login</button>
-      </form>
-    </div>
-  </div>
+    <div class="login-container">
+        <!-- Header -->
+        <div class="login-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="ri-stethoscope-line"></i>
+                </div>
+                <div class="logo-text">DrNow</div>
+            </div>
 
-  
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
+        </div>
+
+        <!-- Body -->
+        <div class="login-body">
+            <form #Loginform="ngForm" (ngSubmit)="onClick(Loginform)">
+                <div class="form-group">
+                    <div class="input-with-icon">
+                        <i class="ri-user-line"></i>
+                        <input id="username" type="text" class="form-control"
+                               [(ngModel)]="model.UserName" name="username" required
+                               [class.is-invalid]="username.invalid && (username.touched || Loginform.submitted)"
+                               placeholder="Enter your username" #username="ngModel" />
+                    </div>
+                    <div class="invalid-feedback" *ngIf="username.invalid && (username.touched || Loginform.submitted)">
+                        User name is required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-with-icon">
+                        <i class="ri-lock-line"></i>
+                        <input id="password" type="password" class="form-control"
+                               [(ngModel)]="model.EnteredPassword" name="password" required
+                               [class.is-invalid]="password.invalid && (password.touched || Loginform.submitted)"
+                               placeholder="Enter your password" #password="ngModel" minlength="6" />
+                    </div>
+                    <div class="invalid-feedback" *ngIf="password.invalid && (password.touched || Loginform.submitted)">
+                        <div *ngIf="password.errors?.['required']">Password is required</div>
+                        <div *ngIf="password.errors?.['minlength']">Password must be at least 6 characters</div>
+                    </div>
+                </div>
+
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-login">Sign In</button>
+            </form>
+
+            <br>
+            <div class="signup-link">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

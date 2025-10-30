@@ -70,7 +70,7 @@
 
                 <!-- Profile Picture -->
                 <div class="avatar-lg me-3">
-                  <img src="images/defaultprofilepicmale.jpg" alt="Doctor Photo" class="avatar-img">
+                  <img [src]="getProfileImage(doc)" alt="Doctor Photo" class="avatar-img">
                 </div>
 
                 <!-- Doctor Details -->
@@ -134,7 +134,7 @@
     </div>
 
     <div class="d-flex justify-content-end mt-3">
-      <ngb-pagination *ngIf="TotalRecords > 0" class="d-flex justify-content-center shadow-sm p-2 bg-white rounded"
+      <ngb-pagination class="d-flex justify-content-center shadow-sm p-2 bg-white rounded"
         [collectionSize]="TotalRecords" [(page)]="filters.PageNumber" [pageSize]="filters.PageSize" [maxSize]="3"
         [boundaryLinks]="true" (pageChange)="loadDoctors()">
       </ngb-pagination>

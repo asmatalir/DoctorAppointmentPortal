@@ -26,7 +26,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading states." });
             }
         }
 
@@ -40,7 +40,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading districts." });
             }
         }
 
@@ -54,7 +54,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading talukas." });
             }
         }
 
@@ -69,7 +69,7 @@ namespace Doctor_Appointment_Portal.Controllers
             }
             catch (Exception ex)
             {
-                return InternalServerError(ex);
+                return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading cities." });
             }
         }
     }

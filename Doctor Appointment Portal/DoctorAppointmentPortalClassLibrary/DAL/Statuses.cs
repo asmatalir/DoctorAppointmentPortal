@@ -47,7 +47,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetList: {ex.Message}");
+                throw;
             }
 
             return statusesList;

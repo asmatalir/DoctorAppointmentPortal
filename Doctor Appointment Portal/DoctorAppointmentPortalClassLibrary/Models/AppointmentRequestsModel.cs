@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,23 +14,59 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
         public int StatusId { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
+
+        [Required]
         public string LastName { get; set; }
+
+        [Required]
+        [EmailAddress]
         public string PatientEmail { get; set; }
+
+        [Required]
+        [StringLength(15, MinimumLength = 10)]
+        [RegularExpression(@"^[0-9]*$")]
         public string ContactNumber { get; set; }
+
+        [Required]
         public DateTime DateOfBirth { get; set; }
+
+        [Required]
         public string Gender { get; set; }
         public string MedicalHistory { get; set; }
         public string InsuranceInfo { get; set; }
 
+        [Required]
+        [StringLength(12, MinimumLength = 12)]
+        [RegularExpression(@"^[0-9]*$")]
+        public string AadhaarNumber { get; set; }
+
+        [Required]
+        [EmailAddress]
         public string DoctorEmail { get; set; }
         public int SpecializationId { get; set; }
+
+        [Required]
         public int SelectedSpecializationId { get; set; }
+
+        [Required]
         public string MedicalConcern { get; set; }
+
+        [Required]
         public DateTime PreferredDate { get; set; }
+
+        [Required]
         public int SlotId { get; set; }
+
+        [Required]
         public int OldSlotId { get; set; }
+
+        [Required]
         public TimeSpan StartTime { get; set; }
+
+        [Required]
         public TimeSpan EndTime { get; set; }
         public TimeSpan FinalStartTime { get; set; }
         public TimeSpan FinalEndTime { get; set; }
@@ -45,11 +82,22 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public string StatusName { get; set; }
         public string AppointmentType { get; set; }
 
+        [Required]
         public int StateId { get; set; }
+
+        [Required]
         public int DistrictId { get; set; }
+
+        [Required]
         public int TalukaId { get; set; }
+
+        [Required]
         public int CityId { get; set; }
+
+        [Required]
         public string AddressLine { get; set; }
+
+        [Required]
         public string Pincode { get; set; }
         public int AddressId { get; set; }
         public string Address { get; set; }

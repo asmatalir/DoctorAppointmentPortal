@@ -24,7 +24,10 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             try
             {
                 DbCommand com = db.GetStoredProcCommand("GetUserPasswordByUsername");
-                db.AddInParameter(com, "UserName", DbType.String, model.UserName);
+                if (!string.IsNullOrEmpty(model.UserName))
+                    db.AddInParameter(com, "UserName", DbType.String, model.UserName);
+                else
+                    db.AddInParameter(com, "UserName", DbType.String, DBNull.Value);
 
                 DataSet ds = db.ExecuteDataSet(com);
 
@@ -39,17 +42,12 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     model.Email = row["Email"].ToString();
                     model.UserName = row["UserName"].ToString();
                     model.DoctorId = !Convert.IsDBNull(row["DoctorId"]) ? Convert.ToInt32(row["DoctorId"]) : 0;
-
-
-
-
-
                     return true; 
                 }
             }
             catch (Exception ex)
             {
-                //errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace, 1);
+                //errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return false;
             }
 

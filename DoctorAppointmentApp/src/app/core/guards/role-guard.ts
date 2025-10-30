@@ -20,7 +20,7 @@ export class RoleGuard implements CanActivate {
     if (this.authenticationService.hasRole(requiredRoles)) {
       return true;
     } else {
-      this.toastService.show("You do not have access to that page", { classname: 'bg-danger text-white', delay: 2000 });
+      this.toastService.show("Unauthorized access", { classname: 'bg-danger text-white', delay: 2000 });
       if (userRoles.includes('Admin')) {
         this.router.navigate(['/admin/appointment-requests']);
       }
@@ -29,7 +29,7 @@ export class RoleGuard implements CanActivate {
       }
       else {
         // Default to patient route if no recognized role
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['']);
       }
       return false;
     }

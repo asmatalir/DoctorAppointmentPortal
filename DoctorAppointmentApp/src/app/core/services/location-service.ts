@@ -1,28 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DoctorsModel } from '../models/DoctorsModel';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-    constructor(private http: HttpClient) {}
+    constructor(private apiService : ApiService) {}
 
   getStates(): Observable<any[]> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Location/GetStates');
+    return this.apiService.get<any[]>('Location/GetStates');
   }
 
   getDistricts(stateId: number): Observable<any[]> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Location/GetDistricts', { params: { stateId: stateId.toString() } });
+    return this.apiService.get<any[]>('Location/GetDistricts', { stateId: stateId.toString() });
   }
 
   getTalukas(districtId: number): Observable<any[]> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Location/GetTalukas', { params: { districtId: districtId.toString() } });
+    return this.apiService.get<any[]>('Location/GetTalukas', { districtId: districtId.toString() });
   }
 
   getCities(talukaId: number): Observable<any[]> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Location/GetCities', { params: { talukaId: talukaId.toString() } });
+    return this.apiService.get<any[]>('Location/GetCities', { talukaId: talukaId.toString() });
   }
 }

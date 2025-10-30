@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild,TemplateRef } from '@angular/core';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { DoctorsModel } from '../../../core/models/DoctorsModel';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { LocationService } from '../../../core/services/location-service';
 import { ToastService } from '../../../core/services/toast-service';
+import { NgbModal,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -15,40 +16,46 @@ import { ToastService } from '../../../core/services/toast-service';
   styleUrl: './doctor-addedit.scss'
 })
 export class DoctorAddedit {
-  
-doctor : DoctorsModel = new DoctorsModel();
-SpecializationIds : number[]=[];
-QualificationIds : number[] = []; 
-specializationsList: any[] = [];
-qualificationsList: any[] = [];
-statesList: any[] = [];
-districtsList: any[] = [];
-talukasList: any[] = [];
-citiesList: any[] = [];
-today: string;
 
+  doctor: DoctorsModel = new DoctorsModel();
+  SpecializationIds: number[] = [];
+  QualificationIds: number[] = [];
+  specializationsList: any[] = [];
+  qualificationsList: any[] = [];
+  statesList: any[] = [];
+  districtsList: any[] = [];
+  talukasList: any[] = [];
+  citiesList: any[] = [];
+  today: string;
 
-constructor(
-  private doctorService: DoctorsService,
-  private route: ActivatedRoute,
-  private router: Router,
-  private locationService : LocationService,
-  private toastService : ToastService
-) {}
+   @ViewChild('doctorForm') form?: NgForm;
+   @ViewChild('unsavedChangesModal') unsavedChangesModal!: TemplateRef<any>; 
 
-ngOnInit(): void {
-  const now = new Date();
-  this.today = now.toISOString().split('T')[0];
-  const doctorId = this.route.snapshot.paramMap.get('id');
-  this.loadDoctorDetails(doctorId ? +doctorId : 0);
-  this.loadStates();
-}
+  private formSaved = false;
+  private modalRef: NgbModalRef;
 
-    // Load all states
+  constructor(
+    private doctorService: DoctorsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private locationService: LocationService,
+    private toastService: ToastService,
+    private modalService: NgbModal
+  ) { }
+
+  ngOnInit(): void {
+    const now = new Date();
+    this.today = now.toISOString().split('T')[0];
+    const doctorId = this.route.snapshot.paramMap.get('id');
+    this.loadDoctorDetails(doctorId ? +doctorId : 0);
+    this.loadStates();
+  }
+
+  // Load all states
   loadStates() {
     this.locationService.getStates().subscribe({
       next: data => this.statesList = data,
-      error: err => console.error('Error loading states', err)
+      error: err => this.toastService.show("Error loading states", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
@@ -63,7 +70,7 @@ ngOnInit(): void {
           this.loadTalukas(this.doctor.DistrictId, this.doctor.TalukaId as number);
         }
       },
-      error: err => console.error('Error loading districts', err)
+      error: err => this.toastService.show("Error loading districts", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
@@ -78,7 +85,7 @@ ngOnInit(): void {
           this.loadCities(this.doctor.TalukaId, this.doctor.CityId as number);
         }
       },
-      error: err => console.error('Error loading talukas', err)
+      error: err => this.toastService.show("Error loading talukas", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
@@ -92,16 +99,16 @@ ngOnInit(): void {
           this.doctor.CityId = selectedCityId;
         }
       },
-      error: err => console.error('Error loading cities', err)
+      error: err => this.toastService.show("Error loading cities", { classname: 'bg-danger text-white', delay: 1500 })
     });
   }
 
   // User changes state
   onStateChange() {
 
-    this.doctor.DistrictId = 0;
-    this.doctor.TalukaId = 0;
-    this.doctor.CityId = 0;
+    this.doctor.DistrictId = null;
+    this.doctor.TalukaId = null;
+    this.doctor.CityId = null;
     this.districtsList = [];
     this.talukasList = [];
     this.citiesList = [];
@@ -114,14 +121,14 @@ ngOnInit(): void {
   // User changes district
   onDistrictChange() {
 
-     if (!this.doctor.StateId) {
-    // this.toastr.warning('Please select a state first.');
-    this.toastService.show("Please select a state first.", { classname: 'bg-warning text-white', delay: 1500 });
-    this.doctor.DistrictId = 0; // reset selection
-    return;
-  }
-    this.doctor.TalukaId = 0;
-    this.doctor.CityId = 0;
+    if (!this.doctor.StateId) {
+      // this.toastr.warning('Please select a state first.');
+      this.toastService.show("Please select a state first.", { classname: 'bg-warning text-white', delay: 1500 });
+      this.doctor.DistrictId = null; 
+      return;
+    }
+    this.doctor.TalukaId = null;
+    this.doctor.CityId = null;;
     this.talukasList = [];
     this.citiesList = [];
 
@@ -133,11 +140,11 @@ ngOnInit(): void {
   onTalukaChange() {
 
     if (!this.doctor.TalukaId) {
-    this.toastService.show("Please select a District first.", { classname: 'bg-warning text-white', delay: 1500 });
-    this.doctor.TalukaId = 0; 
-    return;
-  }
-    this.doctor.CityId = 0;
+      this.toastService.show("Please select a District first.", { classname: 'bg-warning text-white', delay: 1500 });
+      this.doctor.TalukaId = null;
+      return;
+    }
+    this.doctor.CityId = null;
     this.citiesList = [];
 
     if (this.doctor.TalukaId) {
@@ -162,8 +169,8 @@ ngOnInit(): void {
           // Edit mode
           this.doctor = response;
           if (this.doctor.StateId) {
-          this.loadDistricts(this.doctor.StateId, this.doctor.DistrictId as number);
-        }
+            this.loadDistricts(this.doctor.StateId, this.doctor.DistrictId as number);
+          }
         } else {
           // Add mode - initialize new model
           this.doctor = new DoctorsModel();
@@ -176,47 +183,79 @@ ngOnInit(): void {
 
         if (this.doctor.DateOfBirth) {
           const dob = new Date(this.doctor.DateOfBirth);
-          this.doctor.DateOfBirth = dob.toISOString().substring(0, 10); 
+          this.doctor.DateOfBirth = dob.toISOString().substring(0, 10);
         } else {
           this.doctor.DateOfBirth = ''; // empty if null
         }
-        this.SpecializationIds = this.doctor.SpecializationIds? this.doctor.SpecializationIds.split(',').map(id => +id.trim()) : [];
-      
-        this.QualificationIds = this.doctor.QualificationIds ? this.doctor.QualificationIds.split(',').map(id => +id.trim())  : [];
-      
+        this.SpecializationIds = this.doctor.SpecializationIds ? this.doctor.SpecializationIds.split(',').map(id => +id.trim()) : [];
+
+        this.QualificationIds = this.doctor.QualificationIds ? this.doctor.QualificationIds.split(',').map(id => +id.trim()) : [];
+
 
       },
       error: (err) => {
-        console.error('Error loading doctor details:', err);
+        if ((err as any).isAuthError) return;
+        this.toastService.show("Error loading doctor details", { classname: 'bg-danger text-white', delay: 1500 });
       }
     });
   }
 
+    canDeactivate(): Promise<boolean> | boolean {
+    if (this.form?.dirty && !this.formSaved) {
+      return new Promise((resolve) => {
+        this.modalRef = this.modalService.open(this.unsavedChangesModal, { centered: true });
+        this.modalRef.result.then(
+          (result) => resolve(result === 'discard'),
+          () => resolve(false) // closed without confirming
+        );
+      });
+    }
+    return true;
+  }
+    confirmDiscard() {
+    this.modalRef?.close('discard');
+  }
+
+  stayHere() {
+    this.modalRef?.dismiss();
+  }
+
   calculateAge(dob: string): number {
-  const birth = new Date(dob);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-    age--;
+    const birth = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
   }
-  return age;
-}
 
-  
+
   onSubmit(form: NgForm) {
-      if (form.invalid) {
-        alert('Please fill all required fields before submitting.');
-    form.control.markAllAsTouched();
-    return;
-  }
+    if (form.invalid) {
+      this.toastService.show("Please fill all required fields before submitting", { classname: 'bg-warning text-white', delay: 1500 });
+      form.control.markAllAsTouched();
+      return;
+    }
 
-  // Additional explicit checks
-  const age = this.calculateAge(this.doctor.DateOfBirth);
-  if (age < 25 || age > 100) {
-    alert("Doctor's age should be between 25 and 125 years");
-    return;
-  }
+    // Additional explicit checks
+    const age = this.calculateAge(this.doctor.DateOfBirth);
+    if (age < 25 || age > 100) {
+      this.toastService.show("Doctor's age should be between 25 and 125 years", { classname: 'bg-warning text-white', delay: 1500 });
+      return;
+    }
+
+    if(this.doctor.ExperienceYears > 100)
+    {
+        this.toastService.show("Experience cannot exceed 100 years", { classname: 'bg-warning text-white', delay: 1500 });
+        return;
+    }
+
+    if (this.doctor.ExperienceYears > age - 20) {
+      this.toastService.show("Experience seems unrealistic compared to age", { classname: 'bg-warning text-white', delay: 1500 });
+      return;
+}
     this.doctor.SpecializationIds = this.SpecializationIds.join(',');
     this.doctor.QualificationIds = this.QualificationIds.join(',');
 
@@ -224,26 +263,25 @@ ngOnInit(): void {
       next: (response: any) => {
         if (response.success) {
           debugger;
-          // this.toast.success('Doctor details saved successfully!');
-          console.error('Doctor details saved successfully!');
-
-          this.router.navigate(['admin/doctor-list']);  // navigate to doctor list page
+          this.toastService.show("Doctor details saved successfully", { classname: 'bg-success text-white', delay: 1500 });
+          this.router.navigate(['admin/doctor-list']); 
+          this.formSaved = true;
           form.form.markAsPristine();
         } else {
-          // this.toast.error('Error saving doctor details!');
+          this.toastService.show("Error saving doctor details", { classname: 'bg-danger text-white', delay: 1500 });
+
         }
       },
       error: (err) => {
-        debugger;
-        console.error('Error saving doctor details', err);
-        // this.toast.error('Error saving doctor details!');
+        if ((err as any).isAuthError) return;
+        this.toastService.show("Error saving doctor details", { classname: 'bg-danger text-white', delay: 1500 });        // this.toast.error('Error saving doctor details!');
       }
     });
   }
 
   onCancel() {
-  this.router.navigate(['admin/doctor-list']); 
-}
+    this.router.navigate(['admin/doctor-list']);
+  }
 
-  
+
 }

@@ -44,7 +44,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetList: {ex.Message}");
+                throw;
             }
 
             return cityList;
@@ -56,30 +56,34 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             try
             {
+
                 DbCommand com = db.GetStoredProcCommand("GetCitiesByTaluka");
-                db.AddInParameter(com, "@TalukaId", DbType.Int32, talukaId);
+                if(talukaId > 0)
+                        db.AddInParameter(com, "@TalukaId", DbType.Int32, talukaId);
+                else
+                        db.AddInParameter(com, "@TalukaId", DbType.Int32, DBNull.Value);
 
-                DataSet ds = db.ExecuteDataSet(com);
+                    DataSet ds = db.ExecuteDataSet(com);
 
-                if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
-                    DataTable dt = ds.Tables[0];
-                    foreach (DataRow row in dt.Rows)
+                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
-                        CitiesModel city = new CitiesModel()
+                        DataTable dt = ds.Tables[0];
+                        foreach (DataRow row in dt.Rows)
                         {
-                            CityId = Convert.ToInt32(row["CityId"]),
-                            CityName = Convert.ToString(row["CityName"]),
-                            TalukaId = Convert.ToInt32(row["TalukaId"])
-                        };
+                            CitiesModel city = new CitiesModel()
+                            {
+                                CityId = Convert.ToInt32(row["CityId"]),
+                                CityName = Convert.ToString(row["CityName"]),
+                                TalukaId = Convert.ToInt32(row["TalukaId"])
+                            };
 
-                        cityList.Add(city);
+                            cityList.Add(city);
+                        }
                     }
-                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetCitiesByTaluka: {ex.Message}");
+                throw;
             }
 
             return cityList;

@@ -48,8 +48,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                //errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace, 1);
-                Console.WriteLine($"Error in GetList: {ex.Message}");
+                throw;
             }
 
             return specializationList;

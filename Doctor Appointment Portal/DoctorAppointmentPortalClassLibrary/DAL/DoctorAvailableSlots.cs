@@ -26,7 +26,10 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             try
             {
                 DbCommand cmd = db.GetStoredProcCommand("GetDoctorAvailableSlots");
-                db.AddInParameter(cmd, "@DoctorId", DbType.Int32, doctorId);
+                if (doctorId > 0)
+                    db.AddInParameter(cmd, "@DoctorId", DbType.Int32, doctorId);
+                else
+                    db.AddInParameter(cmd, "@DoctorId", DbType.Int32, DBNull.Value);
 
                 DataSet ds = db.ExecuteDataSet(cmd);
 
@@ -53,7 +56,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetSlots: {ex.Message}");
+                throw;
             }
 
             return slotsList;

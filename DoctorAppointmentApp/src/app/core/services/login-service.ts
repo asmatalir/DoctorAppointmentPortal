@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { UserProfilesModel } from '../models/UserProfilesModel';
-import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
 
 
 
@@ -10,16 +9,14 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginService {
-  constructor(private http: HttpClient) {}
+  constructor(private apiService : ApiService) {}
 
-  login(model : UserProfilesModel): Observable<any> {
-    debugger;
-    return this.http.post<any>(environment.apiBaseUrl + 'Accounts/login' , model);
+login(model: UserProfilesModel): Observable<any> {
+  return this.apiService.post<any>('Accounts/login', model);
+}
 
-  }
- 
-  ValidateToken(): Observable<any> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Accounts/ValidateToken');
-  }
+ValidateToken(): Observable<any> {
+  return this.apiService.get<any>('Accounts/ValidateToken');
+}
  
 }

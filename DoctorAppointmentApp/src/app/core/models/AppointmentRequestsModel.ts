@@ -22,14 +22,15 @@ export class AppointmentRequestsModel {
     AppointmentType : string = 'Upcoming';
 
 
-    FirstName: string;           // @FirstName
-    LastName: string;            // @LastName
+    FirstName: string;           
+    LastName: string;            
     PatientName: string;
-    ContactNumber?: string;         // @PhoneNumber
-    DateOfBirth: string;         // @DateOfBirth
-    Gender: string;              // @Gender
-    InsuranceInfo: string;       // @InsuranceInfo
+    ContactNumber: string;        
+    DateOfBirth: string;         
+    Gender: string = '';            
+    InsuranceInfo: string;       
     MedicalHistory: string;  
+    AadhaarNumber : string;
 
     DoctorName: string;
     SlotId: number;  
@@ -54,12 +55,12 @@ export class AppointmentRequestsModel {
 
 
          // Address Information
-    StateId?: number | null = null;
-    DistrictId?: number | null = null;
-    TalukaId?: number | null = null;
-    CityId?: number | null = null;
-    AddressLine?: string = '';
-    Pincode?: string = '';
+    StateId: number | null = null;
+    DistrictId: number | null = null;
+    TalukaId: number | null = null;
+    CityId: number | null = null;
+    AddressLine: string = '';
+    Pincode: string = '';
 
     StatesList : StatesModel[];
     DistrictsList : DistrictsModel[];

@@ -1,39 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DoctorsModel } from '../models/DoctorsModel';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DoctorsService {
-  constructor(private http: HttpClient) { }
+  constructor(private apiService : ApiService
+  ) { }
 
   DoctorsGetList(model: DoctorsModel): Observable<DoctorsModel[]> {
-    return this.http.post<DoctorsModel[]>(environment.apiBaseUrl + 'Doctors/GetLists',model);
+    return this.apiService.post<DoctorsModel[]>('Doctors/GetLists', model);
   }
 
   GetDoctorDetails(id: number): Observable<any> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Doctors/GetDoctorDetails', { params: { id: id.toString() } }
-    );
+    return this.apiService.get<any>('Doctors/GetDoctorDetails', { id: id.toString() });
   }
   
   GetDoctorAvailabilityDetails(id: number): Observable<any> {
-    return this.http.get<any>(environment.apiBaseUrl + 'Doctors/GetDoctorAvailabilityDetails', { params: { id: id.toString() } }
-    );
+    return this.apiService.get<any>('Doctors/GetDoctorAvailabilityDetails', { id: id.toString() });
   }
 
   SaveDoctorDetails(doctor: DoctorsModel): Observable<any> {
-    return this.http.post<any>(environment.apiBaseUrl + 'Doctors/SaveAddEditDoctor', doctor);
+    return this.apiService.post<any>('Doctors/SaveAddEditDoctor', doctor);
   }
   
-  saveDoctorAvailability(doctor: DoctorsModel): Observable<any> { 
-    return this.http.post<any>(environment.apiBaseUrl + 'Doctors/SaveDoctorAvailability', doctor );
+  SaveDoctorAvailability(doctor: DoctorsModel): Observable<any> {
+    return this.apiService.post<any>('Doctors/SaveDoctorAvailability', doctor);
   }
   
   GetDoctorAvailableSlots(id: number): Observable<any> {
-     return this.http.get<any>(environment.apiBaseUrl +'Doctors/GetDoctorSlots' , { params: { id: id.toString() } });
+    return this.apiService.get<any>('Doctors/GetDoctorSlots', { id: id.toString() });
   }
   
 }

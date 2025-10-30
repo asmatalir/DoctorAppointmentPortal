@@ -18,7 +18,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
         {
             db = DatabaseFactory.CreateDatabase();
         }
-
+        ErrorLogs errorLogsDAL = new ErrorLogs();
         public List<AppointmentRequestsModel> GetList(AppointmentRequestsModel model)
         {
             List<AppointmentRequestsModel> AppointmentRequestList = new List<AppointmentRequestsModel>();
@@ -26,7 +26,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             try
             {
                 DbCommand com = db.GetStoredProcCommand("AppointmentRequestsGetList");
-                // Patient Name
+                
                 if (!string.IsNullOrEmpty(model.SearchedPatientName))
                 {
                     db.AddInParameter(com, "@PatientName", DbType.String, model.SearchedPatientName);
@@ -36,7 +36,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@PatientName", DbType.String, DBNull.Value);
                 }
 
-                // Doctor Name
+                
                 if (!string.IsNullOrEmpty(model.SearchedDoctorName))
                 {
                     db.AddInParameter(com, "@DoctorName", DbType.String, model.SearchedDoctorName);
@@ -46,7 +46,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@DoctorName", DbType.String, DBNull.Value);
                 }
 
-                // Specialization Id
+                
                 if (model.SpecializationId > 0)
                 {
                     db.AddInParameter(com, "@SpecializationId", DbType.Int32, model.SpecializationId);
@@ -72,7 +72,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@AppointmentType", DbType.String, DBNull.Value);
                 }
 
-                // Start Date
+                
                 if (model.FromDate.HasValue)
                 {
                     db.AddInParameter(com, "@FromDate", DbType.Date, model.FromDate);
@@ -82,7 +82,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@FromDate", DbType.Date, DBNull.Value);
                 }
 
-                // End Date
+                
                 if (model.ToDate.HasValue)
                 {
                     db.AddInParameter(com, "@ToDate", DbType.Date, model.ToDate.Value);
@@ -92,14 +92,14 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@ToDate", DbType.Date, DBNull.Value);
                 }
 
-                // Page Number
+                
                 db.AddInParameter(com, "@PageNumber", DbType.Int32, model.PageNumber);
 
-                // Page Size
+                
                 db.AddInParameter(com, "@PageSize", DbType.Int32, model.PageSize);
 
 
-                // Add output parameter for total count
+                
                 db.AddOutParameter(com, "@TotalCount", DbType.Int32, sizeof(int));
 
                 DataSet ds = db.ExecuteDataSet(com);
@@ -134,12 +134,12 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     }
                 }
 
-                // Get total count from output parameter
+                
                 this.TotalRecords = Convert.ToInt32(db.GetParameterValue(com, "@TotalCount"));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetList: {ex.Message}");
+                throw; 
             }
 
             return AppointmentRequestList;
@@ -151,13 +151,13 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             try
             {
-                // Use the doctor-specific stored procedure
+                
                 DbCommand com = db.GetStoredProcCommand("DoctorAppointmentRequestsGetList");
 
-                // DoctorId is required
+                
                 db.AddInParameter(com, "@DoctorId", DbType.Int32, model.DoctorId);
 
-                // Patient Name (optional search)
+                
                 if (!string.IsNullOrEmpty(model.SearchedPatientName))
                 {
                     db.AddInParameter(com, "@PatientName", DbType.String, model.SearchedPatientName);
@@ -167,15 +167,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@PatientName", DbType.String, DBNull.Value);
                 }
 
-                // Specialization Id (optional)
-                if (model.SpecializationId > 0)
-                {
-                    db.AddInParameter(com, "@SpecializationId", DbType.Int32, model.SpecializationId);
-                }
-                else
-                {
-                    db.AddInParameter(com, "@SpecializationId", DbType.Int32, DBNull.Value);
-                }
+               
 
                 if (model.StatusId > 0)
                 {
@@ -194,7 +186,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@AppointmentType", DbType.String, DBNull.Value);
                 }
 
-                // Start Date filter
+                
                 if (model.FromDate.HasValue)
                 {
                     db.AddInParameter(com, "@FromDate", DbType.Date, model.FromDate);
@@ -204,7 +196,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@FromDate", DbType.Date, DBNull.Value);
                 }
 
-                // End Date filter
+                
                 if (model.ToDate.HasValue)
                 {
                     db.AddInParameter(com, "@ToDate", DbType.Date, model.ToDate.Value);
@@ -214,11 +206,11 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(com, "@ToDate", DbType.Date, DBNull.Value);
                 }
 
-                // Page Number & Page Size
+                
                 db.AddInParameter(com, "@PageNumber", DbType.Int32, model.PageNumber);
                 db.AddInParameter(com, "@PageSize", DbType.Int32, model.PageSize);
 
-                // Output parameter for total count
+                
                 db.AddOutParameter(com, "@TotalCount", DbType.Int32, sizeof(int));
 
                 DataSet ds = db.ExecuteDataSet(com);
@@ -256,12 +248,11 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                         }
                 }
 
-                // Get total count from output parameter
                 this.TotalRecords = Convert.ToInt32(db.GetParameterValue(com, "@TotalCount"));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in GetDoctorAppointmentRequests: {ex.Message}");
+                throw; 
             }
 
             return AppointmentRequestList;
@@ -276,9 +267,20 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             {
                 DbCommand com = db.GetStoredProcCommand("UpdateAppointmentStatus");
 
-                db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, model.AppointmentRequestId);
-                db.AddInParameter(com, "@StatusName", DbType.String, model.Action);
-                db.AddInParameter(com, "@LastModifiedBy", DbType.Int32, model.LastModifiedBy);
+                if (model.AppointmentRequestId > 0)
+                    db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, model.AppointmentRequestId);
+                else
+                    db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(model.Action))
+                    db.AddInParameter(com, "@StatusName", DbType.String, model.Action);
+                else
+                    db.AddInParameter(com, "@StatusName", DbType.String, DBNull.Value);
+
+                if (model.LastModifiedBy > 0)
+                    db.AddInParameter(com, "@LastModifiedBy", DbType.Int32, model.LastModifiedBy);
+                else
+                    db.AddInParameter(com, "@LastModifiedBy", DbType.Int32, DBNull.Value);
 
                 int rowsAffected = db.ExecuteNonQuery(com);
 
@@ -286,8 +288,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                // Log error if needed
-                Console.WriteLine($"Error in UpdateAppointmentStatus: {ex.Message}");
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
             }
 
             return isUpdated;
@@ -299,45 +300,75 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
 
             try
             {
-                // Create command for stored procedure
+                
                 DbCommand com = db.GetStoredProcCommand("RescheduleAppointment");
 
-                // Add input parameters from model
-                db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, model.AppointmentRequestId);
-                db.AddInParameter(com, "@OldSlotId", DbType.Int32, model.OldSlotId);
-                db.AddInParameter(com, "@NewSlotId", DbType.Int32, model.SlotId);
-                db.AddInParameter(com, "@NewStartTime", DbType.String, model.StartTime.ToString(@"hh\:mm\:ss"));
-                db.AddInParameter(com, "@NewEndTime", DbType.String, model.EndTime.ToString(@"hh\:mm\:ss"));
-                db.AddInParameter(com, "@NewDate", DbType.Date, model.PreferredDate);
-                db.AddInParameter(com, "@DoctorId", DbType.Int32, model.DoctorId);
+                if (model.AppointmentRequestId > 0)
+                    db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, model.AppointmentRequestId);
+                else
+                    db.AddInParameter(com, "@AppointmentRequestId", DbType.Int32, DBNull.Value);
 
-                // Execute stored procedure
+                if (model.OldSlotId > 0)
+                    db.AddInParameter(com, "@OldSlotId", DbType.Int32, model.OldSlotId);
+                else
+                    db.AddInParameter(com, "@OldSlotId", DbType.Int32, DBNull.Value);
+
+                if (model.SlotId > 0)
+                    db.AddInParameter(com, "@NewSlotId", DbType.Int32, model.SlotId);
+                else
+                    db.AddInParameter(com, "@NewSlotId", DbType.Int32, DBNull.Value);
+
+                if (model.StartTime != TimeSpan.Zero)
+                    db.AddInParameter(com, "@NewStartTime", DbType.String, model.StartTime.ToString(@"hh\:mm\:ss"));
+                else
+                    db.AddInParameter(com, "@NewStartTime", DbType.String, DBNull.Value);
+
+                if (model.EndTime != TimeSpan.Zero)
+                    db.AddInParameter(com, "@NewEndTime", DbType.String, model.EndTime.ToString(@"hh\:mm\:ss"));
+                else
+                    db.AddInParameter(com, "@NewEndTime", DbType.String, DBNull.Value);
+
+
+                if (model.PreferredDate != DateTime.MinValue)
+                    db.AddInParameter(com, "@NewDate", DbType.Date, model.PreferredDate);
+                else
+                    db.AddInParameter(com, "@NewDate", DbType.Date, DBNull.Value);
+
+
+                if (model.DoctorId > 0)
+                    db.AddInParameter(com, "@DoctorId", DbType.Int32, model.DoctorId);
+                else
+                    db.AddInParameter(com, "@DoctorId", DbType.Int32, DBNull.Value);
+
+
                 int rowsAffected = db.ExecuteNonQuery(com);
 
                 isUpdated = rowsAffected > 0;
             }
             catch (Exception ex)
             {
-                // Log error if needed
-                Console.WriteLine($"Error in RescheduleAppointment: {ex.Message}");
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
             }
 
             return isUpdated;
         }
 
 
-        public AppointmentRequestsModel LoadPatientDetails(string contactNumber)
+        public AppointmentRequestsModel LoadPatientDetails(string aadhaarNumber)
         {
             AppointmentRequestsModel model = new AppointmentRequestsModel();
 
             try
             {
-                if (!string.IsNullOrEmpty(contactNumber))
-                {
-                    DbCommand com = this.db.GetStoredProcCommand("GetPatientPersonalInfoByPhone");
-                    db.AddInParameter(com, "PhoneNumber", DbType.String, contactNumber);
 
-                    DataSet ds = this.db.ExecuteDataSet(com);
+                DbCommand com = this.db.GetStoredProcCommand("GetPatientPersonalInfoByAadhaar");
+
+                if (!string.IsNullOrEmpty(aadhaarNumber))
+                    db.AddInParameter(com, "@AadhaarNumber", DbType.String, aadhaarNumber);
+                else
+                    db.AddInParameter(com, "@AadhaarNumber", DbType.String, DBNull.Value);
+
+                DataSet ds = this.db.ExecuteDataSet(com);
                     if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
                         DataTable dt = ds.Tables[0];
@@ -346,10 +377,11 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                         model.LastName = Convert.ToString(dt.Rows[0]["LastName"]);
                         model.PatientEmail = Convert.ToString(dt.Rows[0]["Email"]);
                         model.ContactNumber = Convert.ToString(dt.Rows[0]["ContactNumber"]);
+                        model.AadhaarNumber = Convert.ToString(dt.Rows[0]["AadhaarNumber"]);
                         model.DateOfBirth = Convert.ToDateTime(dt.Rows[0]["DateOfBirth"]);
                         model.Gender = Convert.ToString(dt.Rows[0]["Gender"]);
 
-                        // Address
+                        
                         model.AddressLine = Convert.ToString(dt.Rows[0]["AddressLine"]);
                         model.StateId = Convert.ToInt32(dt.Rows[0]["StateId"]);
                         model.DistrictId = Convert.ToInt32(dt.Rows[0]["DistrictId"]);
@@ -357,12 +389,11 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                         model.CityId = Convert.ToInt32(dt.Rows[0]["CityId"]);
                         model.Pincode = Convert.ToString(dt.Rows[0]["Pincode"]);
                     }
-                }
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in LoadPatientDetails: {ex.Message}");
-                // Handle Exception
+                throw;
             }
 
             return model;
@@ -376,7 +407,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             {
                 DbCommand cmd = db.GetStoredProcCommand("SavePatientAppointment");
 
-                // Patient Info
+                
                 if (!string.IsNullOrEmpty(appointment.FirstName))
                     db.AddInParameter(cmd, "@FirstName", DbType.String, appointment.FirstName);
                 else
@@ -396,6 +427,11 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                     db.AddInParameter(cmd, "@PhoneNumber", DbType.String, appointment.ContactNumber);
                 else
                     db.AddInParameter(cmd, "@PhoneNumber", DbType.String, DBNull.Value);
+
+                if (!string.IsNullOrEmpty(appointment.AadhaarNumber))
+                    db.AddInParameter(cmd, "@AadhaarNumber", DbType.String, appointment.AadhaarNumber);
+                else
+                    db.AddInParameter(cmd, "@AadhaarNumber", DbType.String, DBNull.Value);
 
                 if (appointment.DateOfBirth != DateTime.MinValue)
                     db.AddInParameter(cmd, "@DateOfBirth", DbType.Date, appointment.DateOfBirth);
@@ -422,7 +458,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 else
                     db.AddInParameter(cmd, "@AddressLine", DbType.String, DBNull.Value);
 
-                // Slot Info
+                
                 if (appointment.PreferredDate != DateTime.MinValue)
                     db.AddInParameter(cmd, "@SlotDate", DbType.Date, appointment.PreferredDate);
                 else
@@ -443,7 +479,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 else
                     db.AddInParameter(cmd, "@SpecializationId", DbType.Int32, DBNull.Value);
 
-                // Address Info
+                
                 if (appointment.StateId > 0)
                     db.AddInParameter(cmd, "@StateId", DbType.Int32, appointment.StateId);
                 else
@@ -469,7 +505,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 else
                     db.AddInParameter(cmd, "@Pincode", DbType.String, DBNull.Value);
 
-                // Doctor and Slot
+                
                 if (appointment.DoctorId > 0)
                     db.AddInParameter(cmd, "@DoctorId", DbType.Int32, appointment.DoctorId);
                 else
@@ -494,7 +530,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 }
 
 
-                // Saved file path (relative path on server)
+                
                 if (appointment.UploadedFile != null && !string.IsNullOrEmpty(appointment.UploadedFile.FilePath))
                 {
                     db.AddInParameter(cmd, "@DocumentFilePath", DbType.String, appointment.UploadedFile.FilePath);
@@ -505,7 +541,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 }
 
 
-                // Output parameter for inserted appointment ID
+                
                 db.AddOutParameter(cmd, "@AppointmentId", DbType.Int32, 4);
 
                 db.ExecuteNonQuery(cmd);
@@ -515,7 +551,7 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
             }
             catch (Exception ex)
             {
-                // errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace, appointment.CreatedBy);
+                errorLogsDAL.InsertErrorLogs(ex.Message, ex.StackTrace);
                 return -1;
             }
         }
