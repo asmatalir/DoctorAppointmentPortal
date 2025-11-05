@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './homepage.scss'
 })
 export class Homepage {
-
+ngOnInit(): void {
+  history.pushState(null, '');
+  window.addEventListener('popstate', () => {
+    history.pushState(null, '');
+  });
+}
 }

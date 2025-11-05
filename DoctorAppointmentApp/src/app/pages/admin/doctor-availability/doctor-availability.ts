@@ -67,7 +67,7 @@ export class DoctorAvailability {
       },
       error: (err) => {
         if ((err as any).isAuthError) return;
-        this.toastService.show("Error loading doctor details", { classname: 'bg-danger text-white', delay: 1500 })
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
       }
 
     });
@@ -177,7 +177,7 @@ export class DoctorAvailability {
       },
       error: (err) => {
         if ((err as any).isAuthError) return;
-        this.toastService.show("Error saving doctor availability", { classname: 'bg-danger text-white', delay: 1500 });
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
       }
     });
   }

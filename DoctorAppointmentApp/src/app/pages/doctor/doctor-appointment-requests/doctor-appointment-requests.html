@@ -39,9 +39,9 @@
           <th>Doctor</th>
           <th>Specialization</th>
           <th>Medical Concern</th>
-          <th>Appointment Date</th>
-          <th>Start Time</th>
-          <th>End Time</th>
+          <th class="text-end">Appointment Date</th>
+          <th class="text-end">Start Time</th>
+          <th class="text-end">End Time</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
@@ -52,9 +52,9 @@
           <td>{{ req.DoctorName }}</td>
           <td>{{ req.SpecializationName }}</td>
           <td>{{ req.MedicalConcern }}</td>
-          <td>{{ req.FinalDate | date:'yyyy-MM-dd' }}</td>
-          <td>{{ req.FinalStartTime }}</td>
-          <td>{{ req.FinalEndTime }}</td>
+          <td class="text-end">{{ req.FinalDate | date:'yyyy-MM-dd' }}</td>
+          <td class="text-end">{{ req.FinalStartTime }}</td>
+          <td class="text-end">{{ req.FinalEndTime }}</td>
           <td>{{ req.StatusName }}</td>
           <td>
             <div class="dropdown" ngbDropdown>

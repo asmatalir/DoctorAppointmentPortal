@@ -27,7 +27,7 @@
           <div class="row g-4">
             <!-- Contact Number -->
             <div class="col-lg-6">
-              <label class="form-label">Aadhaar Number<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Aadhaar Number<span class="text-danger">*</span></label>
               <input type="text" class="form-control" placeholder="Aadhaar Number" name="AadhaarNumber"
                 [(ngModel)]="appointment.AadhaarNumber" #AadhaarNumber="ngModel" (blur)="loadPatientDetails()" required
                 minlength="12" maxlength="12" pattern="^[0-9]{12}$" [disabled]="isExistingPatient"
@@ -52,7 +52,7 @@
           <h6 class="mb-3 text-dark">Personal Information</h6>
           <div class="row g-4">
             <div class="col-lg-6">
-              <label class="form-label">First Name<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">First Name<span class="text-danger">*</span></label>
               <input type="text" class="form-control" placeholder="First Name" name="FirstName"
                 [(ngModel)]="appointment.FirstName" #FirstName="ngModel" required pattern="^[A-Za-z\s]+$" maxlength="50"
                 [class.is-invalid]="FirstName.invalid && (FirstName.touched || patientForm.submitted)">
@@ -61,7 +61,7 @@
 
             </div>
             <div class="col-lg-6">
-              <label class="form-label">Last Name<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Last Name<span class="text-danger">*</span></label>
               <input type="text" class="form-control" placeholder="Last Name" name="LastName"
                 [(ngModel)]="appointment.LastName" #LastName="ngModel" required pattern="^[A-Za-z\s]+$" maxlength="50"
                 [class.is-invalid]="LastName.invalid && (LastName.touched || patientForm.submitted)">
@@ -69,14 +69,14 @@
               <div class="invalid-feedback" *ngIf="LastName.errors?.['pattern']">Only alphabets are allowed.</div>
             </div>
             <div class="col-lg-6">
-              <label class="form-label">Date Of Birth<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Date Of Birth<span class="text-danger">*</span></label>
               <input type="date" class="form-control" name="DateOfBirth" [(ngModel)]="appointment.DateOfBirth"
                 #DateOfBirth="ngModel" required [max]="today"
                 [class.is-invalid]="DateOfBirth.invalid && (DateOfBirth.touched || patientForm.submitted)">
               <div class="invalid-feedback">Date of Birth is required</div>
             </div>
             <div class="col-lg-6">
-              <label class="form-label">Gender<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Gender<span class="text-danger">*</span></label>
               <select class="form-control" name="Gender" [(ngModel)]="appointment.Gender" #Gender="ngModel" required
                 [class.is-invalid]="Gender.invalid && (Gender.touched || patientForm.submitted)">
                 <option value="">Select Gender</option>
@@ -87,7 +87,7 @@
             </div>
 
             <div class="col-lg-6">
-              <label class="form-label">Contact Number<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Contact Number<span class="text-danger">*</span></label>
               <input type="text" class="form-control" placeholder="Contact Number" name="ContactNumber"
                 [(ngModel)]="appointment.ContactNumber" #ContactNumber="ngModel" required minlength="10" maxlength="15"
                 pattern="^[0-9]+$"
@@ -100,7 +100,7 @@
             </div>
 
             <div class="col-lg-6">
-              <label class="form-label">Email<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Email<span class="text-danger">*</span></label>
               <input type="email" class="form-control" placeholder="Email" name="Email"
                 [(ngModel)]="appointment.PatientEmail" required #PatientEmail="ngModel" maxlength="100"
                 [class.is-invalid]="PatientEmail.invalid && (PatientEmail.touched || patientForm.submitted)">
@@ -110,7 +110,7 @@
 
 
             <div class="col-lg-6">
-              <label class="form-label">Insurance Id</label>
+              <label class="form-label fw-semibold">Insurance Id</label>
               <input type="text" class="form-control" placeholder="Insurance ID" name="InsuranceId" maxlength="100"
                 [(ngModel)]="appointment.InsuranceInfo" #InsuranceId="ngModel"
                 [class.is-invalid]="InsuranceId.invalid && (InsuranceId.touched || patientForm.submitted)">
@@ -118,32 +118,13 @@
           </div>
         </div>
 
-        <!-- Section 3: Medical Information -->
-        <div class="p-3 mb-4 border rounded bg-light">
-          <h6 class="mb-3 text-dark">Medical Information</h6>
-          <div class="row g-4">
-            <div class="col-lg-12">
-              <label class="form-label">Medical History</label>
-              <textarea class="form-control" placeholder="Medical History" name="MedicalHistory" maxlength="300"
-                [(ngModel)]="appointment.MedicalHistory"></textarea>
-            </div>
-            <div class="col-lg-12">
-              <label class="form-label">Medical Concern<span class="text-danger">*</span></label>
-              <textarea class="form-control" placeholder="Medical Concern" name="MedicalConcern"
-                [(ngModel)]="appointment.MedicalConcern" required #MedicalConcern="ngModel" maxlength="300"
-                [class.is-invalid]="MedicalConcern.invalid && (MedicalConcern.touched || patientForm.submitted)"></textarea>
-              <div class="invalid-feedback">Medical Concern is required</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 4: Address Information -->
+                <!-- Section 4: Address Information -->
         <div class="p-3 mb-4 border rounded bg-light">
           <h6 class="mb-3 text-dark">Address Information</h6>
           <div class="row g-4">
 
             <div class="col-lg-3">
-              <label class="form-label">State<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">State<span class="text-danger">*</span></label>
               <ng-select [items]="statesList" bindLabel="StateName" bindValue="StateId" placeholder="Select State"
                 [(ngModel)]="appointment.StateId" name="StateId" placeholder="Select State" required #StateId="ngModel"
                 [class.is-invalid]="StateId.invalid && (StateId.touched || patientForm.submitted)"
@@ -154,7 +135,7 @@
 
 
             <div class="col-lg-3">
-              <label class="form-label">District<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">District<span class="text-danger">*</span></label>
               <ng-select [items]="districtsList" bindLabel="DistrictName" bindValue="DistrictId"
                 placeholder="Select District" [(ngModel)]="appointment.DistrictId" name="DistrictId"
                 placeholder="Select District" required #DistrictId="ngModel"
@@ -166,7 +147,7 @@
 
 
             <div class="col-lg-3">
-              <label class="form-label">Taluka<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Taluka<span class="text-danger">*</span></label>
               <ng-select [items]="talukasList" bindLabel="TalukaName" bindValue="TalukaId" placeholder="Select Taluka"
                 [(ngModel)]="appointment.TalukaId" name="TalukaId" placeholder="Select Taluka" required
                 #TalukaId="ngModel" [class.is-invalid]="TalukaId.invalid && (TalukaId.touched || patientForm.submitted)"
@@ -177,7 +158,7 @@
 
 
             <div class="col-lg-3">
-              <label class="form-label">City<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">City<span class="text-danger">*</span></label>
               <ng-select [items]="citiesList" bindLabel="CityName" bindValue="CityId" placeholder="Select City"
                 [(ngModel)]="appointment.CityId" name="CityId" placeholder="Select City" required #CityId="ngModel"
                 [class.is-invalid]="CityId.invalid && (CityId.touched || patientForm.submitted)">
@@ -187,7 +168,7 @@
 
 
             <div class="col-lg-8">
-              <label class="form-label">Address<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Address<span class="text-danger">*</span></label>
               <input type="text" class="form-control" placeholder="Address Line" name="Address"
                 [(ngModel)]="appointment.AddressLine" required #AddressLine="ngModel" maxlength="200"
                 [class.is-invalid]="AddressLine.invalid && (AddressLine.touched || patientForm.submitted)">
@@ -197,7 +178,7 @@
             </div>
 
             <div class="col-lg-4">
-              <label class="form-label">Pincode<span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Pincode<span class="text-danger">*</span></label>
               <input type="text" class="form-control" placeholder="Pincode" name="Pincode"
                 [(ngModel)]="appointment.Pincode" #Pincode="ngModel" required pattern="^[0-9]{6}$"
                 [class.is-invalid]="Pincode.invalid && (Pincode.touched || patientForm.submitted)">
@@ -209,10 +190,30 @@
           </div>
 
         </div>
+        <!-- Section 3: Medical Information -->
+        <div class="p-3 mb-4 border rounded bg-light">
+          <h6 class="mb-3 text-dark">Medical Information</h6>
+          <div class="row g-4">
+            <div class="col-lg-12">
+              <label class="form-label fw-semibold">Medical History</label>
+              <textarea class="form-control" placeholder="Medical History" name="MedicalHistory" maxlength="300"
+                [(ngModel)]="appointment.MedicalHistory"></textarea>
+            </div>
+            <div class="col-lg-12">
+              <label class="form-label fw-semibold">Medical Concern<span class="text-danger">*</span></label>
+              <textarea class="form-control" placeholder="Medical Concern" name="MedicalConcern"
+                [(ngModel)]="appointment.MedicalConcern" required #MedicalConcern="ngModel" maxlength="300"
+                [class.is-invalid]="MedicalConcern.invalid && (MedicalConcern.touched || patientForm.submitted)"></textarea>
+              <div class="invalid-feedback">Medical Concern is required</div>
+            </div>
+          </div>
+        </div>
+
+
 
         <!-- Section: Optional Medical Document -->
         <div class="p-3 mb-4 border rounded bg-light">
-          <h6 class="mb-3 text-dark">
+          <h6 class="mb-3 text-dark fw-semibold">
             Medical Document <span class="text-muted">(Optional)</span>
           </h6>
           <div class="row g-4">

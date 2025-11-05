@@ -41,16 +41,12 @@ export class Login {
         this.toastService.show("Login Successful", { classname: 'bg-success text-white', delay: 3000 });
         this.userService.setUser({ username: data.username, role: data.userrole });
         sessionStorage.setItem('token', data.token);
-        sessionStorage.removeItem('sessionExpiredNotified');
-        sessionStorage.removeItem('redirectUrl');
 
 
           if (data.userrole === 'Admin') {
             this.router.navigate(['/admin/appointment-requests']);  // Admin default page
           } else if (data.userrole === 'Doctor') {
             this.router.navigate(['/doctor/appointment-requests']);  // Doctor default page
-          } else if (data.userrole === 'Patient') {
-            this.router.navigate(['/patient/dashboard']);  // Patient default page
           } else {
             this.router.navigate(['']); 
           }

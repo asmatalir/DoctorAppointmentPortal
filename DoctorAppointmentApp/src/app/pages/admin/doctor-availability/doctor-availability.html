@@ -6,25 +6,25 @@
 
 
   <div class="p-3 mb-4 border rounded bg-light">
-    <h6 class="mb-3 text-dark fw-bold">Doctor Information</h6>
+    <h6  class="mb-3 text-dark fw-bold">Doctor Information</h6>
     <div class="row g-3 align-items-center">
       <div class="col-md-6">
-        <label class="form-label">Doctor Name</label>
+        <label class="form-label fw-semibold">Doctor Name</label>
         <input type="text" class="form-control" [value]="doctor.FirstName + ' ' + doctor.LastName" readonly>
       </div>
       <div class="col-md-6">
-        <label class="form-label">Specializations</label>
+        <label class="form-label fw-semibold">Specializations</label>
         <input type="text" class="form-control" [value]="doctor.Specializations" readonly>
       </div>
     </div>
 
     <div class="row g-3 mt-2">
       <div class="col-md-6">
-        <label class="form-label">Email</label>
+        <label class="form-label fw-semibold">Email</label>
         <input type="text" class="form-control" [value]="doctor.DoctorEmail" readonly>
       </div>
       <div class="col-md-6">
-        <label class="form-label">Contact</label>
+        <label class="form-label fw-semibold">Contact</label>
         <input type="text" class="form-control" [value]="doctor.ContactNumber" readonly>
       </div>
     </div>

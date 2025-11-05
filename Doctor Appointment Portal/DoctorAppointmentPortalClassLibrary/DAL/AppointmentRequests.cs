@@ -547,6 +547,10 @@ namespace DoctorAppointmentPortalClassLibrary.DAL
                 db.ExecuteNonQuery(cmd);
 
                 resultCode = Convert.ToInt32(db.GetParameterValue(cmd, "@AppointmentId"));
+
+                if (resultCode == -2)
+                    return -2;
+
                 return resultCode;
             }
             catch (Exception ex)

@@ -42,15 +42,15 @@ export class AppointmentRequests {
     if (this.filters.FromDate && this.filters.ToDate) {
       if (new Date(this.filters.ToDate) < new Date(this.filters.FromDate)) {
         this.toastService.show("To Date cannot be earlier than From Date", { classname: 'bg-warning text-white', delay: 1500 });
-        this.filters.FromDate='';
-        this.filters.ToDate='';
+        this.filters.FromDate = '';
+        this.filters.ToDate = '';
         this.loadAppointmentRequests();
-        return; 
+        return;
       }
     }
     this.appointmentRequestService.AppointmentRequestGetList(this.filters).subscribe({
       next: (data: any) => {
-        // Extract the actual doctors array from the response
+        
         this.AppointmentRequestList = data.AppointmentRequestList || [];
         this.specializationsList = data.SpecializationsList || [];
         this.statusesList = data.StatusesList || [];
@@ -59,7 +59,7 @@ export class AppointmentRequests {
       },
       error: (err) => {
         if ((err as any).isAuthError) return;
-        this.toastService.show("Error loading appointment requests", { classname: 'bg-danger text-white', delay: 1500 })
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message|| "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
         this.loading = false;
       }
     });

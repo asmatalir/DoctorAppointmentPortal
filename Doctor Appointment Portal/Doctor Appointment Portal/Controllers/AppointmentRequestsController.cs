@@ -50,6 +50,8 @@ namespace Doctor_Appointment_Portal.Controllers
                 return Content(HttpStatusCode.InternalServerError, new { message = "Server error while loading appointment requests." });
             }
         }
+
+
         [JwtAuthorize(Roles = "Doctor")]
         [HttpPost]
         public IHttpActionResult DoctorApppointmentGetLists(AppointmentRequestsModel model)
@@ -224,6 +226,15 @@ namespace Doctor_Appointment_Portal.Controllers
 
                 // Save appointment in DB
                 int isSaved = appointmentRequestsDAL.SavePatientAppointment(model);
+
+                if (isSaved == -2)
+                {
+                    if (model.UploadedFile != null)
+                        File.Delete(HttpContext.Current.Server.MapPath(Path.Combine(uploadRootFolder, model.UploadedFile.FilePath)));
+
+                    return Content(HttpStatusCode.BadRequest, new { message = "Appointment limit reached. You may schedule a maximum of two appointments on the same day." });
+                }
+
                 if (isSaved <= 0)
                 {
                     if (model.UploadedFile != null)
@@ -258,7 +269,7 @@ namespace Doctor_Appointment_Portal.Controllers
 
                 // Send email
                 EmailHelper.SendEmail(model.DoctorEmail, doctorSubject, doctorBody, isHtml: true);
-
+                
 
                 
                 // Read the HTML template

@@ -50,7 +50,7 @@ export class DoctorList {
       },
       error: (err) => {
         if ((err as any).isAuthError) return; 
-        this.toastService.show("Error loading doctors", { classname: 'bg-danger text-white', delay: 1500 })
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
         this.loading = false;
       }
     });

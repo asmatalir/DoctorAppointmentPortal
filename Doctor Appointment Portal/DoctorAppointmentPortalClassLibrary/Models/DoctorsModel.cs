@@ -51,7 +51,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int TotalRecords { get; set; }
 
         public string Address { get; set; }
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
         [Required]
         public int StateId { get; set; }
@@ -63,17 +63,16 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public int TalukaId { get; set; }
 
         [Required]
-        public int? CityId { get; set; }
+        public int CityId { get; set; }
 
         [Required]
         public string Pincode { get; set; }
 
-        [Required]
         public string AddressLine { get; set; }
 
         public string SearchedDoctorName { get; set; }
-        public int SelectedSpecializationId { get; set; }
-        public int SelectedCityId { get; set; }
+        public int? SelectedSpecializationId { get; set; }
+        public int? SelectedCityId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
@@ -82,7 +81,7 @@ namespace DoctorAppointmentPortalClassLibrary.Models
         public string SpecializationNames { get; set; }
         public string SpecializationIds { get; set; }
         public bool IsActive { get; set; }
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }

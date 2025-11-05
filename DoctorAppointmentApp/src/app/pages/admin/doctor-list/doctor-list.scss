@@ -26,3 +26,18 @@
   border: none !important;
   box-shadow: none !important;
 }
+
+
+.no-wrap-table th {
+  white-space: nowrap;
+}
+
+
+.address-tooltip {
+  display: inline-block;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: help;
+}

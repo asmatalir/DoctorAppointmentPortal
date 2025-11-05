@@ -1,7 +1,4 @@
-﻿
-
-
-GO
+﻿GO
 CREATE OR ALTER PROCEDURE DoctorsGetList  
     @DoctorName NVARCHAR(100) = NULL,
     @SpecializationId INT = NULL,
@@ -1495,6 +1492,17 @@ BEGIN
         SET @PatientId = SCOPE_IDENTITY();
     END
 
+	    IF (
+        SELECT COUNT(*) 
+        FROM AppointmentRequests
+        WHERE PatientId = @PatientId
+            AND CAST(PreferredDate AS date) = CAST(@SlotDate AS date)) >= 2
+    BEGIN
+        SET @AppointmentId = -2; 
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+
 
 	SELECT 
 		@PendingStatusId = StatusId
@@ -1659,6 +1667,7 @@ BEGIN
 END
 GO
 
+
 GO
 CREATE OR ALTER PROCEDURE GenerateDoctorSlots
     @FromDate DATE,
@@ -1771,6 +1780,110 @@ BEGIN
       );
 END;
 GO
+
+
+
+-- using numbers table
+GO
+CREATE OR ALTER PROCEDURE GenerateDoctorSlots
+    @FromDate DATE,
+    @ToDate DATE,
+    @CreatedBy INT
+AS
+BEGIN
+
+    DECLARE @AvailableStatusId INT;
+
+    SELECT @AvailableStatusId = StatusId
+    FROM Statuses
+    WHERE StatusName = 'Available';
+
+    -- Generate Regular Availability Slots
+    INSERT INTO DoctorSlots
+    (
+        DoctorId,
+        SlotDate,
+        StartTime,
+        EndTime,
+        StatusId,
+        CreatedBy,
+        CreatedOn
+    )
+    SELECT 
+        DA.DoctorId,
+        DATEADD(DAY, d.Number, @FromDate) AS SlotDate,
+        DATEADD(MINUTE, t.Number * DA.SlotDuration, DA.StartTime) AS StartTime,
+        DATEADD(MINUTE, (t.Number + 1) * DA.SlotDuration, DA.StartTime) AS EndTime,
+        @AvailableStatusId AS StatusId,
+        @CreatedBy,
+        GETDATE()
+    FROM DoctorAvailability DA
+    CROSS JOIN Numbers d
+    CROSS JOIN Numbers t
+    LEFT JOIN DoctorSlots S
+        ON S.DoctorId = DA.DoctorId
+        AND S.SlotDate = DATEADD(DAY, d.Number, @FromDate)
+        AND S.StartTime = DATEADD(MINUTE, t.Number * DA.SlotDuration, DA.StartTime)
+    WHERE DATEADD(DAY, d.Number, @FromDate) <= @ToDate
+      AND ((DATEPART(WEEKDAY, DATEADD(DAY, d.Number, @FromDate)) + @@DATEFIRST - 2) % 7) + 1 = DA.DayOfWeek
+      AND S.SlotId IS NULL
+      AND t.Number < DATEDIFF(MINUTE, DA.StartTime, DA.EndTime) / DA.SlotDuration
+      AND NOT EXISTS (
+            SELECT 1
+            FROM DoctorAvailabilityExceptions E
+            WHERE E.DoctorId = DA.DoctorId
+              AND E.ExceptionDate = DATEADD(DAY, d.Number, @FromDate)
+              AND E.IsAvailable = 0
+              AND DATEADD(MINUTE, t.Number * DA.SlotDuration, DA.StartTime) < E.EndTime
+              AND DATEADD(MINUTE, (t.Number + 1) * DA.SlotDuration, DA.StartTime) > E.StartTime
+        );
+
+
+    -- Generate Slots for Special Working Days (Exception Days Marked Available)
+
+    INSERT INTO DoctorSlots
+    (
+        DoctorId,
+        SlotDate,
+        StartTime,
+        EndTime,
+        StatusId,
+        CreatedBy,
+        CreatedOn
+    )
+    SELECT 
+        E.DoctorId,
+        E.ExceptionDate AS SlotDate,
+        DATEADD(MINUTE, t.Number * DA.SlotDuration, E.StartTime) AS StartTime,
+        DATEADD(MINUTE, (t.Number + 1) * DA.SlotDuration, E.StartTime) AS EndTime,
+        @AvailableStatusId AS StatusId,
+        @CreatedBy,
+        GETDATE()
+    FROM DoctorAvailabilityExceptions E
+    JOIN DoctorAvailability DA
+        ON DA.DoctorId = E.DoctorId
+    CROSS JOIN Numbers t
+    LEFT JOIN DoctorSlots S
+        ON S.DoctorId = E.DoctorId
+        AND S.SlotDate = E.ExceptionDate
+        AND S.StartTime = DATEADD(MINUTE, t.Number * DA.SlotDuration, E.StartTime)
+    WHERE E.IsAvailable = 1
+      AND E.StartTime IS NOT NULL
+      AND t.Number < DATEDIFF(MINUTE, E.StartTime, E.EndTime) / DA.SlotDuration
+      AND S.SlotId IS NULL
+      AND NOT EXISTS (
+            SELECT 1
+            FROM DoctorAvailabilityExceptions EX
+            WHERE EX.DoctorId = E.DoctorId
+              AND EX.IsAvailable = 0
+              AND EX.ExceptionDate = E.ExceptionDate
+              AND DATEADD(MINUTE, t.Number * DA.SlotDuration, E.StartTime) < EX.EndTime
+              AND DATEADD(MINUTE, (t.Number + 1) * DA.SlotDuration, E.StartTime) > EX.StartTime
+      );
+
+END;
+GO
+
 
 
 GO
@@ -1896,7 +2009,7 @@ DoctorAppointmentErrorLogsInsert
 AS
 BEGIN
 
-	INSERT INTO PurchaseOrderErrorLogs
+	INSERT INTO DoctorAppointmentErrorLogsInsert
 	(
 	   ErrorMessage,
 	   StackTrace,

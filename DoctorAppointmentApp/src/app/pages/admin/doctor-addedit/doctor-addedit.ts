@@ -1,4 +1,4 @@
-import { Component,ViewChild,TemplateRef } from '@angular/core';
+import { Component, ViewChild, TemplateRef } from '@angular/core';
 import { DoctorsService } from '../../../core/services/doctors-service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { DoctorsModel } from '../../../core/models/DoctorsModel';
@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { LocationService } from '../../../core/services/location-service';
 import { ToastService } from '../../../core/services/toast-service';
-import { NgbModal,NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -28,8 +28,8 @@ export class DoctorAddedit {
   citiesList: any[] = [];
   today: string;
 
-   @ViewChild('doctorForm') form?: NgForm;
-   @ViewChild('unsavedChangesModal') unsavedChangesModal!: TemplateRef<any>; 
+  @ViewChild('doctorForm') form?: NgForm;
+  @ViewChild('unsavedChangesModal') unsavedChangesModal!: TemplateRef<any>;
 
   private formSaved = false;
   private modalRef: NgbModalRef;
@@ -124,7 +124,7 @@ export class DoctorAddedit {
     if (!this.doctor.StateId) {
       // this.toastr.warning('Please select a state first.');
       this.toastService.show("Please select a state first.", { classname: 'bg-warning text-white', delay: 1500 });
-      this.doctor.DistrictId = null; 
+      this.doctor.DistrictId = null;
       return;
     }
     this.doctor.TalukaId = null;
@@ -185,7 +185,7 @@ export class DoctorAddedit {
           const dob = new Date(this.doctor.DateOfBirth);
           this.doctor.DateOfBirth = dob.toISOString().substring(0, 10);
         } else {
-          this.doctor.DateOfBirth = ''; // empty if null
+          this.doctor.DateOfBirth = ''; 
         }
         this.SpecializationIds = this.doctor.SpecializationIds ? this.doctor.SpecializationIds.split(',').map(id => +id.trim()) : [];
 
@@ -195,12 +195,12 @@ export class DoctorAddedit {
       },
       error: (err) => {
         if ((err as any).isAuthError) return;
-        this.toastService.show("Error loading doctor details", { classname: 'bg-danger text-white', delay: 1500 });
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
       }
     });
   }
 
-    canDeactivate(): Promise<boolean> | boolean {
+  canDeactivate(): Promise<boolean> | boolean {
     if (this.form?.dirty && !this.formSaved) {
       return new Promise((resolve) => {
         this.modalRef = this.modalService.open(this.unsavedChangesModal, { centered: true });
@@ -212,7 +212,7 @@ export class DoctorAddedit {
     }
     return true;
   }
-    confirmDiscard() {
+  confirmDiscard() {
     this.modalRef?.close('discard');
   }
 
@@ -246,16 +246,15 @@ export class DoctorAddedit {
       return;
     }
 
-    if(this.doctor.ExperienceYears > 100)
-    {
-        this.toastService.show("Experience cannot exceed 100 years", { classname: 'bg-warning text-white', delay: 1500 });
-        return;
+    if (this.doctor.ExperienceYears > 100) {
+      this.toastService.show("Experience cannot exceed 100 years", { classname: 'bg-warning text-white', delay: 1500 });
+      return;
     }
 
     if (this.doctor.ExperienceYears > age - 20) {
       this.toastService.show("Experience seems unrealistic compared to age", { classname: 'bg-warning text-white', delay: 1500 });
       return;
-}
+    }
     this.doctor.SpecializationIds = this.SpecializationIds.join(',');
     this.doctor.QualificationIds = this.QualificationIds.join(',');
 
@@ -264,17 +263,17 @@ export class DoctorAddedit {
         if (response.success) {
           debugger;
           this.toastService.show("Doctor details saved successfully", { classname: 'bg-success text-white', delay: 1500 });
-          this.router.navigate(['admin/doctor-list']); 
+          this.router.navigate(['admin/doctor-list']);
           this.formSaved = true;
           form.form.markAsPristine();
         } else {
-          this.toastService.show("Error saving doctor details", { classname: 'bg-danger text-white', delay: 1500 });
+        this.toastService.show(`Error: ${response?.error?.message || response?.error || response?.message}`, { classname: 'bg-danger text-white', delay: 1500 });
 
         }
       },
       error: (err) => {
         if ((err as any).isAuthError) return;
-        this.toastService.show("Error saving doctor details", { classname: 'bg-danger text-white', delay: 1500 });        // this.toast.error('Error saving doctor details!');
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
       }
     });
   }

@@ -85,7 +85,7 @@ export class DoctorAvailableSlotsModal implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.toastService.show("Error loading slots", { classname: 'bg-danger text-white', delay: 1500 });
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
 
       }
     });
@@ -152,7 +152,7 @@ export class DoctorAvailableSlotsModal implements OnInit {
       },
       error: (err) => {
 
-        this.toastService.show("Failed to reschedule appointment", { classname: 'bg-danger text-white', delay: 1500 });      
+        this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 1500 });
 
       }
     });
@@ -169,7 +169,8 @@ export class DoctorAvailableSlotsModal implements OnInit {
         endTime: appointmentModel.EndTime,
         slotDate: appointmentModel.PreferredDate,
         specializationId: appointmentModel.SpecializationId
-      }
+      },
+      skipLocationChange: true
     });
   }
 }

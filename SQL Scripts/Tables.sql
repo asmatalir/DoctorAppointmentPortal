@@ -258,9 +258,18 @@ CREATE TABLE DoctorAppointmentErrorLogs (
     LogId INT IDENTITY(1,1) PRIMARY KEY,
     ErrorMessage NVARCHAR(MAX),
     StackTrace NVARCHAR(MAX),
-	CreatedBy INT NULL  FOREIGN KEY REFERENCES UserInfo(UserId),
+	CreatedBy INT NULL FOREIGN KEY REFERENCES UserProfiles(UserId),
     CreatedOn DATETIME
 )
+
+CREATE TABLE Numbers (
+    Number INT NOT NULL PRIMARY KEY
+);
+
+INSERT INTO Numbers (Number)
+SELECT TOP (10001) ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) - 1
+FROM sys.all_objects;
+
 
 
 

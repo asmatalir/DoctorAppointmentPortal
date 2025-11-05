@@ -174,11 +174,11 @@ export class PatientForm {
 
 
   loadPatientDetails() {
-    if (!this.appointment.AadhaarNumber) {
-      return;
-    }
+    if (!this.appointment.AadhaarNumber)
+       return;
 
     const enteredAadhaarNumber = this.appointment.AadhaarNumber;
+
     const doctorContext = {
       DoctorId: this.appointment.DoctorId,
       DoctorName: this.appointment.DoctorName,
@@ -190,39 +190,43 @@ export class PatientForm {
       SelectedSpecializationId: this.appointment.SelectedSpecializationId
     };
 
-    this.appointmentRequestService.GetPatientDetails(this.appointment.AadhaarNumber)
+    this.appointmentRequestService.GetPatientDetails(enteredAadhaarNumber)
       .subscribe({
         next: (response: AppointmentRequestsModel) => {
-          console.log(response);
-          debugger;
-          if (response && response.PatientId > 0) {
-            this.isExistingPatient = true;
-            Object.assign(this.appointment, response);
+
+          this.isExistingPatient = response?.PatientId > 0;
+
+
+          if (this.isExistingPatient) {
+            this.appointment = { ...response };
             this.appointment.AadhaarNumber = response.AadhaarNumber || enteredAadhaarNumber;
 
             if (this.appointment.DateOfBirth) {
-              const dob = new Date(this.appointment.DateOfBirth);
-              this.appointment.DateOfBirth = dob.toISOString().substring(0, 10);
+              this.appointment.DateOfBirth = new Date(this.appointment.DateOfBirth)
+                .toISOString().substring(0, 10);
             } else {
               this.appointment.DateOfBirth = '';
             }
-            this.loadDistricts(this.appointment.StateId as number, this.appointment.DistrictId as number);
+
+            this.loadDistricts(this.appointment.StateId!, this.appointment.DistrictId!);
           }
+
           else {
-            this.isExistingPatient = false;
             this.appointment = new AppointmentRequestsModel();
-            console.log("appointments: " , this.appointment)
             this.appointment.AadhaarNumber = enteredAadhaarNumber;
           }
+
+
           Object.assign(this.appointment, doctorContext);
-
-
         },
+
         error: (err) => {
-          this.toastService.show("Error loading patient details", { classname: 'bg-danger text-white', delay: 1500 })
+          this.toastService.show(`Error: ${err?.error?.message || err?.error || err?.message}`,
+            { classname: 'bg-danger text-white', delay: 1500 });
         }
       });
   }
+
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -242,21 +246,13 @@ export class PatientForm {
     }
   }
 
-  // canDeactivate(): boolean {
-  //   debugger;
-  //   if (this.form?.dirty) {
-  //     return confirm('Are you sure you want to discard your changes?');
-  //   }
-  //   return true;
-  // }
-
   canDeactivate(): Promise<boolean> | boolean {
     if (this.form?.dirty && !this.formSaved) {
       return new Promise((resolve) => {
         this.modalRef = this.modalService.open(this.unsavedChangesModal, { centered: true });
         this.modalRef.result.then(
           (result) => resolve(result === 'discard'),
-          () => resolve(false) // closed without confirming
+          () => resolve(false)
         );
       });
     }
@@ -317,7 +313,7 @@ export class PatientForm {
         this.router.navigate(['']);
       },
       error: (error) => {
-        this.toastService.show("Failed to save appointment. Please try again later", { classname: 'bg-danger text-white', delay: 1500 })
+        this.toastService.show(`Error: ${error?.error?.message || error?.error || error?.message || "An unexpected error occurred."}`, { classname: 'bg-danger text-white', delay: 3000 });
 
       }
     });

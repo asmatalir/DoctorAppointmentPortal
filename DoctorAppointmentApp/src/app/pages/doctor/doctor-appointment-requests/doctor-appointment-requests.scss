@@ -6,3 +6,7 @@ button[ngbDropdownToggle]::after {
   cursor: not-allowed; /* show not-allowed cursor */
   pointer-events: none; /* prevent clicks */
 }
+
+.text-end {
+  text-align: right !important;
+}
